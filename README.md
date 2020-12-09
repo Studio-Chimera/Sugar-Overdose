@@ -3,6 +3,7 @@
 ## Setup project
 Run the following commands:  
 `cocos new Sugar-Overdose -l cpp -d ./`  
+`cd Sugar-Overdose`  
 `git init`  
 `git remote add origin https://github.com/Studio-Chimera/Sugar-Overdose.git`  
 `git fetch`  
