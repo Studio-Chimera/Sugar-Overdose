@@ -1,5 +1,6 @@
 #include "MainMenuScene.h"
-#include "Definitions.h"
+#include "LevelSelectionScene.h"
+#include "utils/Definitions.h"
 #include <SonarFrameworks.h>
 
 USING_NS_CC;
@@ -35,7 +36,7 @@ bool MainMenuScene::init() {
 	Button* const optionsButton = Button::create(BUTTON_OPTIONS, BUTTON_OPTIONS);
 	optionsButton->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.38 + origin.y));
 
-	Button* const creditsButton = Button::create(BUTTON_CREDITS, BUTTON_CREDITS);
+	Button* const creditsButton  = Button::create(BUTTON_CREDITS, BUTTON_CREDITS);
 	creditsButton->setPosition(Vec2(screenZize.width / 4.1 + origin.x, screenZize.height * 0.25 + origin.y));
 
 	Button* const leaveButton = Button::create(BUTTON_LEAVE, BUTTON_LEAVE);
@@ -64,7 +65,7 @@ void MainMenuScene::onClickSelectionLevelButton(Ref *sender, Widget::TouchEventT
 	switch (type) {
 		
 	case Widget::TouchEventType::ENDED:
-		//SwitchToGameScene(0.5);
+		changeScene(1, CustomScenes::LevelSelectionMenu);
 		break;
 
 	default:
@@ -76,7 +77,7 @@ void MainMenuScene::onClickOptionsButton(Ref* sender, Widget::TouchEventType typ
 	switch (type) {
 
 	case Widget::TouchEventType::ENDED:
-		//SwitchToGameScene(0.5);
+		//changeScene(1, CustomScenes::????);
 		break;
 
 	default:
@@ -88,7 +89,7 @@ void MainMenuScene::onClickCreditsButton(Ref* sender, Widget::TouchEventType typ
 	switch (type) {
 
 	case Widget::TouchEventType::ENDED:
-		//SwitchToGameScene(0.5);
+		//changeScene(1, CustomScenes::????);
 		break;
 
 	default:
@@ -108,10 +109,3 @@ void MainMenuScene::onClickLeaveButton(Ref* sender, Widget::TouchEventType type)
 	//	break;
 	}
 }
-//
-//void MainMenuScene::SwitchToGameScene(float dt)
-//{
-//	Scene* gameScene = GameScene::createScene();
-//	TransitionFade* transition = TransitionFade::create(dt, gameScene);
-//	Director::getInstance()->replaceScene(gameScene);
-//}

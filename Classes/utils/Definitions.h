@@ -1,4 +1,7 @@
 #pragma once
+#include <String.h>
+#include "menus/MainMenuScene.h"
+#include "menus/LevelSelectionScene.h"
 
 /*
 this file defines all constantes
@@ -18,6 +21,9 @@ this file defines all constantes
 #define BUTTON_CREDITS_PRESSED "buttons/"
 #define BUTTON_LEAVE "buttons/button_leave.png"
 #define BUTTON_LEAVE_PRESSED "buttons/"
+#define BUTTON_PLAY "buttons/button_leave.png"
+#define BUTTON_PLAY_PRESSED "buttons/"
+#define CAPTURE "buttons/Capture.png"
 
 // IDs
 
@@ -25,3 +31,10 @@ this file defines all constantes
 #define DISPLAY_TIME_SPLASH_SCENE 1.5
 
 // STATES
+
+
+// SCENES
+enum class CustomScenes { MainMenu, LevelSelectionMenu, OptionsMenu, CreditsMenu };
+
+//	Open a new menu
+void changeScene(float dt, CustomScenes customScenes);	

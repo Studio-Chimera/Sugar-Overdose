@@ -1,6 +1,6 @@
 #include "SplashScene.h"
 #include "SimpleAudioEngine.h"
-#include "Definitions.h"
+#include "utils/Definitions.h"
 #include "MainMenuScene.h"
 #include <SonarFrameworks.h>
 
