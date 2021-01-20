@@ -1,4 +1,5 @@
 #include "LevelManager.h"
+#include "Level.h"
 USING_NS_CC;
 // ###################################################
 // Declarations
@@ -36,9 +37,10 @@ void LevelManager::openLevel(std::string level)
 	auto director = Director::getInstance();
 
 	//Todo: Uncomment when adding Level Class
-	//auto scene = Level::createScene();
+	auto test = new Level();
+	auto scene = test->scene();
 	std::stringstream map;
 	map << "maps/" << level << ".tmx";
-	//scene->setTiledMap(map);
-	//director->runWithScene(scene);
+	test->setTiledMap(map.str());
+	director->runWithScene(scene);
 }
