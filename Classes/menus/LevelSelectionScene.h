@@ -2,6 +2,7 @@
 #include "cocos2d.h"
 #include "extensions/cocos-ext.h"
 #include "ui/CocosGUI.h"
+#include "utils/Definitions.h"
 
 USING_NS_CC;
 
@@ -14,7 +15,6 @@ public:
 	// FUNC
 	static cocos2d::Scene* createScene();
 	virtual bool init();
-	//void SwitchToGameScene(float dt);
 	CREATE_FUNC(LevelSelectionScene)
 
 	// ATTR
@@ -26,5 +26,6 @@ private:
 	void onClickBackButton(Ref* sender, Widget::TouchEventType touchEventType);
 
 	// ATTR
+	Label* label = Label::createWithTTF("Any", "fonts/Sugar Bomb.ttf", 45);
 
 };

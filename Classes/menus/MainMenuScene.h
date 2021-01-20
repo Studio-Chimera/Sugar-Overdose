@@ -14,7 +14,6 @@ public:
 	// FUNC
 	static cocos2d::Scene* createScene();
 	virtual bool init();
-	//void SwitchToGameScene(float dt);
 	CREATE_FUNC(MainMenuScene)
 
 	// ATTR
