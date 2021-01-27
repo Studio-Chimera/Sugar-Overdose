@@ -37,10 +37,10 @@ void LevelManager::openLevel(std::string level)
 	auto director = Director::getInstance();
 
 	//Todo: Uncomment when adding Level Class
-	auto test = new Level();
-	auto scene = test->scene();
+	auto level = new Level();
+	auto scene = level->scene();
 	std::stringstream map;
 	map << "maps/" << level << ".tmx";
-	test->setTiledMap(map.str());
+	level->setTiledMap(map.str());
 	director->runWithScene(scene);
 }
