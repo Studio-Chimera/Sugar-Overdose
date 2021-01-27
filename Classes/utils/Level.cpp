@@ -1,6 +1,7 @@
 #include "./Classes/utils/Level.h"
 #include <iostream>
 #include <vector>
+#include "store.h"
 using namespace cocos2d;
 Scene* Level::scene()
 {

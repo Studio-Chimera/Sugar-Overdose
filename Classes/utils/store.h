@@ -1,0 +1,1 @@
+extern std::string g_mapName;
