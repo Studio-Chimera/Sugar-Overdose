@@ -38,7 +38,6 @@ std::list<std::string> LevelManager::getLevels()
 void LevelManager::openLevel(std::string level)
 {
 	auto director = Director::getInstance();
-
 	std::stringstream map;
 	map << "maps/" << level << ".tmx";
 	auto store = Store::GetInstance();
