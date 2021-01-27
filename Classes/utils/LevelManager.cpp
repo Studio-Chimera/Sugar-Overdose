@@ -1,4 +1,9 @@
 #include "LevelManager.h"
+#include "Level.h"
+#include "store.h"
+
+std::string g_mapName;
+
 USING_NS_CC;
 // ###################################################
 // Declarations
@@ -34,11 +39,9 @@ std::list<std::string> LevelManager::getLevels()
 void LevelManager::openLevel(std::string level)
 {
 	auto director = Director::getInstance();
-
-	//Todo: Uncomment when adding Level Class
-	//auto scene = Level::createScene();
 	std::stringstream map;
 	map << "maps/" << level << ".tmx";
-	//scene->setTiledMap(map);
-	//director->runWithScene(scene);
+	g_mapName = map.str();
+	auto scene = Level::scene();
+	director->runWithScene(scene);
 }
