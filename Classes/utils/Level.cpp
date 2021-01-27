@@ -11,6 +11,7 @@ Scene* Level::scene()
     // 'scene' is an autorelease object
     Scene* scene = Scene::createWithPhysics();
     scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    
     // 'layer' is an autorelease object
     Level* level = Level::create();
     level->createPhysicalWorld(scene->getPhysicsWorld());
