@@ -1,7 +1,5 @@
 #include "Definitions.h"
 
-
-
 void changeScene(float dt, CustomScenes customScenes)
 {
 	Scene* newScene;
@@ -15,11 +13,13 @@ void changeScene(float dt, CustomScenes customScenes)
 	case(CustomScenes::LevelSelectionMenu):
 		newScene = LevelSelectionScene::createScene();
 		break;
-		//case(CustomScenes::OptionsMenu):
-		//	newScene = MainMenuScene::createScene();
+	case(CustomScenes::OptionsMenu):
+		newScene = OptionsScene::createScene();
+		break;
 
-		//case(CustomScenes::CreditsMenu):
-		//	newScene = MainMenuScene::createScene();
+	case(CustomScenes::CreditsMenu):
+		newScene = CreditsScene::createScene();
+		break;
 
 	default:
 		break; // Implement error msg

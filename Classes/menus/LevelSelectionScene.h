@@ -26,6 +26,8 @@ private:
 	void onClickBackButton(Ref* sender, Widget::TouchEventType touchEventType);
 
 	// ATTR
-	Label* label = Label::createWithTTF("Any", "fonts/Sugar Bomb.ttf", 45);
+
+	/*********** FOR BUTTONS TEXTS HARD-CODED ***********/
+	//Label* label = Label::createWithTTF("Any", "fonts/Sugar Bomb.ttf", 45);
 
 };

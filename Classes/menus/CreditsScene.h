@@ -8,14 +8,14 @@ USING_NS_CC;
 
 using namespace ui;
 
-class OptionsScene : public cocos2d::Layer{
+class CreditsScene : public cocos2d::Layer{
 
 public:
 
 	// FUNC
 	static cocos2d::Scene* createScene();
 	virtual bool init();
-	CREATE_FUNC(OptionsScene)
+	CREATE_FUNC(CreditsScene)
 
 	// ATTR
 
