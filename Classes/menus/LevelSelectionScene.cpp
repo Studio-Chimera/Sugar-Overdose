@@ -30,21 +30,32 @@ bool LevelSelectionScene::init() {
 	title->setPosition(Vec2(screenZize.width / 2 + origin.x, screenZize.height * 0.65 + origin.y));
 	this->addChild(title);
 
-	Button* buttonPlay = Button::create();
+	/*********** WAY WITH BUTTON TEXT HARD-CODED ***********/
+
+	/*Button* buttonPlay = Button::create();
 	Label* labelPlay = Label::createWithTTF("play", "fonts/Sugar Bomb.ttf", 45);
 	buttonPlay->setPosition(Vec2(screenZize.width / 4 + origin.x, screenZize.height * 0.3));
 	buttonPlay->addChild(labelPlay);
-	
 	labelPlay->setString("STOP");
-	
-	// CAPTURE est un fond noir, il faut trouer une solution pour un boutton sans img
+
 	Button* buttonBack = Button::create();
 	Label* labelBack = Label::createWithTTF("back to main menu", "fonts/Sugar Bomb.ttf", 45);
 	auto size = labelBack->getContentSize();
 	buttonBack->setContentSize(size);
 	buttonBack->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.35));
-	buttonBack->addChild(labelBack);
+	buttonBack->addChild(labelBack); */
 
+	/*********** WAY WITH BUTTONS TEXTS HARD-CODED ***********/
+
+	// Place buttons
+	Button* buttonPlay = Button::create(BUTTON_PLAY, BUTTON_PLAY);
+	buttonPlay->setPosition(Vec2(screenZize.width / 4 + origin.x, screenZize.height * 0.38));
+
+	Button* buttonBack = Button::create(BUTTON_BACK_TO_MAIN_MENU, BUTTON_BACK_TO_MAIN_MENU);
+	buttonBack->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.38 + origin.y));
+	
+	//// CAPTURE est un fond noir, il faut trouer une solution pour un boutton sans img
+	
 	//for each (level in levelManager->getLevels()) {
 	//	// add image level
 	//	// add name 
@@ -55,10 +66,6 @@ bool LevelSelectionScene::init() {
 
 	buttonPlay->addTouchEventListener(CC_CALLBACK_2(LevelSelectionScene::onClickPlayButton, this));
 	buttonBack->addTouchEventListener(CC_CALLBACK_2(LevelSelectionScene::onClickBackButton, this));
-
-
-//	SonarCocosHelper::UI ui;
-//	ui.AddAudioToggle(SOUND_ON_BUTTON, SOUND_ON_PRESSED_BUTTON, SOUND_OFF_BUTTON, SOUND_OFF_PRESSED_BUTTON, this, SonarCocosHelper::UIButtonPosition::eBottomRight);
 
 	return true;
 }
