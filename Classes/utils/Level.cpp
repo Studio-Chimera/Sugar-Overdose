@@ -26,19 +26,13 @@ bool Level::init()
     {
         return false;
     }
-    return true;
-}
 
-void Level::setTiledMap(std::string map)
-{
-    // instanciate a new tiledMap with level.tmx as model
     _tileMap = new TMXTiledMap();
-    _tileMap->initWithTMXFile(map);
-    
+    _tileMap->initWithTMXFile(g_mapName);
     // pickup tiles
     _background = _tileMap->layerNamed("background");
-    _blocks = _tileMap->layerNamed("blocks");
-    
     // add the node to scene tree
     this->addChild(_tileMap);
+
+    return true;
 }

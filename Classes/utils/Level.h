@@ -18,6 +18,5 @@ public:
 
     // implement the "static create()" method manually
     CREATE_FUNC(Level);
-    void setTiledMap(std::string map);
 };
 #endif // __LEVEL_SCENE_H__
