@@ -24,6 +24,8 @@
 
 #include "AppDelegate.h"
 #include "menus/SplashScene.h"
+#include <AudioEngine.h>
+#include <utils/Definitions.h>
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1    
@@ -120,6 +122,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
     
     auto scene = SplashScene::createScene();
 
+    //Start music
+    cocos2d::experimental::AudioEngine::play2d(MAIN_SOUND, true);
+    cocos2d::experimental::AudioEngine::setVolume(0, DEFAULT_VOLUME);
+    
     // run
     director->runWithScene(scene);
     

@@ -3,10 +3,13 @@
 #include "extensions/cocos-ext.h"
 #include "ui/CocosGUI.h"
 #include "utils/Definitions.h"
+#include "utils/LevelManager.h"
+#include <string>
+#include <list>
 
 USING_NS_CC;
-
 using namespace ui;
+using namespace std;
 
 class LevelSelectionScene : public cocos2d::Layer{
 
@@ -26,7 +29,8 @@ private:
 	void onClickBackButton(Ref* sender, Widget::TouchEventType touchEventType);
 
 	// ATTR
-
+	LevelManager* levelManager;
+	list<string> listLevels;
 	/*********** FOR BUTTONS TEXTS HARD-CODED ***********/
 	//Label* label = Label::createWithTTF("Any", "fonts/Sugar Bomb.ttf", 45);
 

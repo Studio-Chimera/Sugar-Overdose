@@ -3,6 +3,7 @@
 #include "OptionsScene.h"
 #include "utils/Definitions.h"
 #include <SonarFrameworks.h>
+#include <AudioEngine.h>
 
 USING_NS_CC;
 
@@ -23,7 +24,8 @@ bool MainMenuScene::init() {
 	if (!Layer::init()) {	
 		return false;
 	} 
-	  
+
+	// Get informations for display 
 	Size const screenZize = Director::getInstance()->getVisibleSize();
 	Vec2 const origin = Director::getInstance()->getVisibleOrigin();
 	
@@ -102,7 +104,9 @@ void MainMenuScene::onClickLeaveButton(Ref* sender, Widget::TouchEventType type)
 	switch (type) {
 
 	case Widget::TouchEventType::ENDED:
-		auto director = Director::getInstance();
+		cocos2d::experimental::AudioEngine::end();
+
+		const auto director = Director::getInstance();
 		director->end();
 		break;
 

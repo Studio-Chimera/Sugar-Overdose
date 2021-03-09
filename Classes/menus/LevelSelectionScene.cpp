@@ -1,7 +1,7 @@
 #include "LevelSelectionScene.h"
 #include <SonarFrameworks.h>
 #include "MainMenuScene.h"
-#include <utils/Definitions.h>
+#include "utils/Definitions.h"
 USING_NS_CC;
 
 Scene* LevelSelectionScene::createScene() {
@@ -61,11 +61,15 @@ bool LevelSelectionScene::init() {
 	//	// add name 
 	//}
 
+
 	this->addChild(buttonPlay);
 	this->addChild(buttonBack);
 
 	buttonPlay->addTouchEventListener(CC_CALLBACK_2(LevelSelectionScene::onClickPlayButton, this));
 	buttonBack->addTouchEventListener(CC_CALLBACK_2(LevelSelectionScene::onClickBackButton, this));
+
+	levelManager = new LevelManager();
+	listLevels = levelManager->getLevels();
 
 	return true;
 }
@@ -74,7 +78,7 @@ void LevelSelectionScene::onClickPlayButton(Ref *sender, Widget::TouchEventType 
 	switch (type) {
 		
 	case Widget::TouchEventType::ENDED:
-		//changeScene(1, CustomScenes::????);
+		levelManager->openLevel("test1");
 		break;
 
 	default:

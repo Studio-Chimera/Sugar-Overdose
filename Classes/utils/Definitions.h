@@ -39,11 +39,15 @@ this file defines all constantes
 
 // IDs
 
-// TIMES
+// VALUES
 #define DISPLAY_TIME_SPLASH_SCENE 1.5
+constexpr auto DEFAULT_VOLUME = 0.2;
 
 // STATES
 
+
+// SOUNDS
+#define MAIN_SOUND "sounds/Giedre-PisserDebout.mp3"
 
 // SCENES
 enum class CustomScenes { MainMenu, LevelSelectionMenu, OptionsMenu, CreditsMenu };
