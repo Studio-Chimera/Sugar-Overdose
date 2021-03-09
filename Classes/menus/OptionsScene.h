@@ -4,9 +4,11 @@
 #include "ui/CocosGUI.h"
 #include "utils/Definitions.h"
 
+USING_NS_CC_EXT;
 USING_NS_CC;
 
 using namespace ui;
+
 
 class OptionsScene : public cocos2d::Layer{
 
@@ -19,11 +21,14 @@ public:
 
 	// ATTR
 
+
 private:
 
 	// FUNC
 	void onClickBackButton(Ref* sender, Widget::TouchEventType touchEventType);
-
+	void sliderEvent(Ref* sender, ui::Slider::EventType eventType);
+	
 	// ATTR
+
 
 };
