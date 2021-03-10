@@ -44,5 +44,5 @@ void LevelManager::openLevel(std::string level)
 	auto store = Store::GetInstance();
 	store->g_mapName = map.str();
 	auto scene = Level::scene();
-	director->runWithScene(scene);
+	director->replaceScene(scene);
 }

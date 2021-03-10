@@ -2,7 +2,9 @@
 #include <iostream>
 #include <vector>
 #include "Store.h"
+
 using namespace cocos2d;
+
 Scene* Level::scene()
 {
     // 'scene' is an autorelease object
@@ -30,8 +32,9 @@ bool Level::init()
     auto store = Store::GetInstance();
     _tileMap = new TMXTiledMap();
     _tileMap->initWithTMXFile(store->g_mapName);
-    // pickup tiles
+    // find layer (from tmx file)
     _background = _tileMap->layerNamed("background");
+
     // add the node to scene tree
     this->addChild(_tileMap);
 
