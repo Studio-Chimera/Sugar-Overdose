@@ -29,7 +29,7 @@ bool LevelSelectionScene::init() {
 	Sprite* const title = Sprite::create(TITLE);
 	title->setPosition(Vec2(screenZize.width / 2 + origin.x, screenZize.height * 0.65 + origin.y));
 	this->addChild(title);
-
+//Todo: Refactor with dynamic text
 	/*********** WAY WITH BUTTON TEXT HARD-CODED ***********/
 
 	/*Button* buttonPlay = Button::create();
@@ -55,7 +55,7 @@ bool LevelSelectionScene::init() {
 	buttonBack->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.38 + origin.y));
 	
 	//// CAPTURE est un fond noir, il faut trouer une solution pour un boutton sans img
-	
+	//Todo: Add level selection
 	//for each (level in levelManager->getLevels()) {
 	//	// add image level
 	//	// add name 
