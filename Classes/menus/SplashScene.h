@@ -10,7 +10,6 @@ public:
     
     CREATE_FUNC(SplashScene);
 
-
 private:
     void SwitchToMainMenu(float dt);
 

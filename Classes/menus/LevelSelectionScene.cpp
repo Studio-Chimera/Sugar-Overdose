@@ -31,6 +31,8 @@ bool LevelSelectionScene::init() {
 	this->addChild(title);
 //Todo: Refactor with dynamic text
 	/*********** WAY WITH BUTTON TEXT HARD-CODED ***********/
+	
+	// With this way, we need a black background in image
 
 	/*Button* buttonPlay = Button::create();
 	Label* labelPlay = Label::createWithTTF("play", "fonts/Sugar Bomb.ttf", 45);
@@ -53,14 +55,11 @@ bool LevelSelectionScene::init() {
 
 	Button* buttonBack = Button::create(BUTTON_BACK_TO_MAIN_MENU, BUTTON_BACK_TO_MAIN_MENU);
 	buttonBack->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.38 + origin.y));
-	
-	//// CAPTURE est un fond noir, il faut trouer une solution pour un boutton sans img
 	//Todo: Add level selection
 	//for each (level in levelManager->getLevels()) {
 	//	// add image level
 	//	// add name 
 	//}
-
 
 	this->addChild(buttonPlay);
 	this->addChild(buttonBack);

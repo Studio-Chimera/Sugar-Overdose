@@ -57,10 +57,6 @@ bool MainMenuScene::init() {
 	buttonCredits->addTouchEventListener(CC_CALLBACK_2(MainMenuScene::onClickCreditsButton, this));
 	buttonLeave->addTouchEventListener(CC_CALLBACK_2(MainMenuScene::onClickLeaveButton, this));
 
-
-//	SonarCocosHelper::UI ui;
-//	ui.AddAudioToggle(SOUND_ON_BUTTON, SOUND_ON_PRESSED_BUTTON, SOUND_OFF_BUTTON, SOUND_OFF_PRESSED_BUTTON, this, SonarCocosHelper::UIButtonPosition::eBottomRight);
-
 	return true;
 }
 
