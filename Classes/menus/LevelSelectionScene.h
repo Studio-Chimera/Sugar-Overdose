@@ -1,6 +1,5 @@
 #pragma once
 #include "cocos2d.h"
-#include "extensions/cocos-ext.h"
 #include "ui/CocosGUI.h"
 #include "utils/Definitions.h"
 #include "utils/LevelManager.h"
