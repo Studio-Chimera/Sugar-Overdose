@@ -1,8 +1,6 @@
 #include "LevelManager.h"
 #include "Level.h"
-#include "store.h"
-
-std::string g_mapName;
+#include "Store.h"
 
 USING_NS_CC;
 // ###################################################
@@ -42,7 +40,8 @@ void LevelManager::openLevel(std::string level)
 
 	std::stringstream map;
 	map << "maps/" << level << ".tmx";
-	g_mapName = map.str();
+	auto store = Store::GetInstance();
+	store->g_mapName = map.str();
 	auto scene = Level::scene();
 	director->runWithScene(scene);
 }

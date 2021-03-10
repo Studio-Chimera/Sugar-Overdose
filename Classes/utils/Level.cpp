@@ -1,7 +1,7 @@
-#include "./Classes/utils/Level.h"
+#include "Level.h"
 #include <iostream>
 #include <vector>
-#include "store.h"
+#include "Store.h"
 using namespace cocos2d;
 Scene* Level::scene()
 {
@@ -27,8 +27,9 @@ bool Level::init()
         return false;
     }
 
+    auto store = Store::GetInstance();
     _tileMap = new TMXTiledMap();
-    _tileMap->initWithTMXFile(g_mapName);
+    _tileMap->initWithTMXFile(store->g_mapName);
     // pickup tiles
     _background = _tileMap->layerNamed("background");
     // add the node to scene tree
