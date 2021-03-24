@@ -1,20 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-up" width="10" height="10" tilewidth="64" tileheight="64" infinite="0" nextlayerid="4" nextobjectid="1">
- <tileset firstgid="1" name="tuiles" tilewidth="64" tileheight="64" tilecount="96" columns="12">
-  <image source="roadTextures_tilesheet.png" width="768" height="512"/>
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-up" width="10" height="10" tilewidth="17" tileheight="17" infinite="0" nextlayerid="7" nextobjectid="3">
+ <editorsettings>
+  <chunksize width="17" height="17"/>
+ </editorsettings>
+ <tileset firstgid="1" name="roguelikeIndoor_transparent" tilewidth="17" tileheight="17" tilecount="442" columns="26">
+  <image source="tiles/roguelikeIndoor_transparent.png" width="458" height="305"/>
  </tileset>
  <layer id="3" name="background" width="10" height="10">
+  <properties>
+   <property name="collidable" type="bool" value="false"/>
+   <property name="destructable" type="bool" value="false"/>
+  </properties>
   <data encoding="csv">
-2,2,2,25,25,25,25,25,25,25,
-75,25,2,2,25,25,25,25,25,25,
-75,25,25,2,25,17,17,17,25,25,
-75,25,25,17,17,17,2,25,26,26,
-75,25,25,17,25,25,2,17,25,26,
-75,25,17,2,25,25,2,17,25,26,
-75,25,17,17,2,2,2,17,25,26,
-75,25,25,17,17,17,17,17,25,26,
-75,75,75,25,17,17,25,25,25,26,
-26,26,26,26,26,26,26,26,26,26
+155,155,155,155,155,155,155,155,155,155,
+155,155,155,155,155,155,155,155,155,155,
+155,155,155,155,155,155,155,155,155,155,
+155,155,155,155,155,155,155,155,155,155,
+155,155,155,155,155,155,155,155,155,155,
+155,155,155,155,155,155,155,155,155,155,
+155,155,155,155,155,155,155,155,155,155,
+155,155,155,155,155,155,155,155,155,155,
+155,155,155,155,155,155,155,155,155,155,
+155,155,155,155,155,155,155,155,155,155
+</data>
+ </layer>
+ <objectgroup id="6" name="spawns">
+  <object id="1" name="spawn 2" type="spawn" x="128.667" y="39">
+   <point/>
+  </object>
+  <object id="2" name="spawn 1" type="spawn" x="111" y="124">
+   <point/>
+  </object>
+ </objectgroup>
+ <layer id="4" name="walls" width="10" height="10">
+  <properties>
+   <property name="collidable" type="bool" value="true"/>
+   <property name="destructable" type="bool" value="true"/>
+  </properties>
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,323,401,0,0,0,0,0,0,
+0,0,349,0,0,350,0,0,0,0,
+0,0,349,0,0,350,0,0,0,0,
+0,0,349,0,399,326,0,0,0,0,
+0,0,349,0,0,0,0,0,0,0,
+0,0,349,0,0,0,0,0,0,0,
+0,0,325,400,401,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="5" name="border" width="10" height="10">
+  <properties>
+   <property name="collidable" type="bool" value="true"/>
+   <property name="destructable" type="bool" value="false"/>
+  </properties>
+  <data encoding="csv">
+226,226,226,226,226,226,226,226,226,226,
+226,0,0,0,0,0,0,0,0,226,
+226,0,0,0,0,0,0,0,0,226,
+226,0,0,0,0,0,0,0,0,226,
+226,0,0,0,0,0,0,0,0,226,
+226,0,0,0,0,0,0,0,0,226,
+226,0,0,0,0,0,0,0,0,226,
+226,0,0,0,0,0,0,0,0,226,
+226,0,0,0,0,0,0,0,0,226,
+226,226,226,226,226,226,226,226,226,226
 </data>
  </layer>
 </map>

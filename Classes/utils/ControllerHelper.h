@@ -22,5 +22,9 @@ public:
 
     void addControls(Player* player, std::string type);
 
+private:
+    EventListenerKeyboard* createKeyboardController(Player* player);
+    EventListenerCustom createCustomController();
+
 };
 #endif

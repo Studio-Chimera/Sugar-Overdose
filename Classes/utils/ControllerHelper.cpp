@@ -29,12 +29,9 @@ void ControllerHelper::addControls(Player* player, std::string type)
 
 }
 
-EventListenerCustom createCustomController()
-{
 
-}
 
-EventListenerKeyboard* createKeyboardController(Player* player)
+EventListenerKeyboard* ControllerHelper::createKeyboardController(Player* player)
 {
     auto listener = EventListenerKeyboard::create();
 

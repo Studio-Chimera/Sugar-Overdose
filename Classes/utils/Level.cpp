@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "Store.h"
+#include "PlayerHelper.h"
 
 using namespace cocos2d;
 
@@ -15,6 +16,9 @@ Scene* Level::scene()
     Level* layer = Level::create();
     layer->createPhysicalWorld(scene->getPhysicsWorld());
     scene->addChild(layer);
+    auto helper = new PlayerHelper();
+    auto pos = new Vec2(100, 100);
+    helper->createPlayer(pos);
     return scene;
 }
 

@@ -36,7 +36,7 @@ public:
 
     void setPosX(int newPos);
     void setPosY(int newPos);
-    void setPosition(Vec2 position);
+    void setPosition(Vec2* position);
     void setSideMoveAnimation(Vector<SpriteFrame*>);
     void setTopMoveAnimation(Vector<SpriteFrame*>);
     void setBottomMoveAnimation(Vector<SpriteFrame*>);

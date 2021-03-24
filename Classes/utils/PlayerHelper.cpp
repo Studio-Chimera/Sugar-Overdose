@@ -32,7 +32,7 @@ std::list<Player*> PlayerHelper::getPlayers()
 // ###################################################
 
 // call this one to have your new player instance
-Player* PlayerHelper::createPlayer(Vec2 position)
+Player* PlayerHelper::createPlayer(Vec2* position)
 {
 	//create player instance
     auto player = new Player;
@@ -51,9 +51,13 @@ Player* PlayerHelper::createPlayer(Vec2 position)
 // add all the animation's frame to the player
 void PlayerHelper::setPlayerSprites(Player* player)
 {
-    auto playerNumber = _playersInstances.size;
-	player->getSpritecacher()->addSpriteFramesWithFile("sprites/player" << playerNumber+1 <<".plist");
-	player->getSprite()->initWithSpriteFrameName("player"<< playerNumber+1 <<"_stand.png");
+    auto playerNumber = _playersInstances.size();
+	std::stringstream plistFile;
+	plistFile << "sprites/player/player"<< playerNumber+1 << "/player" << playerNumber + 1 << ".plist";
+	player->getSpritecacher()->addSpriteFramesWithFile(plistFile.str());
+	std::stringstream standPng;
+	standPng << "sprites/player/player" << playerNumber + 1 << "/player" << playerNumber + 1 << "_stand.png";
+	player->getSprite()->initWithSpriteFrameName(standPng.str());
 	createSideMoveAnimation(playerNumber, player);
 	createTopMoveAnimation(playerNumber, player);
 	createBottomMoveAnimation(playerNumber, player);
