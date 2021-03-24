@@ -56,7 +56,8 @@ void PlayerHelper::setPlayerSprites(Player* player)
 	plistFile << "sprites/player/player"<< playerNumber+1 << "/player" << playerNumber + 1 << ".plist";
 	player->getSpritecacher()->addSpriteFramesWithFile(plistFile.str());
 	std::stringstream standPng;
-	standPng << "sprites/player/player" << playerNumber + 1 << "/player" << playerNumber + 1 << "_stand.png";
+	standPng << "player" << playerNumber + 1 << "_stand.png";
+
 	player->getSprite()->initWithSpriteFrameName(standPng.str());
 	createSideMoveAnimation(playerNumber, player);
 	createTopMoveAnimation(playerNumber, player);
@@ -65,12 +66,12 @@ void PlayerHelper::setPlayerSprites(Player* player)
 
 void PlayerHelper::createSideMoveAnimation(int playerNumber, Player* player)
 {
-	const int kNumberOfFrames = 8;
+	const int kNumberOfFrames = 2;
 	Vector<SpriteFrame*> frames;
 	for (int i = 1; i < kNumberOfFrames; i++)
 	{
 		std::stringstream ss;
-		ss << "player1_sideWalk/player"<< playerNumber+1 <<"_sideWalk0" << i << ".png";
+		ss << "player"<< playerNumber+1 <<"_sideWalk0" << i << ".png";
 		auto sprite = player->getSpritecacher()->getSpriteFrameByName(ss.str());
 		frames.pushBack(sprite);
 	}
@@ -80,12 +81,12 @@ void PlayerHelper::createSideMoveAnimation(int playerNumber, Player* player)
 
 void PlayerHelper::createTopMoveAnimation(int playerNumber, Player* player)
 {
-	const int kNumberOfFrames = 8;
+	const int kNumberOfFrames = 2;
 	Vector<SpriteFrame*> frames;
 	for (int i = 1; i < kNumberOfFrames; i++)
 	{
 		std::stringstream ss;
-		ss << "player1_topWalk/player" << playerNumber+1 << "_topWalk0" << i << ".png";
+		ss << "player" << playerNumber+1 << "_topWalk0" << i << ".png";
 		auto sprite = player->getSpritecacher()->getSpriteFrameByName(ss.str());
 		frames.pushBack(sprite);
 	}
@@ -95,12 +96,12 @@ void PlayerHelper::createTopMoveAnimation(int playerNumber, Player* player)
 
 void PlayerHelper::createBottomMoveAnimation(int playerNumber, Player* player)
 {
-	const int kNumberOfFrames = 8;
+	const int kNumberOfFrames = 2;
 	Vector<SpriteFrame*> frames;
 	for (int i = 1; i < kNumberOfFrames; i++)
 	{
 		std::stringstream ss;
-		ss << "player1_bottomWalk/player" << playerNumber+1 << "_bottomWalk0" << i << ".png";
+		ss << "player" << playerNumber+1 << "_bottomWalk0" << i << ".png";
 		auto sprite = player->getSpritecacher()->getSpriteFrameByName(ss.str());
 		frames.pushBack(sprite);
 	}
