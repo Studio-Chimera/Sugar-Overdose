@@ -322,7 +322,7 @@
   <object id="1" name="spawn 2" type="spawn" x="200" y="200">
    <point/>
   </object>
-  <object id="2" name="spawn 1" type="spawn" x="400" y="124">
+  <object id="2" name="spawn 1" type="spawn" x="400" y="400">
    <point/>
   </object>
  </objectgroup>
