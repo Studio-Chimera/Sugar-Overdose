@@ -18,7 +18,7 @@ private:
 public:
     virtual bool init();
     static Scene* scene();
-
+    bool onContactBegin(PhysicsContact& contact);
     // implement the "static create()" method manually
     CREATE_FUNC(Level);
 };

@@ -17,6 +17,7 @@ Scene* Level::scene()
     level->createPhysicalWorld(scene->getPhysicsWorld());
     scene->addChild(level);
 
+
     return scene;
 }
 
@@ -60,6 +61,26 @@ bool Level::init()
 
     this->_eventDispatcher->addEventListenerWithSceneGraphPriority(player1Controller, player1->getSprite());
     this->_eventDispatcher->addEventListenerWithSceneGraphPriority(player2Controller, player2->getSprite());
+
+    auto contactListener = EventListenerPhysicsContact::create();
+    contactListener->onContactBegin = CC_CALLBACK_1(Level::onContactBegin, this);
+    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
+
+    return true;
+}
+
+bool Level::onContactBegin(PhysicsContact& contact) {
+
+    PhysicsBody* physicsBodyShapeA = contact.getShapeA()->getBody();
+    PhysicsBody* physicsBodyShapeB = contact.getShapeB()->getBody();
+
+    // check if the bodies have collided
+    if ((1 == physicsBodyShapeA->getCollisionBitmask() && 2 == physicsBodyShapeB->getCollisionBitmask()) ||
+        (2 == physicsBodyShapeA->getCollisionBitmask() && 1 == physicsBodyShapeB->getCollisionBitmask()) || 
+        (2 == physicsBodyShapeA->getCollisionBitmask() && 2 == physicsBodyShapeB->getCollisionBitmask()))
+    {
+        CCLOG("COLLISIONS HAS OCCURED");
+    }
 
     return true;
 }
