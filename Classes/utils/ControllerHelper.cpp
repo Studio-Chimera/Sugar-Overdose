@@ -14,49 +14,67 @@ ControllerHelper::~ControllerHelper()
 // Methods
 // ###################################################
 
-void ControllerHelper::addControls(Player* player, std::string type)
+void ControllerHelper::addControls(Player* player, int type)
 {
-	if (type == "player")
-	{
-		player->setController(createKeyboardController(player));
-	}
-	else if (type== "IA") {
-		//player->setController();
-	}
-	else {
-		//throw error
-	}
+
+    switch (type){
+        case 1:
+            player->setController(createKeyboardArrowController(player));
+            break;
+        case 2:
+            player->setController(createKeyboard_ZQSD_Controller(player));
+            break;
+        case 3:
+
+            break;
+        case 4:
+            break;
+        case 5:
+            //player->setIAController();
+            break;
+    }
 
 }
 
-
-
-EventListenerKeyboard* ControllerHelper::createKeyboardController(Player* player)
+EventListenerKeyboard* ControllerHelper::createKeyboardArrowController(Player* player)
 {
     auto listener = EventListenerKeyboard::create();
 
     listener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event) {
-        switch (keyCode) {
-        case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-        case EventKeyboard::KeyCode::KEY_Q:
+        
+        if (EventKeyboard::KeyCode::KEY_LEFT_ARROW == keyCode) {
             player->moveLeft();
-            break;
-        case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-        case EventKeyboard::KeyCode::KEY_D:
+        } else if (EventKeyboard::KeyCode::KEY_RIGHT_ARROW == keyCode) {
             player->moveRight();
-            break;
-        case EventKeyboard::KeyCode::KEY_UP_ARROW:
-        case EventKeyboard::KeyCode::KEY_Z:
-            player->moveTop();
-            break;
-        case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-        case EventKeyboard::KeyCode::KEY_S:
-            player->moveBottom();
-            break;
+        } else if (EventKeyboard::KeyCode::KEY_UP_ARROW == keyCode) {
+            player->moveUp();
+        } else if (EventKeyboard::KeyCode::KEY_DOWN_ARROW == keyCode) {
+            player->moveDown();
         }
     };
 
     return listener;
 }
 
+EventListenerKeyboard* ControllerHelper::createKeyboard_ZQSD_Controller(Player* player)
+{
+    auto listener = EventListenerKeyboard::create();
 
+    listener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, Event* event) {
+
+        if (EventKeyboard::KeyCode::KEY_A == keyCode) {
+            player->moveLeft();
+        }
+        else if (EventKeyboard::KeyCode::KEY_D == keyCode) {
+            player->moveRight();
+        }
+        else if (EventKeyboard::KeyCode::KEY_W == keyCode) {
+            player->moveUp();
+        }
+        else if (EventKeyboard::KeyCode::KEY_S == keyCode) {
+            player->moveDown();
+        }
+    };
+
+    return listener;
+}

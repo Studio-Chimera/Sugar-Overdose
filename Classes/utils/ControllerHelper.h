@@ -20,10 +20,11 @@ public:
     // Methods
     // ###################################################
 
-    void addControls(Player* player, std::string type);
+    void addControls(Player* player, int type);
 
 private:
-    EventListenerKeyboard* createKeyboardController(Player* player);
+    EventListenerKeyboard* createKeyboardArrowController(Player* player);
+    EventListenerKeyboard* createKeyboard_ZQSD_Controller(Player* player);
     EventListenerCustom createCustomController();
 
 };

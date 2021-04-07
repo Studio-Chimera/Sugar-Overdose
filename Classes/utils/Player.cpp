@@ -17,6 +17,7 @@ Player::Player()
 	auto physicsBody = PhysicsBody::createBox(Size(65.0f, 65.0f),
 		PhysicsMaterial(0.1f, 1.0f, 0.0f));
 	physicsBody->setDynamic(false); // set to true for gravity
+	physicsBody->setGravityEnable(false);
 
 	//apply physicsBody to the sprite
 	_sprite->addComponent(physicsBody);
@@ -115,11 +116,6 @@ void Player::setBottomMoveAnimation(Vector<SpriteFrame*> frames)
 // Methods
 // ###################################################
 
-void Player::actualizePosition()
-{
-	_sprite->setPosition(getPosition());
-}
-
 void Player::moveLeft() {
 	_sprite->setFlipX(true);
 	_posX -= 35;
@@ -128,25 +124,30 @@ void Player::moveLeft() {
 }
 
 void Player::moveRight() {
-	_sprite->setFlipX(false);
+
 	_posX += 35;
 	auto movement = MoveTo::create(0.6, getPosition());
-	_sprite->runAction(Spawn::create(Animate::create(_sideMoveAnimation), movement,0.5f, nullptr));
+	_sprite->runAction(Spawn::create(Animate::create(_sideMoveAnimation), movement, nullptr));
+
 }
 
-void Player::moveTop() {
+void Player::moveUp() {
 	_posY += 35;
 	auto movement = MoveTo::create(0.6, getPosition());
-	_sprite->runAction(Spawn::create(Animate::create(_topMoveAnimation), movement, 0.5f, nullptr));
+	_sprite->runAction(Spawn::create(Animate::create(_topMoveAnimation), movement, nullptr));
 }
 
-void Player::moveBottom() {
-	_posX += 35;
+void Player::moveDown() {
+	_posY -= 35;
 	auto movement = MoveTo::create(0.6, getPosition());
-	_sprite->runAction(Spawn::create(Animate::create(_bottomMoveAnimation), movement, 0.5f, nullptr));
+	_sprite->runAction(Spawn::create(Animate::create(_bottomMoveAnimation), movement, nullptr));
 }
 
 void Player::plantBomb() {
 	//Todo
 }
 
+void Player::stopAnimation(cocos2d::RepeatForever* ani) {
+	CCLOG("STOP ANIMATION");
+	_sprite->stopAction(ani);
+}

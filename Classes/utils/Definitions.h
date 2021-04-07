@@ -6,7 +6,7 @@
 #include "menus/CreditsScene.h"
 
 /*
-this file defines all constantes
+this file defines all constantes and reusables functions
 */
 
 // SPRITES - BACKGROUNDS & WINDOWS
@@ -39,12 +39,19 @@ this file defines all constantes
 
 // IDs
 
-// VALUES
+// VALUES NUMBER
 #define DISPLAY_TIME_SPLASH_SCENE 1.5
-constexpr auto DEFAULT_VOLUME = 0.2;
+constexpr auto DEFAULT_VOLUME = 0;
 
 // STATES
 
+
+// TYPES
+#define TYPE_PLAYER_ONE 1
+#define TYPE_PLAYER_TWO 2
+#define TYPE_PLAYER_THREE 3
+#define TYPE_PLAYER_FOUR 4
+#define TYPE_IA 5
 
 // SOUNDS
 #define MAIN_SOUND "sounds/Giedre-PisserDebout.mp3"

@@ -2,6 +2,8 @@
 #ifndef __LEVEL_SCENE_H__
 #define __LEVEL_SCENE_H__
 #include "cocos2d.h"
+#include "utils/Definitions.h"
+
 using namespace cocos2d;
 
 class Level : public Layer

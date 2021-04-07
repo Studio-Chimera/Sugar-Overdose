@@ -32,7 +32,7 @@ std::list<Player*> PlayerHelper::getPlayers()
 // ###################################################
 
 // call this one to have your new player instance
-Player* PlayerHelper::createPlayer(Vec2* position)
+Player* PlayerHelper::createPlayer(Vec2* position, int type)
 {
 	//create player instance
     auto player = new Player;
@@ -41,10 +41,11 @@ Player* PlayerHelper::createPlayer(Vec2* position)
     player->setPosition(position);
     setPlayerSprites(player);
 	auto controllerHelper = new ControllerHelper;
-	controllerHelper->addControls(player, "player"); //to use controls on scene add: this->_eventDispatcher->addEventListenerWithSceneGraphPriority(player->getController(), player->getSprite());
+
+	controllerHelper->addControls(player, type); //to use controls on scene add: this->_eventDispatcher->addEventListenerWithSceneGraphPriority(player->getController(), player->getSprite());
 
 	// save instance
-    _playersInstances.push_back(player);
+	_playersInstances.push_back(player);
     return player;
 }
 
@@ -62,6 +63,8 @@ void PlayerHelper::setPlayerSprites(Player* player)
 	createSideMoveAnimation(playerNumber, player);
 	createTopMoveAnimation(playerNumber, player);
 	createBottomMoveAnimation(playerNumber, player);
+
+	player->getSprite()->setPosition(player->getPosition());
 }
 
 void PlayerHelper::createSideMoveAnimation(int playerNumber, Player* player)

@@ -41,6 +41,7 @@ public:
     void setTopMoveAnimation(Vector<SpriteFrame*>);
     void setBottomMoveAnimation(Vector<SpriteFrame*>);
     void setController(std::variant<EventListenerCustom*, EventListenerKeyboard*> controller);
+    void stopAnimation(cocos2d::RepeatForever* ani);
 
     // ###################################################
     // Methods
@@ -48,10 +49,9 @@ public:
 
     void moveLeft();
     void moveRight();
-    void moveTop();
-    void moveBottom();
+    void moveUp();
+    void moveDown();
     void plantBomb();
-    void actualizePosition();
 
 private:
     SpriteFrameCache* _spriteCacher;

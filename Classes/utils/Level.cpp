@@ -45,12 +45,11 @@ bool Level::init()
     auto spawn2 = spawnPoints->objectNamed("spawn 2");
 
     // spawn players
-    playerHelper->createPlayer(new Vec2(spawn1.at("x").asInt(), spawn1.at("y").asInt()));
-    playerHelper->createPlayer(new Vec2(spawn2.at("x").asInt(), spawn2.at("y").asInt()));
-
-    auto player1 = playerHelper->getPlayers().front();
-    auto player2 = playerHelper->getPlayers().back();
-
+    /*auto player1 = playerHelper->createPlayer(new Vec2(spawn1.at("x").asInt(), spawn1.at("y").asInt()));
+    auto player2 = playerHelper->createPlayer(new Vec2(spawn2.at("x").asInt(), spawn2.at("y").asInt()));*/
+    auto player1 = playerHelper->createPlayer(new Vec2(100, 100), TYPE_PLAYER_ONE);
+    auto player2 = playerHelper->createPlayer(new Vec2(300, 300), TYPE_PLAYER_TWO);
+    
     // add the node to scene tree
     this->addChild(_tileMap);
     this->addChild(player1->getSprite());
