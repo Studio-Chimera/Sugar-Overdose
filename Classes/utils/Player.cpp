@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <iomanip>
+#include <utils/Definitions.h>
 
 // ###################################################
 // Declarations
@@ -16,16 +17,16 @@ Player::Player()
 	// create a physic body
 	auto physicsBody = PhysicsBody::createBox(Size(112.5f, 188.5f), PhysicsMaterial(0.1f, 1.0f, 0.0f));
 	physicsBody->setDynamic(false);
-	//physicsBody->setRotationEnable(false);
-	//physicsBody->setGravityEnable(false);
 
-	physicsBody->setCollisionBitmask(2); // Set a tag
+	/*physicsBody->setRotationEnable(false);
+	physicsBody->setGravityEnable(true);*/
+
+	//physicsBody->setCollisionBitmask(2); // Set a tag
 	physicsBody->setContactTestBitmask(true); // Allow to collision to be detected
 
-	//physicsBody->addMass(1000.0f);
 	//apply physicsBody to the sprite
-	_sprite->addComponent(physicsBody);
-	//_sprite->setPhysicsBody(physicsBody); // on charly tutorial
+	//_sprite->addComponent(physicsBody);
+	_sprite->setPhysicsBody(physicsBody); // on charly tutorial
 
 
 	_sideMoveAnimation = new Animation;
@@ -99,7 +100,7 @@ void Player::setPosition(Vec2* position)
 void Player::setSideMoveAnimation(Vector<SpriteFrame*> frames)
 {
 	// create the animation
-	const float delay = 0.2f;
+	const float delay = TIME_WALK_ANIMATION;
 	const unsigned int loop = 1;
 	_sideMoveAnimation->initWithSpriteFrames(frames, delay, loop);
 }
@@ -107,7 +108,7 @@ void Player::setSideMoveAnimation(Vector<SpriteFrame*> frames)
 void Player::setTopMoveAnimation(Vector<SpriteFrame*> frames)
 {
 	// create the animation
-	const float delay = 0.2f;
+	const float delay = TIME_WALK_ANIMATION;
 	const unsigned int loop = 1;
 	_topMoveAnimation->initWithSpriteFrames(frames, delay, loop);
 }
@@ -115,7 +116,7 @@ void Player::setTopMoveAnimation(Vector<SpriteFrame*> frames)
 void Player::setBottomMoveAnimation(Vector<SpriteFrame*> frames)
 {
 	// create the animation
-	const float delay = 0.1f;
+	const float delay = TIME_WALK_ANIMATION;
 	const unsigned int loop = 1;
 	_bottomMoveAnimation->initWithSpriteFrames(frames, delay, loop);
 }
@@ -126,28 +127,28 @@ void Player::setBottomMoveAnimation(Vector<SpriteFrame*> frames)
 void Player::moveLeft() {
 
 	_sprite->setFlipX(true);
-	_posX -= 35;
-	auto movement = MoveTo::create(0.1, getPosition());
+	_posX -= STEP_PLAYER;
+	auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 	_sprite->runAction(Spawn::create(Animate::create(_sideMoveAnimation), movement, nullptr));
 }
 
 void Player::moveRight() {
 
-	_posX += 35;
-	auto movement = MoveTo::create(0.1, getPosition());
+	_posX += STEP_PLAYER;
+	auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 	_sprite->runAction(Spawn::create(Animate::create(_sideMoveAnimation), movement, nullptr));
 
 }
 
 void Player::moveUp() {
-	_posY += 35;
-	auto movement = MoveTo::create(0.1, getPosition());
+	_posY += STEP_PLAYER;
+	auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 	_sprite->runAction(Spawn::create(Animate::create(_topMoveAnimation), movement, nullptr));
 }
 
 void Player::moveDown() {
-	_posY -= 35;
-	auto movement = MoveTo::create(0.1, getPosition());
+	_posY -= STEP_PLAYER;
+	auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 	_sprite->runAction(Spawn::create(Animate::create(_bottomMoveAnimation), movement, nullptr));
 }
 

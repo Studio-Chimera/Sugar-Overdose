@@ -41,7 +41,10 @@ this file defines all constantes and reusables functions
 
 // VALUES NUMBER
 #define DISPLAY_TIME_SPLASH_SCENE 1.5
+#define STEP_PLAYER 25
+#define TIME_WALK_ANIMATION 0.01
 constexpr auto DEFAULT_VOLUME = 0;
+
 
 // STATES
 
