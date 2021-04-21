@@ -16,7 +16,6 @@ ControllerHelper::~ControllerHelper()
 
 void ControllerHelper::addControls(Player* player, int type)
 {
-
     switch (type){
         case 1:
             player->setController(createKeyboardArrowController(player));
@@ -25,7 +24,6 @@ void ControllerHelper::addControls(Player* player, int type)
             player->setController(createKeyboard_ZQSD_Controller(player));
             break;
         case 3:
-
             break;
         case 4:
             break;
@@ -33,7 +31,6 @@ void ControllerHelper::addControls(Player* player, int type)
             //player->setIAController();
             break;
     }
-
 }
 
 EventListenerKeyboard* ControllerHelper::createKeyboardArrowController(Player* player)
@@ -64,14 +61,11 @@ EventListenerKeyboard* ControllerHelper::createKeyboard_ZQSD_Controller(Player* 
 
         if (EventKeyboard::KeyCode::KEY_A == keyCode) {
             player->moveLeft();
-        }
-        else if (EventKeyboard::KeyCode::KEY_D == keyCode) {
+        } else if (EventKeyboard::KeyCode::KEY_D == keyCode) {
             player->moveRight();
-        }
-        else if (EventKeyboard::KeyCode::KEY_W == keyCode) {
+        } else if (EventKeyboard::KeyCode::KEY_W == keyCode) {
             player->moveUp();
-        }
-        else if (EventKeyboard::KeyCode::KEY_S == keyCode) {
+        } else if (EventKeyboard::KeyCode::KEY_S == keyCode) {
             player->moveDown();
         }
     };

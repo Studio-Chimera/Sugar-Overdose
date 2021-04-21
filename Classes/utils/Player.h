@@ -56,6 +56,7 @@ public:
 private:
     SpriteFrameCache* _spriteCacher;
     Sprite* _sprite;
+
     int _posX;
     int _posY;
     Animation* _sideMoveAnimation;
