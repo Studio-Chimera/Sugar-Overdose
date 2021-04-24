@@ -129,19 +129,6 @@ bool Level::onContactBegin(PhysicsContact& contact) {
         (2 == physicsBodyA->getCollisionBitmask() && 2 == physicsBodyB->getCollisionBitmask()))
     {
 
-        //physicsBodyA->setVelocityLimit(0.1f);
-        //physicsBodyA->setLinearDamping(1.0f);
-        //physicsBodyA->setAngularDamping(1.0f);
-
-        //physicsBodyB->setVelocityLimit(0.1f);
-        //physicsBodyB->setLinearDamping(1.0f);
-        //physicsBodyB->setAngularDamping(1.0f);
-        //physicsBodyB->setAngularDamping(1.0f);
-
-        //CCLOG("COLLISIONS HAS OCCURED");
-        // 
-
-
         Node* playerA = physicsBodyA->getOwner();
         Size sizeA = playerA->getContentSize();
         Vec2 positionPlayerA = playerA->getPosition();
@@ -151,26 +138,20 @@ bool Level::onContactBegin(PhysicsContact& contact) {
         Vec2 positionPlayerB = playerB->getPosition();
 
         
-        float xMaxPlayerA = positionPlayerA.x + sizeA.width; // Take off STEP_PLAYER cause of step character which is already moved
+        float xMaxPlayerA = positionPlayerA.x + sizeA.width; 
         float xMaxPlayerB = positionPlayerB.x + sizeB.width;
         float yMaxPlayerA = positionPlayerA.y + sizeA.height;
         float yMaxPlayerB = positionPlayerB.y + sizeB.height;
 
-        // used to compute if player is in range of hitbox(+ or - STEP_PLAYER)
-        float borderLeftPlayerA_MinRange = positionPlayerA.x - STEP_PLAYER;
-        float borderLeftPlayerA_MaxRange = positionPlayerA.x + STEP_PLAYER;
-
-        float borderBottomPlayerA_MinRange = positionPlayerA.y - STEP_PLAYER;
-        float borderBottomPlayerA_MaxRange = positionPlayerA.y + STEP_PLAYER;
-
-        float borderTopPlayerA_MinRange = positionPlayerA.y - STEP_PLAYER;
-        float borderTopPlayerA_MaxRange = positionPlayerA.y + STEP_PLAYER;
-
+        // used to compute if player is in range of hitbox(~ + or - one STEP_PLAYER)
         float borderLeftPlayerB_MinRange = positionPlayerB.x - STEP_PLAYER;
         float borderLeftPlayerB_MaxRange = positionPlayerB.x + STEP_PLAYER;
 
-        float borderTopPlayerB_MinRange = positionPlayerB.y - STEP_PLAYER;
-        float borderTopPlayerB_MaxRange = positionPlayerB.y + STEP_PLAYER;
+        float borderRightPlayerB_MinRange = xMaxPlayerB - STEP_PLAYER;
+        float borderRightPlayerB_MaxRange = xMaxPlayerB + STEP_PLAYER;
+
+        float borderTopPlayerB_MinRange = yMaxPlayerB - STEP_PLAYER;
+        float borderTopPlayerB_MaxRange = yMaxPlayerB + STEP_PLAYER;
 
 
         // Contact from left side, 
@@ -178,28 +159,20 @@ bool Level::onContactBegin(PhysicsContact& contact) {
             float newPositionX = positionPlayerA.x - STEP_PLAYER;
             Vec2 newPosition(newPositionX, positionPlayerA.y);
             physicsBodyA->getOwner()->setPosition(newPosition);
-
-            physicsBodyA->setVelocity(Vec2(0.0f, 0.0f));
-            //physicsBodyA->getOwner()->cleanup();
-
-            physicsBodyA->applyForce(Vec2(0.0f, 0.0f), Vec2(0.0f, 0.0f));
-            return true;
         }
         
-        // Contact from right side
-        else if (xMaxPlayerB >= borderLeftPlayerA_MinRange && xMaxPlayerB <= borderLeftPlayerA_MaxRange) {
+        // Contact from right side, 
+        else if (positionPlayerA.x >= borderRightPlayerB_MinRange && positionPlayerA.x <= borderRightPlayerB_MaxRange) {
             float newPositionX = positionPlayerA.x + STEP_PLAYER;
             Vec2 newPosition(newPositionX, positionPlayerA.y);
-            physicsBodyA->getOwner()->setPosition(newPosition);
-            return true;
+            physicsBodyA->getOwner()->setPosition(newPosition);            
         }
 
         // Contact from top side
-        else if (yMaxPlayerA >= borderTopPlayerB_MinRange && yMaxPlayerA <= borderTopPlayerB_MaxRange) {
-            float newPositionX = positionPlayerA.x + STEP_PLAYER;
-            Vec2 newPosition(newPositionX, positionPlayerA.y);
+        else if (positionPlayerA.y >= borderTopPlayerB_MinRange && positionPlayerA.y <= borderTopPlayerB_MaxRange) {
+            float newPositionY = positionPlayerA.y + STEP_PLAYER;
+            Vec2 newPosition(positionPlayerA.x, newPositionY);
             physicsBodyA->getOwner()->setPosition(newPosition);
-         return true;
         }
 
         // Contact from bot side
@@ -207,9 +180,13 @@ bool Level::onContactBegin(PhysicsContact& contact) {
             float newPositionY = positionPlayerA.y - STEP_PLAYER;
             Vec2 newPosition(positionPlayerA.x, newPositionY);
             physicsBodyA->getOwner()->setPosition(newPosition);
-            return true;
         }
 
+        physicsBodyA->getOwner()->cleanup();
+        return true;
+
+        //physicsBodyA->setVelocity(Vec2(0.0f, 0.0f));
+        //physicsBodyA->applyForce(Vec2(0.0f, 0.0f), Vec2(0.0f, 0.0f));
         //physicsBodyA->resetForces();
         
     }
