@@ -141,42 +141,76 @@ bool Level::onContactBegin(PhysicsContact& contact) {
         //CCLOG("COLLISIONS HAS OCCURED");
         // 
 
-        
-        Node* playerB = physicsBodyB->getOwner();
-        Vec2 positionPlayerB = playerB->getPosition();
-        float positionPlayerBX = positionPlayerB.x;
 
         Node* playerA = physicsBodyA->getOwner();
         Size sizeA = playerA->getContentSize();
         Vec2 positionPlayerA = playerA->getPosition();
 
-        float contact_AX = positionPlayerA.x - STEP_PLAYER + sizeA.width; // Take off 35 cause of step character which is 35px
+        Node* playerB = physicsBodyB->getOwner();
+        Size sizeB = playerB->getContentSize();
+        Vec2 positionPlayerB = playerB->getPosition();
 
-        // Contact from left side, compute if player is in range of hitbox (+ or - STEP_PLAYER)
-        if (contact_AX >= (positionPlayerBX - STEP_PLAYER) && contact_AX <= (positionPlayerBX + STEP_PLAYER)) {
+        
+        float xMaxPlayerA = positionPlayerA.x + sizeA.width; // Take off STEP_PLAYER cause of step character which is already moved
+        float xMaxPlayerB = positionPlayerB.x + sizeB.width;
+        float yMaxPlayerA = positionPlayerA.y + sizeA.height;
+        float yMaxPlayerB = positionPlayerB.y + sizeB.height;
+
+        // used to compute if player is in range of hitbox(+ or - STEP_PLAYER)
+        float borderLeftPlayerA_MinRange = positionPlayerA.x - STEP_PLAYER;
+        float borderLeftPlayerA_MaxRange = positionPlayerA.x + STEP_PLAYER;
+
+        float borderBottomPlayerA_MinRange = positionPlayerA.y - STEP_PLAYER;
+        float borderBottomPlayerA_MaxRange = positionPlayerA.y + STEP_PLAYER;
+
+        float borderTopPlayerA_MinRange = positionPlayerA.y - STEP_PLAYER;
+        float borderTopPlayerA_MaxRange = positionPlayerA.y + STEP_PLAYER;
+
+        float borderLeftPlayerB_MinRange = positionPlayerB.x - STEP_PLAYER;
+        float borderLeftPlayerB_MaxRange = positionPlayerB.x + STEP_PLAYER;
+
+        float borderTopPlayerB_MinRange = positionPlayerB.y - STEP_PLAYER;
+        float borderTopPlayerB_MaxRange = positionPlayerB.y + STEP_PLAYER;
+
+
+        // Contact from left side, 
+        if (xMaxPlayerA >= borderLeftPlayerB_MinRange && xMaxPlayerA <= borderLeftPlayerB_MaxRange) {
             float newPositionX = positionPlayerA.x - STEP_PLAYER;
             Vec2 newPosition(newPositionX, positionPlayerA.y);
             physicsBodyA->getOwner()->setPosition(newPosition);
-        } 
+
+            physicsBodyA->setVelocity(Vec2(0.0f, 0.0f));
+            //physicsBodyA->getOwner()->cleanup();
+
+            physicsBodyA->applyForce(Vec2(0.0f, 0.0f), Vec2(0.0f, 0.0f));
+            return true;
+        }
         
+        // Contact from right side
+        else if (xMaxPlayerB >= borderLeftPlayerA_MinRange && xMaxPlayerB <= borderLeftPlayerA_MaxRange) {
+            float newPositionX = positionPlayerA.x + STEP_PLAYER;
+            Vec2 newPosition(newPositionX, positionPlayerA.y);
+            physicsBodyA->getOwner()->setPosition(newPosition);
+            return true;
+        }
+
+        // Contact from top side
+        else if (yMaxPlayerA >= borderTopPlayerB_MinRange && yMaxPlayerA <= borderTopPlayerB_MaxRange) {
+            float newPositionX = positionPlayerA.x + STEP_PLAYER;
+            Vec2 newPosition(newPositionX, positionPlayerA.y);
+            physicsBodyA->getOwner()->setPosition(newPosition);
+         return true;
+        }
+
         // Contact from bot side
-        else { 
+        else {
             float newPositionY = positionPlayerA.y - STEP_PLAYER;
             Vec2 newPosition(positionPlayerA.x, newPositionY);
             physicsBodyA->getOwner()->setPosition(newPosition);
+            return true;
         }
 
-        physicsBodyA->getOwner()->stopAllActions();
-        physicsBodyA->applyForce(Vec2(0.0f, 0.0f), Vec2(0.0f, 0.0f));
-
-
-        // Contact from right side
-
-        // Contact from top side
-
-
         //physicsBodyA->resetForces();
-        //physicsBodyB->resetForces();
         
     }
 

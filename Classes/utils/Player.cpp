@@ -130,10 +130,12 @@ void Player::moveLeft() {
 	_posX -= STEP_PLAYER;
 	auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 	_sprite->runAction(Spawn::create(Animate::create(_sideMoveAnimation), movement, nullptr));
+	_sprite->unscheduleAllCallbacks();
 }
 
 void Player::moveRight() {
 
+	_sprite->setFlipX(false);
 	_posX += STEP_PLAYER;
 	auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 	_sprite->runAction(Spawn::create(Animate::create(_sideMoveAnimation), movement, nullptr));
@@ -150,6 +152,7 @@ void Player::moveDown() {
 	_posY -= STEP_PLAYER;
 	auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 	_sprite->runAction(Spawn::create(Animate::create(_bottomMoveAnimation), movement, nullptr));
+	
 }
 
 void Player::plantBomb() {
