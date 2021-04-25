@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "Store.h"
+#include "Bomb.h"
 
 using namespace cocos2d;
 
@@ -28,6 +29,10 @@ bool Level::init()
     {
         return false;
     }
+
+    auto bsprite = Bomb::create();
+    bsprite->setPosition(0, 0);
+    this->addChild(bsprite, 0);
 
     auto store = Store::GetInstance();
     _tileMap = new TMXTiledMap();
