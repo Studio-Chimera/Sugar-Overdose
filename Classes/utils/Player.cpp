@@ -17,16 +17,13 @@ Player::Player()
 	// create a physic body
 	auto physicsBody = PhysicsBody::createBox(Size(112.5f, 188.5f), PHYSICSBODY_MATERIAL_DEFAULT);
 	physicsBody->setDynamic(false);
-
-	/*physicsBody->setRotationEnable(false);
-	physicsBody->setGravityEnable(true);*/
-
+	physicsBody->setRotationEnable(false);
+	physicsBody->setGravityEnable(false);
+	physicsBody->resetForces();
 	physicsBody->setCollisionBitmask(2); // Set a tag
 	physicsBody->setContactTestBitmask(true); // Allow to collision to be detected
 
-	//apply physicsBody to the sprite
-	_sprite->setPhysicsBody(physicsBody); // on charly tutorial
-
+	_sprite->setPhysicsBody(physicsBody);
 
 	_sideMoveAnimation = new Animation;
 	_topMoveAnimation = new Animation;
