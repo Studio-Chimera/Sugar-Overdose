@@ -24,11 +24,17 @@ private:
 public:
     virtual bool init();
     static Scene* scene();
+    
     bool onContactBegin(PhysicsContact& contact); // detects collisions
     bool onContactPreSolve(PhysicsContact& contact, PhysicsContactPreSolve& solve); // detects collisions
     void onContactPostSolve(PhysicsContact& contact, const PhysicsContactPostSolve& solve); // detects collisions
+    
     void setPlayerPosition(CCPoint position);
+
     void playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBodyB);
+
+    void playerCollisionBorderMap(PhysicsBody* physicsBodyA, PhysicsBody* physicsBodyB);
+
 
     // implement the "static create()" method manually
     CREATE_FUNC(Level);
