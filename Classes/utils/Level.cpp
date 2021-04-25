@@ -1,0 +1,47 @@
+#include "Level.h"
+#include <iostream>
+#include <vector>
+#include "Store.h"
+#include "Bomb.h"
+
+using namespace cocos2d;
+
+Scene* Level::scene()
+{
+    // 'scene' is an autorelease object
+    Scene* scene = Scene::createWithPhysics();
+    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    
+    // 'layer' is an autorelease object
+    Level* layer = Level::create();
+    layer->createPhysicalWorld(scene->getPhysicsWorld());
+    scene->addChild(layer);
+    return scene;
+}
+
+// on "init" you need to initialize your instance
+bool Level::init()
+{
+    // ###################################################
+    // Instanciate tilemap
+    // ###################################################
+    if (!Layer::init())
+    {
+        return false;
+    }
+
+    auto bsprite = Bomb::create();
+    bsprite->setPosition(0, 0);
+    this->addChild(bsprite, 0);
+
+    auto store = Store::GetInstance();
+    _tileMap = new TMXTiledMap();
+    _tileMap->initWithTMXFile(store->g_mapName);
+    // find layer (from tmx file)
+    _background = _tileMap->layerNamed("background");
+
+    // add the node to scene tree
+    this->addChild(_tileMap);
+
+    return true;
+}
