@@ -32,27 +32,41 @@ bool Level::init()
         return false;
     }
 
+    // get map properties
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+    // create border map edgeNode
     auto edgeBody = PhysicsBody::createEdgeBox(visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 3);
+    edgeBody->setCollisionBitmask(1); // Set a tag
+    edgeBody->setContactTestBitmask(true); // Allow to collision to be detected
+    edgeBody->setDynamic(false);
 
     auto edgeNode = Node::create();
+    
     edgeNode->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     edgeNode->setPhysicsBody(edgeBody);
 
-    this->addChild(edgeNode);
 
 
+
+    edgeNode->setOpacity(0);
+
+
+    // init map
     auto store = Store::GetInstance();
     _tileMap = new TMXTiledMap();
     _tileMap->initWithTMXFile(store->g_mapName);
+
     // find layer (from tmx file)
     _background = _tileMap->layerNamed("background");
-
+    _walls = _tileMap->layerNamed("walls");
+    _border = _tileMap->layerNamed("borders");
+    Value customProperty = _border->getProperty("collisionable");
+    
     auto playerHelper = new PlayerHelper();
 
-    //get spawnpoint object from objects
+    // get spawnpoint object from objects
     TMXObjectGroup* spawnPoints = _tileMap->objectGroupNamed("spawns");
     auto spawn1 = spawnPoints->objectNamed("spawn 1");
     auto spawn2 = spawnPoints->objectNamed("spawn 2");
@@ -64,132 +78,183 @@ bool Level::init()
     auto player2 = playerHelper->createPlayer(new Vec2(400, 400), TYPE_PLAYER_TWO);
     
     // Load shapes
-    auto shapeCache = PhysicsShapeCache::getInstance();
+    //auto shapeCache = PhysicsShapeCache::getInstance();
     /*shapeCache->addShapesWithFile("Shapes.plist");
     shapeCache->setBodyOnSprite("player1_stand", player1->getSprite());
     shapeCache->setBodyOnSprite("player2_stand", player2->getSprite());*/
 
-    player1->getSprite()->getPhysicsBody()->setCollisionBitmask(1);
-    player2->getSprite()->getPhysicsBody()->setCollisionBitmask(2);
     
-    // add the node to scene tree
+    // add the nodes to scene tree
     this->addChild(_tileMap);
     this->addChild(player1->getSprite());
     this->addChild(player2->getSprite());
+    this->addChild(edgeNode);
 
+    // get & set players controls 
     EventListenerKeyboard *player1Controller = std::get<EventListenerKeyboard*>(player1->getController());
     EventListenerKeyboard *player2Controller = std::get<EventListenerKeyboard*>(player2->getController());
 
-    this->_eventDispatcher->addEventListenerWithSceneGraphPriority(player1Controller, player1->getSprite());
-    this->_eventDispatcher->addEventListenerWithSceneGraphPriority(player2Controller, player2->getSprite());
+    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(player1Controller, player1->getSprite());
+    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(player2Controller, player2->getSprite());
 
-    // Enable collision detection
+    // enable collision detection
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = CC_CALLBACK_1(Level::onContactBegin, this);
+    contactListener->onContactPreSolve = CC_CALLBACK_2(Level::onContactPreSolve, this);
+    contactListener->onContactPostSolve = CC_CALLBACK_2(Level::onContactPostSolve, this);
+
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
-
-    //// Enable collision detection
-    //auto contactListener2 = EventListenerPhysicsContact::create();
-    //contactListener2->onContactPostSolve = CC_CALLBACK_1(Level::onContactPreSolve, this);
-    //this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener2, this);
-
+    
     return true;
-}
-
-bool Level::onContactPreSolve(PhysicsContact& contact) {
-
-
-    PhysicsBody* physicsBodyA = contact.getShapeA()->getBody();
-    PhysicsBody* physicsBodyB = contact.getShapeB()->getBody();
-    if ((1 == physicsBodyA->getCollisionBitmask() && 2 == physicsBodyB->getCollisionBitmask()) ||
-        (2 == physicsBodyA->getCollisionBitmask() && 1 == physicsBodyB->getCollisionBitmask()) ||
-        (2 == physicsBodyA->getCollisionBitmask() && 2 == physicsBodyB->getCollisionBitmask()))
-    {
-        physicsBodyA;
-        physicsBodyB;
-        CCLOG("COLLISIONS HAS OCCURED PRESOLVE");
-    }
-    return true;
-
 }
 
 /*
 * detects collisions
+* collisionBitmask 2 => players
+* collisionBitmask 1 => border  
 */
 bool Level::onContactBegin(PhysicsContact& contact) {
     
     PhysicsBody* physicsBodyA = contact.getShapeA()->getBody(); // A is who create the conctact
-    PhysicsBody* physicsBodyB = contact.getShapeB()->getBody(); // B is who is undergo contact
-    
+    PhysicsBody* physicsBodyB = contact.getShapeB()->getBody(); // B is who is undergo contact    
+
     // check if the bodies have collided
-    // 2 => player
-    // 1 => border (not setted)
-    if ((1 == physicsBodyA->getCollisionBitmask() && 2 == physicsBodyB->getCollisionBitmask()) ||
-        (2 == physicsBodyA->getCollisionBitmask() && 1 == physicsBodyB->getCollisionBitmask()) || 
-        (2 == physicsBodyA->getCollisionBitmask() && 2 == physicsBodyB->getCollisionBitmask()))
+    if (physicsBodyA->getCollisionBitmask() == 2 && physicsBodyB->getCollisionBitmask() == 2)
     {
-
-        Node* playerA = physicsBodyA->getOwner();
-        Size sizeA = playerA->getContentSize();
-        Vec2 positionPlayerA = playerA->getPosition();
-
-        Node* playerB = physicsBodyB->getOwner();
-        Size sizeB = playerB->getContentSize();
-        Vec2 positionPlayerB = playerB->getPosition();
-
-        
-        float xMaxPlayerA = positionPlayerA.x + sizeA.width; 
-        float xMaxPlayerB = positionPlayerB.x + sizeB.width;
-        float yMaxPlayerA = positionPlayerA.y + sizeA.height;
-        float yMaxPlayerB = positionPlayerB.y + sizeB.height;
-
-        // used to compute if player is in range of hitbox(~ + or - one STEP_PLAYER)
-        float borderLeftPlayerB_MinRange = positionPlayerB.x - STEP_PLAYER;
-        float borderLeftPlayerB_MaxRange = positionPlayerB.x + STEP_PLAYER;
-
-        float borderRightPlayerB_MinRange = xMaxPlayerB - STEP_PLAYER;
-        float borderRightPlayerB_MaxRange = xMaxPlayerB + STEP_PLAYER;
-
-        float borderTopPlayerB_MinRange = yMaxPlayerB - STEP_PLAYER;
-        float borderTopPlayerB_MaxRange = yMaxPlayerB + STEP_PLAYER;
-
-
-        // Contact from left side, 
-        if (xMaxPlayerA >= borderLeftPlayerB_MinRange && xMaxPlayerA <= borderLeftPlayerB_MaxRange) {
-            float newPositionX = positionPlayerA.x - STEP_PLAYER;
-            Vec2 newPosition(newPositionX, positionPlayerA.y);
-            physicsBodyA->getOwner()->setPosition(newPosition);
-        }
-        
-        // Contact from right side, 
-        else if (positionPlayerA.x >= borderRightPlayerB_MinRange && positionPlayerA.x <= borderRightPlayerB_MaxRange) {
-            float newPositionX = positionPlayerA.x + STEP_PLAYER;
-            Vec2 newPosition(newPositionX, positionPlayerA.y);
-            physicsBodyA->getOwner()->setPosition(newPosition);            
-        }
-
-        // Contact from top side
-        else if (positionPlayerA.y >= borderTopPlayerB_MinRange && positionPlayerA.y <= borderTopPlayerB_MaxRange) {
-            float newPositionY = positionPlayerA.y + STEP_PLAYER;
-            Vec2 newPosition(positionPlayerA.x, newPositionY);
-            physicsBodyA->getOwner()->setPosition(newPosition);
-        }
-
-        // Contact from bot side
-        else {
-            float newPositionY = positionPlayerA.y - STEP_PLAYER;
-            Vec2 newPosition(positionPlayerA.x, newPositionY);
-            physicsBodyA->getOwner()->setPosition(newPosition);
-        }
-
-        physicsBodyA->getOwner()->cleanup();
-        return true;
-
-        //physicsBodyA->setVelocity(Vec2(0.0f, 0.0f));
-        //physicsBodyA->applyForce(Vec2(0.0f, 0.0f), Vec2(0.0f, 0.0f));
-        //physicsBodyA->resetForces();
-        
+        playersCollision(physicsBodyA, physicsBodyB);
     }
-
+    else if (physicsBodyA->getCollisionBitmask() == 1 && physicsBodyB->getCollisionBitmask() == 2) {
+        /*     playerCollisionBorderMap() {}*/
+        
+        // Save position
+        Vec2 currentPositon = physicsBodyB->getOwner()->getPosition();
+        currentPositon.x = currentPositon.x + STEP_PLAYER;
+        physicsBodyB->getOwner()->setPosition(currentPositon);
+    }
     return true;
 }
+
+bool Level::onContactPreSolve(PhysicsContact& contact, PhysicsContactPreSolve& solve) {
+
+    PhysicsBody* physicsBodyA = contact.getShapeA()->getBody();
+    PhysicsBody* physicsBodyB = contact.getShapeB()->getBody();
+    CCLOG(physicsBodyA->getNode()->isRunning() ? "a true" : " a false");
+    CCLOG(physicsBodyB->getNode()->isRunning() ? " b true" : " b false");
+
+    ssize_t sizeA = physicsBodyA->getNode()->getNumberOfRunningActions();
+    CCLOG("%d : ", sizeA);
+    
+    //physicsBodyA->getOwner()->cleanup();
+
+    ssize_t sizeA_2 = physicsBodyA->getNode()->getNumberOfRunningActions();
+    CCLOG("%d : ", sizeA_2);
+
+    //physicsBodyA->setVelocity(Vec2(0.0f, 0.0f));
+    //physicsBodyA->setMoment(0.0f);
+    //physicsBodyA->applyForce(Vec2(0.0f, 0.0f), Vec2(0.0f, 0.0f));
+    //physicsBodyA->resetForces();
+
+    //solve.setFriction(0.0f);
+    //solve.setRestitution(0.0f);
+    //solve.setSurfaceVelocity(Vec2(0.0f, 0.0f));
+
+    CCLOG("COLLISIONS HAS OCCURED PreSolve");
+    return true;
+}
+
+/**
+* Start calcul
+*/
+void Level::onContactPostSolve(PhysicsContact& contact, const PhysicsContactPostSolve& solve) {
+    
+    PhysicsBody* physicsBodyA = contact.getShapeA()->getBody();
+    PhysicsBody* physicsBodyB = contact.getShapeB()->getBody();
+    CCLOG("COLLISIONS HAS OCCURED PostSolve");
+
+}
+
+
+/*
+ when : collision have been trigger between 2 players
+ do : move back player which made the collision
+*/
+void Level::playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBodyB) {
+    Node* playerA = physicsBodyA->getOwner();
+    Size sizeA = playerA->getContentSize();
+    Vec2 positionPlayerA = playerA->getPosition();
+
+    Node* playerB = physicsBodyB->getOwner();
+    Size sizeB = playerB->getContentSize();
+    Vec2 positionPlayerB = playerB->getPosition();
+
+    float xMaxPlayerA = positionPlayerA.x + sizeA.width;
+    float xMaxPlayerB = positionPlayerB.x + sizeB.width;
+    float yMaxPlayerA = positionPlayerA.y + sizeA.height;
+    float yMaxPlayerB = positionPlayerB.y + sizeB.height;
+
+    // used to compute if player is in range of hitbox(~ + or - one STEP_PLAYER)
+    float borderLeftPlayerB_MinRange = positionPlayerB.x - STEP_PLAYER;
+    float borderLeftPlayerB_MaxRange = positionPlayerB.x + STEP_PLAYER;
+
+    float borderRightPlayerB_MinRange = xMaxPlayerB - STEP_PLAYER;
+    float borderRightPlayerB_MaxRange = xMaxPlayerB + STEP_PLAYER;
+
+    float borderTopPlayerB_MinRange = yMaxPlayerB - STEP_PLAYER;
+    float borderTopPlayerB_MaxRange = yMaxPlayerB + STEP_PLAYER;
+
+
+    // Contact from left side, 
+    if (xMaxPlayerA >= borderLeftPlayerB_MinRange && xMaxPlayerA <= borderLeftPlayerB_MaxRange) {
+        float newPositionX = positionPlayerA.x - STEP_PLAYER;
+        Vec2 newPosition(newPositionX, positionPlayerA.y);
+        physicsBodyA->getOwner()->setPosition(newPosition);
+
+    }
+
+    // Contact from right side, 
+    else if (positionPlayerA.x >= borderRightPlayerB_MinRange && positionPlayerA.x <= borderRightPlayerB_MaxRange) {
+        float newPositionX = positionPlayerA.x + STEP_PLAYER;
+        Vec2 newPosition(newPositionX, positionPlayerA.y);
+        physicsBodyA->getOwner()->setPosition(newPosition);
+    }
+
+    // Contact from top side
+    else if (positionPlayerA.y >= borderTopPlayerB_MinRange && positionPlayerA.y <= borderTopPlayerB_MaxRange) {
+        float newPositionY = positionPlayerA.y + STEP_PLAYER;
+        Vec2 newPosition(positionPlayerA.x, newPositionY);
+        physicsBodyA->getOwner()->setPosition(newPosition);
+    }
+
+    // Contact from bot side
+    else {
+        float newPositionY = positionPlayerA.y - STEP_PLAYER;
+        Vec2 newPosition(positionPlayerA.x, newPositionY);
+        physicsBodyA->getOwner()->setPosition(newPosition);
+    }
+}
+
+
+//Point Level::tileCoordForPosition(CCPoint position)
+//{
+//    int x = position.x / _tileMap->getTileSize().width;
+//    int y = ((_tileMap->getMapSize().height * _tileMap->getTileSize().height) - position.y) / _tileMap->getTileSize().height;
+//    return ccp(x, y);
+//}
+
+
+//void Level::setPlayerPosition(CCPoint position)
+//{
+//    CCPoint tileCoord = this->tileCoordForPosition(position);
+//    int tileGid = _border->tileGIDAt(tileCoord);
+//    if (tileGid) {
+//        CCDictionary* properties = _tileMap->propertiesForGID(tileGid);
+//        if (properties) {
+//            CCString* collision = new CCString();
+//            *collision = *properties->valueForKey("collisionable");
+//            if (collision && (collision->compare("True") == 0)) {
+//                return;
+//            }
+//        }
+//    }
+//    _player->setPosition(position);
+//}
