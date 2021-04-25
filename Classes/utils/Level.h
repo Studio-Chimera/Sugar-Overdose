@@ -9,17 +9,26 @@ using namespace cocos2d;
 class Level : public Layer
 {
 private:
-    TMXTiledMap* _tileMap;
+    CCTMXTiledMap* _tileMap;
     TMXLayer* _background;
-    TMXLayer* _blocks;
-    void createPhysicalWorld(PhysicsWorld* world) { _sceneWorld = world; };
+    TMXLayer* _walls;
+    TMXLayer* _border;
+
     PhysicsWorld* _sceneWorld;
+
+    CCPoint tileCoordForPosition(CCPoint position);
+
+    void createPhysicalWorld(PhysicsWorld* world) { _sceneWorld = world; };
+    
 
 public:
     virtual bool init();
     static Scene* scene();
     bool onContactBegin(PhysicsContact& contact); // detects collisions
-    bool onContactPreSolve(PhysicsContact& contact); // detects collisions
+    bool onContactPreSolve(PhysicsContact& contact, PhysicsContactPreSolve& solve); // detects collisions
+    void onContactPostSolve(PhysicsContact& contact, const PhysicsContactPostSolve& solve); // detects collisions
+    void setPlayerPosition(CCPoint position);
+    void playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBodyB);
 
     // implement the "static create()" method manually
     CREATE_FUNC(Level);
