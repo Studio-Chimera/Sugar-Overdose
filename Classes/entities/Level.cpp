@@ -1,8 +1,8 @@
 #include "Level.h"
 #include <iostream>
 #include <vector>
-#include "Store.h"
-#include "PlayerHelper.h"
+#include "utils/Store.h"
+#include "helpers/PlayerHelper.h"
 #include <proj.win32/PhysicsShapeCache.h>
 
 using namespace cocos2d;
@@ -74,12 +74,8 @@ bool Level::init()
     auto player1 = playerHelper->createPlayer(new Vec2(200, 200), TYPE_PLAYER_ONE);
     auto player2 = playerHelper->createPlayer(new Vec2(400, 400), TYPE_PLAYER_TWO);
     
-    // load shapes
-    //auto shapeCache = PhysicsShapeCache::getInstance();
-    /*shapeCache->addShapesWithFile("Shapes.plist");
-    shapeCache->setBodyOnSprite("player1_stand", player1->getSprite());
-    shapeCache->setBodyOnSprite("player2_stand", player2->getSprite());*/
-
+    player1->getSprite()->getPhysicsBody()->setCollisionBitmask(1);
+    player2->getSprite()->getPhysicsBody()->setCollisionBitmask(2);
     
     // add the nodes to scene tree
     this->addChild(_tileMap);
