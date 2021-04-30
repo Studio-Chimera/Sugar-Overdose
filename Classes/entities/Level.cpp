@@ -1,11 +1,25 @@
 #include "Level.h"
 #include <iostream>
 #include <vector>
-#include "Store.h"
-#include "PlayerHelper.h"
+#include "utils/Store.h"
+#include "helpers/PlayerHelper.h"
+#include "entities/Player.h"
 #include <proj.win32/PhysicsShapeCache.h>
 
 using namespace cocos2d;
+
+Level* Level::levelInstance{ nullptr };
+//std::mutex Level::mutex;
+
+Level* Level::getInstance()
+{
+    //std::lock_guard<std::mutex> lock(mutex);
+    if (levelInstance == nullptr)
+    {
+        levelInstance = new Level();
+    }
+    return levelInstance;
+}
 
 Scene* Level::scene()
 {
@@ -14,7 +28,8 @@ Scene* Level::scene()
     scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
     scene->getPhysicsWorld()->setGravity(Vec2(0, 0));
     // 'layer' is an autorelease object
-    Level* level = Level::create();
+    Level* level = Level::getInstance()->create();
+    //Level* level = Level::create();
     level->createPhysicalWorld(scene->getPhysicsWorld());
     scene->addChild(level);
 
@@ -44,31 +59,31 @@ bool Level::init()
     this->addChild(edgeNode);
 
 
+    // prepare map
     auto store = Store::GetInstance();
     _tileMap = new TMXTiledMap();
     _tileMap->initWithTMXFile(store->g_mapName);
     // find layer (from tmx file)
     _background = _tileMap->layerNamed("background");
+    
+    // prepare walls
 
-    auto playerHelper = new PlayerHelper();
+    _walls = _tileMap->layerNamed("walls");
+    _walls->setVisible(false);
 
-    //get spawnpoint object from objects
+
+    // get spawnpoint objects from objects
     TMXObjectGroup* spawnPoints = _tileMap->objectGroupNamed("spawns");
     auto spawn1 = spawnPoints->objectNamed("spawn 1");
     auto spawn2 = spawnPoints->objectNamed("spawn 2");
 
     // spawn players
+    auto playerHelper = new PlayerHelper();
     /*auto player1 = playerHelper->createPlayer(new Vec2(spawn1.at("x").asInt(), spawn1.at("y").asInt()));
     auto player2 = playerHelper->createPlayer(new Vec2(spawn2.at("x").asInt(), spawn2.at("y").asInt()));*/
-    auto player1 = playerHelper->createPlayer(new Vec2(200, 200), TYPE_PLAYER_ONE);
-    auto player2 = playerHelper->createPlayer(new Vec2(400, 400), TYPE_PLAYER_TWO);
+    auto player1 = playerHelper->createPlayer(new Vec2(200, 200), TYPE_PLAYER_ONE, this);
+    auto player2 = playerHelper->createPlayer(new Vec2(400, 400), TYPE_PLAYER_TWO, this);
     
-    // Load shapes
-    auto shapeCache = PhysicsShapeCache::getInstance();
-    /*shapeCache->addShapesWithFile("Shapes.plist");
-    shapeCache->setBodyOnSprite("player1_stand", player1->getSprite());
-    shapeCache->setBodyOnSprite("player2_stand", player2->getSprite());*/
-
     player1->getSprite()->getPhysicsBody()->setCollisionBitmask(1);
     player2->getSprite()->getPhysicsBody()->setCollisionBitmask(2);
     
@@ -94,6 +109,24 @@ bool Level::init()
     //this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener2, this);
 
     return true;
+}
+
+int Level::getTileGid(Vec2 position) {
+    Vec2 tileCoord = this->getTileCoordForPosition(position);
+    int tileGid = _walls->tileGIDAt(tileCoord);
+    return tileGid;
+}
+
+
+/*
+ return cocos2d-x coordonates, with tiled coordonates
+*/
+Vec2 Level::getTileCoordForPosition(Vec2 position)
+{
+    int posX = position.x;
+    int x = posX / _tileMap->getTileSize().width;
+    int y = ((_tileMap->getMapSize().height * _tileMap->getTileSize().height) - position.y) / _tileMap->getTileSize().height;
+    return ccp(x, y); // DEPRECATED
 }
 
 bool Level::onContactPreSolve(PhysicsContact& contact) {
@@ -192,4 +225,12 @@ bool Level::onContactBegin(PhysicsContact& contact) {
     }
 
     return true;
+}
+
+
+Vector<TMXLayer*> Level::getLayersLevel() {
+    Vector<TMXLayer*> layersLevel;
+    layersLevel.pushBack(_walls);
+    layersLevel.pushBack(_background);
+    return layersLevel;
 }

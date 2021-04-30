@@ -1,4 +1,6 @@
 #include "PlayerHelper.h"
+#include <entities/Level.h>
+
 USING_NS_CC;
 // ###################################################
 // Declarations
@@ -32,11 +34,12 @@ std::list<Player*> PlayerHelper::getPlayers()
 // ###################################################
 
 // call this one to have your new player instance
-Player* PlayerHelper::createPlayer(Vec2* position, int type)
+Player* PlayerHelper::createPlayer(Vec2* position, int type, Level* level)
 {
 	//create player instance
     auto player = new Player;
-	player->setPosition(position);
+	player->setPosition(*position);
+	//player->setLevel(level);
 	setPlayerSprites(player);
 
 	// add players special features

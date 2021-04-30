@@ -5,6 +5,7 @@
 #include "cocos2d.h"
 #include <extensions\physics-nodes\CCPhysicsSprite.h>
 #include <variant>
+#include "entities/Level.h"
 
 using namespace cocos2d;
 
@@ -29,6 +30,8 @@ public:
     int getPosY();
     Vec2 getPosition();
     std::variant<EventListenerCustom*, EventListenerKeyboard*> getController();
+    //Level* getLevel();
+    Vec2 getTileCoordForPosition(Vec2 position);
 
     // ###################################################
     // Setters
@@ -36,12 +39,13 @@ public:
 
     void setPosX(int newPos);
     void setPosY(int newPos);
-    void setPosition(Vec2* position);
+    void setPosition(Vec2 position);
     void setSideMoveAnimation(Vector<SpriteFrame*>);
     void setTopMoveAnimation(Vector<SpriteFrame*>);
     void setBottomMoveAnimation(Vector<SpriteFrame*>);
     void setController(std::variant<EventListenerCustom*, EventListenerKeyboard*> controller);
-    void stopAnimation(cocos2d::RepeatForever* ani);
+    void setPlayerPosition();
+    //void setLevel(Level* level);
 
     // ###################################################
     // Methods
@@ -52,6 +56,7 @@ public:
     void moveUp();
     void moveDown();
     void plantBomb();
+    void stopAnimation(cocos2d::RepeatForever* ani);
 
 private:
     SpriteFrameCache* _spriteCacher;
@@ -59,6 +64,7 @@ private:
 
     int _posX;
     int _posY;
+    //Level* _level;
     Animation* _sideMoveAnimation;
     Animation* _topMoveAnimation;
     Animation* _bottomMoveAnimation;

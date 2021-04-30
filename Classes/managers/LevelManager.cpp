@@ -1,6 +1,6 @@
-#include "LevelManager.h"
-#include "Level.h"
-#include "Store.h"
+#include "managers\LevelManager.h"
+#include "entities\Level.h"
+#include "utils\Store.h"
 
 USING_NS_CC;
 
@@ -43,6 +43,8 @@ void LevelManager::openLevel(std::string level)
 	map << "maps/" << level << ".tmx";
 	auto store = Store::GetInstance();
 	store->g_mapName = map.str();
-	auto scene = Level::scene();
+
+	auto scene = Level::getInstance()->scene(); /* Instantiate the singleton AND the scene */
+	//auto scene = currentLevel->scene();
 	director->replaceScene(scene);
 }

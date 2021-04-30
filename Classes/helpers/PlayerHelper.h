@@ -4,8 +4,8 @@
 #include <string>
 #include <list>
 #include "cocos2d.h"
-#include <utils\Player.h>
-#include <utils\ControllerHelper.h>
+#include <entities\Player.h>
+#include <helpers\ControllerHelper.h>
 
 class PlayerHelper
 {
@@ -33,7 +33,7 @@ public:
     // Methods
     // ###################################################
 
-    Player* createPlayer(Vec2* position, int number);
+    Player* createPlayer(Vec2* position, int number, Level* level);
     void setPlayerSprites(Player* player);
     void createSideMoveAnimation(int playerNumber, Player* player);
     void createTopMoveAnimation(int playerNumber, Player* player);

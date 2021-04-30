@@ -38,10 +38,13 @@ Player::~Player()
 {
 }
 
-
 // ###################################################
 // Getters
 // ###################################################
+
+//Level* Player::getLevel() {
+//	return _level;
+//};
 
 Sprite* Player::getSprite()
 {
@@ -62,6 +65,7 @@ int Player::getPosY()
 {
 	return _posY;
 }
+
 Vec2 Player::getPosition()
 {
 	return Vec2(_posX, _posY);
@@ -75,6 +79,10 @@ std::variant<EventListenerCustom*, EventListenerKeyboard*> Player::getController
 // ###################################################
 // Setters
 // ###################################################
+
+//void Player::setLevel(Level* level) {
+//	 _level = level;
+//}
 
 void Player::setController(std::variant<EventListenerCustom*, EventListenerKeyboard*> controller)
 {
@@ -91,10 +99,10 @@ void Player::setPosY(int newPos)
 	_posY = newPos;
 }
 
-void Player::setPosition(Vec2* position)
+void Player::setPosition(Vec2 position)
 {
-	_posX = position->x;
-	_posY = position->y;
+	_posX = position.x;
+	_posY = position.y;
 }
 
 void Player::setSideMoveAnimation(Vector<SpriteFrame*> frames)
@@ -126,11 +134,11 @@ void Player::setBottomMoveAnimation(Vector<SpriteFrame*> frames)
 
 void Player::moveLeft() {
 
+	setPlayerPosition();
 	_sprite->setFlipX(true);
 	_posX -= STEP_PLAYER;
 	auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 	_sprite->runAction(Spawn::create(Animate::create(_sideMoveAnimation), movement, nullptr));
-	_sprite->unscheduleAllCallbacks();
 }
 
 void Player::moveRight() {
@@ -162,4 +170,31 @@ void Player::plantBomb() {
 void Player::stopAnimation(cocos2d::RepeatForever* ani) {
 	CCLOG("STOP ANIMATION");
 	_sprite->stopAction(ani);
+}
+
+
+
+
+void Player::setPlayerPosition()
+{
+	Vec2 pos = this->getPosition();
+	Level* currentLevel = Level::getInstance();
+	Vec2 tileCoord = currentLevel->getTileCoordForPosition(pos);
+	Vector<TMXLayer*> layersLevel = currentLevel->getLayersLevel();
+	TMXLayer* layer = layersLevel.front();
+	int tileGid = layer->tileGIDAt(tileCoord);
+	// 
+	//if (tileGid) {
+	//    ValueMap properties = _walls->getProperties();
+	//    for (auto &it : properties) {
+	//        if (it.first == "collisionable") {
+	//            CCString* collision = new CCString();
+	//            *collision = properties.find(it.first);/* valueForKey("Collidable");*/
+	//            if (collision && (collision->compare("True") == 0)) {
+	//                return;
+	//            }
+	//    };
+	//}
+	this->setPosition(pos);
+	return;
 }

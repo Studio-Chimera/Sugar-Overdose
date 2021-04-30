@@ -2,7 +2,7 @@
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
 #include "utils/Definitions.h"
-#include "utils/LevelManager.h"
+#include "managers/LevelManager.h"
 #include <string>
 #include <list>
 
