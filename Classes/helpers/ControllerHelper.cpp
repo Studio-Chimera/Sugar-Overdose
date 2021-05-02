@@ -18,10 +18,10 @@ void ControllerHelper::addControls(Player* player, int type)
 {
     switch (type){
         case 1:
-            player->setController(createKeyboardArrowController(player));
+            player->setController(createKeyboard_ZQSD_Controller(player));
             break;
         case 2:
-            player->setController(createKeyboard_ZQSD_Controller(player));
+            player->setController(createKeyboardArrowController(player));
             break;
         case 3:
             break;
