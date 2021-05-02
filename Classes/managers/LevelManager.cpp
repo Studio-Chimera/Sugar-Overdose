@@ -43,8 +43,8 @@ void LevelManager::openLevel(std::string level)
 	map << "maps/" << level << ".tmx";
 	auto store = Store::GetInstance();
 	store->g_mapName = map.str();
-
-	auto scene = Level::getInstance()->scene(); /* Instantiate the singleton AND the scene */
-	//auto scene = currentLevel->scene();
+	
+	//Level* currentLevel = Level::getInstance();
+	auto scene = Level::getInstance()->scene(); /* Instantiate the Level singleton AND the Scene */
 	director->replaceScene(scene);
 }

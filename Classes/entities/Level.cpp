@@ -8,7 +8,7 @@
 
 using namespace cocos2d;
 
-Level* Level::levelInstance{ nullptr };
+Level* Level::levelInstance = nullptr;
 //std::mutex Level::mutex;
 
 Level* Level::getInstance()
@@ -28,10 +28,9 @@ Scene* Level::scene()
     scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
     scene->getPhysicsWorld()->setGravity(Vec2(0, 0));
     // 'layer' is an autorelease object
-    Level* level = Level::getInstance()->create();
-    //Level* level = Level::create();
-    level->createPhysicalWorld(scene->getPhysicsWorld());
-    scene->addChild(level);
+    levelInstance = Level::getInstance()->create();
+    levelInstance->createPhysicalWorld(scene->getPhysicsWorld());
+    scene->addChild(levelInstance);
 
     return scene;
 }

@@ -15,29 +15,45 @@ class Level : public Layer
 
 public:
 
-    Level(Level& other) = delete;
-    static Level* getInstance();
+    /*
+    methods
+    */
 
     virtual bool init();
     static Scene* scene();
-    bool onContactBegin(PhysicsContact& contact); // detects collisions
-    bool onContactPreSolve(PhysicsContact& contact); // detects collisions
+    bool onContactBegin(PhysicsContact& contact); // first step collision
+    bool onContactPreSolve(PhysicsContact& contact); // second step collision
     
-    Vector<TMXLayer*> getLayersLevel();
-    int getTileGid(Vec2 position);
-    Vec2 Level::getTileCoordForPosition(Vec2 position);
+    Level(Level& other) = delete;
+    void operator=(const Level&) = delete;
 
     // implement the "static create()" method manually
     CREATE_FUNC(Level);
 
+    /*
+    getters
+    */
+
+    static Level* getInstance();
+    
+    int getTileGid(Vec2 position);
+    Vector<TMXLayer*> getLayersLevel();
+    Vec2 Level::getTileCoordForPosition(Vec2 position);
+
+    /*
+    setters
+    */
+    
+
 protected:
     Level(){}
     ~Level(){}
+    
+    static Level* levelInstance;
 
 private:
 
-    static Level* levelInstance;
-    static std::mutex mutex;
+    //static std::mutex mutex;
 
     TMXTiledMap* _tileMap;
     TMXLayer* _background;
