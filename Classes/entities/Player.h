@@ -24,14 +24,15 @@ public:
     // Getters
     // ###################################################
 
-    Sprite* getSprite();
-    SpriteFrameCache* getSpritecacher();
     int getPosX();
     int getPosY();
+
     Vec2 getPosition();
-    std::variant<EventListenerCustom*, EventListenerKeyboard*> getController();
-    //Level* getLevel();
     Vec2 getTileCoordForPosition(Vec2 position);
+    Sprite* getSprite();
+    SpriteFrameCache* getSpritecacher();
+    std::variant<EventListenerCustom*, EventListenerKeyboard*> getController();
+
 
     // ###################################################
     // Setters
@@ -44,8 +45,6 @@ public:
     void setTopMoveAnimation(Vector<SpriteFrame*>);
     void setBottomMoveAnimation(Vector<SpriteFrame*>);
     void setController(std::variant<EventListenerCustom*, EventListenerKeyboard*> controller);
-    void setPlayerPosition();
-    //void setLevel(Level* level);
 
     // ###################################################
     // Methods
@@ -57,14 +56,17 @@ public:
     void moveDown();
     void plantBomb();
     void stopAnimation(cocos2d::RepeatForever* ani);
+    bool blockPlayerIfWalls(const int direction);
+    bool blockPlayer(const int direction);
+
 
 private:
-    SpriteFrameCache* _spriteCacher;
-    Sprite* _sprite;
-
+    
     int _posX;
     int _posY;
-    //Level* _level;
+
+    SpriteFrameCache* _spriteCacher;
+    Sprite* _sprite;
     Animation* _sideMoveAnimation;
     Animation* _topMoveAnimation;
     Animation* _bottomMoveAnimation;

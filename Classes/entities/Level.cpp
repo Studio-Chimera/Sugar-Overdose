@@ -49,27 +49,24 @@ bool Level::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+    // create border
     auto edgeBody = PhysicsBody::createEdgeBox(visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 3);
-
     auto edgeNode = Node::create();
     edgeNode->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     edgeNode->setPhysicsBody(edgeBody);
-
-    this->addChild(edgeNode);
 
 
     // prepare map
     auto store = Store::GetInstance();
     _tileMap = new TMXTiledMap();
     _tileMap->initWithTMXFile(store->g_mapName);
-    // find layer (from tmx file)
-    _background = _tileMap->layerNamed("background");
     
-    // prepare walls
-
-    _walls = _tileMap->layerNamed("walls");
-    _walls->setVisible(false);
-
+    // manage layers (from tmx file)
+    _background = _tileMap->getLayer("background");
+    _background->setTag(1);
+    
+    _walls = _tileMap->getLayer("walls");
+    _walls->setTag(2);
 
     // get spawnpoint objects from objects
     TMXObjectGroup* spawnPoints = _tileMap->objectGroupNamed("spawns");
@@ -80,13 +77,14 @@ bool Level::init()
     auto playerHelper = new PlayerHelper();
     /*auto player1 = playerHelper->createPlayer(new Vec2(spawn1.at("x").asInt(), spawn1.at("y").asInt()));
     auto player2 = playerHelper->createPlayer(new Vec2(spawn2.at("x").asInt(), spawn2.at("y").asInt()));*/
-    auto player1 = playerHelper->createPlayer(new Vec2(200, 200), TYPE_PLAYER_ONE, this);
-    auto player2 = playerHelper->createPlayer(new Vec2(400, 400), TYPE_PLAYER_TWO, this);
+    auto player1 = playerHelper->createPlayer(new Vec2(130, 210), TYPE_PLAYER_ONE, this);
+    auto player2 = playerHelper->createPlayer(new Vec2(1880, 1035), TYPE_PLAYER_TWO, this);
     
     player1->getSprite()->getPhysicsBody()->setCollisionBitmask(1);
     player2->getSprite()->getPhysicsBody()->setCollisionBitmask(2);
     
     // add the node to scene tree
+    this->addChild(edgeNode);
     this->addChild(_tileMap);
     this->addChild(player1->getSprite());
     this->addChild(player2->getSprite());
@@ -110,22 +108,23 @@ bool Level::init()
     return true;
 }
 
-int Level::getTileGid(Vec2 position) {
-    Vec2 tileCoord = this->getTileCoordForPosition(position);
-    int tileGid = _walls->tileGIDAt(tileCoord);
-    return tileGid;
-}
+//int Level::getTileGid(Vec2 position) {
+//    Vec2 tileCoord = this->getTileCoordForPosition(position);
+//    int tileGid = _walls->tileGIDAt(tileCoord);
+//    return tileGid;
+//}
 
 
 /*
  return cocos2d-x coordonates, with tiled coordonates
 */
-Vec2 Level::getTileCoordForPosition(Vec2 position)
+Sprite* Level::getTileCoordForPosition(Vec2 position)
 {
     int posX = position.x;
     int x = posX / _tileMap->getTileSize().width;
     int y = ((_tileMap->getMapSize().height * _tileMap->getTileSize().height) - position.y) / _tileMap->getTileSize().height;
-    return ccp(x, y); // DEPRECATED
+    
+    return _walls->getTileAt(Vec2(x, y));
 }
 
 bool Level::onContactPreSolve(PhysicsContact& contact) {

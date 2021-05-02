@@ -36,9 +36,10 @@ public:
 
     static Level* getInstance();
     
-    int getTileGid(Vec2 position);
+    //int getTileGid(Vec2 position);
     Vector<TMXLayer*> getLayersLevel();
-    Vec2 Level::getTileCoordForPosition(Vec2 position);
+    //Vec2 Level::getTileCoordForPosition(Vec2 position);
+    Sprite* Level::getTileCoordForPosition(Vec2 position);
 
     /*
     setters

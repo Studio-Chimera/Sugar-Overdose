@@ -134,33 +134,42 @@ void Player::setBottomMoveAnimation(Vector<SpriteFrame*> frames)
 
 void Player::moveLeft() {
 
-	setPlayerPosition();
-	_sprite->setFlipX(true);
-	_posX -= STEP_PLAYER;
-	auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
-	_sprite->runAction(Spawn::create(Animate::create(_sideMoveAnimation), movement, nullptr));
+	bool blocked = blockPlayerIfWalls(DIRECTION_LEFT);
+	//if (!blocked) {
+		_sprite->setFlipX(true);
+		_posX -= STEP_PLAYER;
+		auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
+		_sprite->runAction(Spawn::create(Animate::create(_sideMoveAnimation), movement, nullptr));
+	//}
 }
 
 void Player::moveRight() {
 
-	_sprite->setFlipX(false);
-	_posX += STEP_PLAYER;
-	auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
-	_sprite->runAction(Spawn::create(Animate::create(_sideMoveAnimation), movement, nullptr));
-
+	bool blocked = blockPlayerIfWalls(DIRECTION_RIGHT);
+	//if (!blocked) {
+		_sprite->setFlipX(false);
+		_posX += STEP_PLAYER;
+		auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
+		_sprite->runAction(Spawn::create(Animate::create(_sideMoveAnimation), movement, nullptr));
+	//}
 }
 
 void Player::moveUp() {
-	_posY += STEP_PLAYER;
-	auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
-	_sprite->runAction(Spawn::create(Animate::create(_topMoveAnimation), movement, nullptr));
+	bool blocked = blockPlayerIfWalls(DIRECTION_TOP);
+	//if (!blocked) {
+		_posY += STEP_PLAYER;
+		auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
+		_sprite->runAction(Spawn::create(Animate::create(_topMoveAnimation), movement, nullptr));
+	//}
 }
 
 void Player::moveDown() {
-	_posY -= STEP_PLAYER;
-	auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
-	_sprite->runAction(Spawn::create(Animate::create(_bottomMoveAnimation), movement, nullptr));
-	
+	bool blocked = blockPlayerIfWalls(DIRECTION_BOTTOM);
+	//if (!blocked) {
+		_posY -= STEP_PLAYER;
+		auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
+		_sprite->runAction(Spawn::create(Animate::create(_bottomMoveAnimation), movement, nullptr));
+	//}	
 }
 
 void Player::plantBomb() {
@@ -172,29 +181,45 @@ void Player::stopAnimation(cocos2d::RepeatForever* ani) {
 	_sprite->stopAction(ani);
 }
 
-
-
-
-void Player::setPlayerPosition()
+/*
+	detect walls, which are destructible and collisionable, 
+	and block player if it enter in contact with it
+*/
+bool Player::blockPlayerIfWalls(const int direction)
 {
-	Vec2 pos = this->getPosition();
+	const Vec2 pos = this->getPosition();
 	Level* currentLevel = Level::getInstance();
-	Vec2 tileCoord = currentLevel->getTileCoordForPosition(pos);
-	Vector<TMXLayer*> layersLevel = currentLevel->getLayersLevel();
-	TMXLayer* layer = layersLevel.front();
-	int tileGid = layer->tileGIDAt(tileCoord);
-	// 
-	//if (tileGid) {
-	//    ValueMap properties = _walls->getProperties();
-	//    for (auto &it : properties) {
-	//        if (it.first == "collisionable") {
-	//            CCString* collision = new CCString();
-	//            *collision = properties.find(it.first);/* valueForKey("Collidable");*/
-	//            if (collision && (collision->compare("True") == 0)) {
-	//                return;
-	//            }
-	//    };
-	//}
-	this->setPosition(pos);
-	return;
+	const Sprite* tile = currentLevel->getTileCoordForPosition(pos);
+	int id = 0;
+	if (tile) {
+		SpriteBatchNode* spriteBatchNode = tile->getBatchNode();
+		 id = spriteBatchNode->getTag();
+		 if (id == 2) { // Tag 2 is walls
+			 return blockPlayer(direction);
+		 }
+	}
+}
+
+/*
+	block player by replacing according to direction
+*/
+bool Player::blockPlayer(const int direction) {
+	const Vec2 pos = this->getPosition();
+	switch (direction)
+	{
+	case DIRECTION_LEFT:
+		this->setPosition(Vec2(pos.x + 25, pos.y));
+		return true;
+	case DIRECTION_RIGHT:
+		this->setPosition(Vec2(pos.x - 25, pos.y));
+		return true;
+	case DIRECTION_TOP:
+		this->setPosition(Vec2(pos.x, pos.y + 25));
+		return true;
+	case DIRECTION_BOTTOM:
+		this->setPosition(Vec2(pos.x, pos.y - 25));
+		return true;
+	default:
+		return false;
+	}
 }

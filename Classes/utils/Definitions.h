@@ -62,6 +62,13 @@ constexpr auto DEFAULT_VOLUME = 0;
 // SCENES
 enum class CustomScenes { MainMenu, LevelSelectionMenu, OptionsMenu, CreditsMenu };
 
+// DIRECTIONS
+#define DIRECTION_LEFT 1
+#define DIRECTION_RIGHT 2
+#define DIRECTION_TOP 3
+#define DIRECTION_BOTTOM 4
+
+
 /*	Open a new menu
 * dt: time to replace scene
 * customScenes: new scene
