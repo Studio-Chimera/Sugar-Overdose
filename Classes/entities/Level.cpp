@@ -50,7 +50,7 @@ bool Level::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     // create border
-    auto edgeBody = PhysicsBody::createEdgeBox(visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 3);
+    auto edgeBody = PhysicsBody::createEdgeBox(visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 1);
     auto edgeNode = Node::create();
     edgeNode->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     edgeNode->setPhysicsBody(edgeBody);
@@ -60,25 +60,58 @@ bool Level::init()
     auto store = Store::GetInstance();
     _tileMap = new TMXTiledMap();
     _tileMap->initWithTMXFile(store->g_mapName);
-    
+
     // manage layers (from tmx file)
     _background = _tileMap->getLayer("background");
     _background->setTag(1);
     
+    auto wallsBody = PhysicsBody::createEdgeBox(Size(STEP_PLAYER, STEP_PLAYER), PHYSICSBODY_MATERIAL_DEFAULT, 3);
     _walls = _tileMap->getLayer("walls");
     _walls->setTag(2);
 
+    float mapWidth = _tileMap->getMapSize().width;
+    float mapHeight = _tileMap->getMapSize().height;
+    float tileWidth = _tileMap->getTileSize().width;
+    float tileHeight = _tileMap->getTileSize().height;
+    int gid;
+    int currentPosInArray = 0;
+
+    for (int i = 0; i < mapWidth; i++) {
+        for (int y = 0; y < mapHeight; y++) {
+            gid = _walls->getTileGIDAt(Vec2(i, y));
+            if (gid) {
+                float tileXPositon = i * tileWidth;
+                float tileYPosition = (mapHeight * tileHeight) - ((y + 1) * tileHeight);
+                Rect rect = Rect(tileXPositon, tileYPosition, tileWidth, tileHeight);
+                //Node noude = Node();
+                
+                //noude.addChild(react);
+                obstacles[currentPosInArray] = rect;
+                currentPosInArray++;
+            }
+        }
+    }
+    
+    //auto* eazeaz = _walls->getTiles
+    auto *eazeaz = _walls->getTileSet();
+    
+    auto tileCoord = new Point(20, 20);
+    Size* size = new Size(5, 5);
+    Rect(*tileCoord, *size);
+
+    //_walls->setPhysicsBody(wallsBody);
+    
     // get spawnpoint objects from objects
-    TMXObjectGroup* spawnPoints = _tileMap->objectGroupNamed("spawns");
-    auto spawn1 = spawnPoints->objectNamed("spawn 1");
-    auto spawn2 = spawnPoints->objectNamed("spawn 2");
+    //TMXObjectGroup* spawnPoints = _tileMap->objectGroupNamed("spawns");
+    //auto spawn1 = spawnPoints->objectNamed("spawn 1");
+    //auto spawn2 = spawnPoints->objectNamed("spawn 2");
 
     // spawn players
-    auto playerHelper = new PlayerHelper();
+    const auto playerHelper = new PlayerHelper();
     /*auto player1 = playerHelper->createPlayer(new Vec2(spawn1.at("x").asInt(), spawn1.at("y").asInt()));
     auto player2 = playerHelper->createPlayer(new Vec2(spawn2.at("x").asInt(), spawn2.at("y").asInt()));*/
-    auto player1 = playerHelper->createPlayer(new Vec2(130, 210), TYPE_PLAYER_ONE, this);
-    auto player2 = playerHelper->createPlayer(new Vec2(1880, 1035), TYPE_PLAYER_TWO, this);
+    auto player1 = playerHelper->createPlayer(new Vec2(100, 100), TYPE_PLAYER_ONE, this);
+    auto player2 = playerHelper->createPlayer(new Vec2(200, 200), TYPE_PLAYER_TWO, this);
     
     player1->getSprite()->getPhysicsBody()->setCollisionBitmask(1);
     player2->getSprite()->getPhysicsBody()->setCollisionBitmask(2);
@@ -108,23 +141,32 @@ bool Level::init()
     return true;
 }
 
-//int Level::getTileGid(Vec2 position) {
-//    Vec2 tileCoord = this->getTileCoordForPosition(position);
-//    int tileGid = _walls->tileGIDAt(tileCoord);
-//    return tileGid;
-//}
-
 
 /*
  return cocos2d-x coordonates, with tiled coordonates
 */
-Sprite* Level::getTileCoordForPosition(Vec2 position)
+Sprite* Level::getTileCoordForPosition(Vec2 position, Size size)
 {
-    int posX = position.x;
-    int x = posX / _tileMap->getTileSize().width;
-    int y = ((_tileMap->getMapSize().height * _tileMap->getTileSize().height) - position.y) / _tileMap->getTileSize().height;
+    //int posX = position.x;
+    float x = position.x / _tileMap->getTileSize().width;
+    //int y = position.y / _tileMap->getTileSize().height;
+    float y = ((_tileMap->getMapSize().height * _tileMap->getTileSize().height) - position.y) / _tileMap->getTileSize().height;
+    //CCLOG("WALL x %f WALL y %f", x, y);
+    //player1->getSprite()->getPhysicsBody()->getFirstShape()->
+    Rect newReactangle = 
+        Rect(position.x + 2 - size.width / 2, 
+            position.y + 2 - size.height / 2,
+            size.width - 4, size.height - 4);
+
+    for (int i = 0; i < sizeof(obstacles); i++) {
+        if (newReactangle.intersectsRect(obstacles[i])) {
+            CCLOG("true");
+        }
+    }
     
+
     return _walls->getTileAt(Vec2(x, y));
+    //return _walls->getTileAt(position);
 }
 
 bool Level::onContactPreSolve(PhysicsContact& contact) {

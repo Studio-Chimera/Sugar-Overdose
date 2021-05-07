@@ -26,7 +26,7 @@ public:
 
     int getPosX();
     int getPosY();
-
+    Vec2 getNextPosition(int direction);
     Vec2 getPosition();
     Vec2 getTileCoordForPosition(Vec2 position);
     Sprite* getSprite();

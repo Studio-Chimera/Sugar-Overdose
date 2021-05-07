@@ -15,7 +15,8 @@ Player::Player()
 	_sprite = new Sprite;
 
 	// create a physic body
-	auto physicsBody = PhysicsBody::createBox(Size(112.5f, 188.5f), PhysicsMaterial(0.1f, 1.0f, 0.0f));
+	//auto physicsBody = PhysicsBody::createBox(Size(112.5f, 188.5f), PhysicsMaterial(0.1f, 1.0f, 0.0f));
+	auto physicsBody = PhysicsBody::createBox(Size(STEP_PLAYER, STEP_PLAYER), PHYSICSBODY_MATERIAL_DEFAULT);
 	physicsBody->setDynamic(false);
 
 	/*physicsBody->setRotationEnable(false);
@@ -80,10 +81,6 @@ std::variant<EventListenerCustom*, EventListenerKeyboard*> Player::getController
 // Setters
 // ###################################################
 
-//void Player::setLevel(Level* level) {
-//	 _level = level;
-//}
-
 void Player::setController(std::variant<EventListenerCustom*, EventListenerKeyboard*> controller)
 {
 	_controller = controller;
@@ -146,30 +143,30 @@ void Player::moveLeft() {
 void Player::moveRight() {
 
 	bool blocked = blockPlayerIfWalls(DIRECTION_RIGHT);
-	//if (!blocked) {
+	if (!blocked) {
 		_sprite->setFlipX(false);
 		_posX += STEP_PLAYER;
 		auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 		_sprite->runAction(Spawn::create(Animate::create(_sideMoveAnimation), movement, nullptr));
-	//}
+	}
 }
 
 void Player::moveUp() {
 	bool blocked = blockPlayerIfWalls(DIRECTION_TOP);
-	//if (!blocked) {
+	if (!blocked) {
 		_posY += STEP_PLAYER;
 		auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 		_sprite->runAction(Spawn::create(Animate::create(_topMoveAnimation), movement, nullptr));
-	//}
+	}
 }
 
 void Player::moveDown() {
 	bool blocked = blockPlayerIfWalls(DIRECTION_BOTTOM);
-	//if (!blocked) {
+	if (!blocked) {
 		_posY -= STEP_PLAYER;
 		auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 		_sprite->runAction(Spawn::create(Animate::create(_bottomMoveAnimation), movement, nullptr));
-	//}	
+	}	
 }
 
 void Player::plantBomb() {
@@ -185,41 +182,84 @@ void Player::stopAnimation(cocos2d::RepeatForever* ani) {
 	detect walls, which are destructible and collisionable, 
 	and block player if it enter in contact with it
 */
-bool Player::blockPlayerIfWalls(const int direction)
-{
-	const Vec2 pos = this->getPosition();
-	Level* currentLevel = Level::getInstance();
-	const Sprite* tile = currentLevel->getTileCoordForPosition(pos);
+bool Player::blockPlayerIfWalls(const int direction){
+
+	Vec2 nextPosition = getNextPosition(direction);
+
+	
+		//getPhysicsBody()->getShape()->get
+	Sprite* tile = Level::getInstance()->getTileCoordForPosition(nextPosition, _sprite->getContentSize());
+	//tile->getPosition();
+	//Size s; 
+	//s.width = 17.0f;
+	//s.height = 17.0f;
+	//tile->setContentSize(s);
+
+	auto body = PhysicsBody::createEdgeBox(Size(STEP_PLAYER, STEP_PLAYER), PHYSICSBODY_MATERIAL_DEFAULT, 1);
+	body->setDynamic(false);
 	int id = 0;
 	if (tile) {
+		tile->setPhysicsBody(body);
 		SpriteBatchNode* spriteBatchNode = tile->getBatchNode();
 		 id = spriteBatchNode->getTag();
 		 if (id == 2) { // Tag 2 is walls
-			 return blockPlayer(direction);
+			 return true;
+			 //return blockPlayer(direction);
 		 }
 	}
+	return false;
 }
 
 /*
 	block player by replacing according to direction
 */
 bool Player::blockPlayer(const int direction) {
-	const Vec2 pos = this->getPosition();
+	const Vec2 pos = getPosition();
 	switch (direction)
 	{
 	case DIRECTION_LEFT:
-		this->setPosition(Vec2(pos.x + 25, pos.y));
+		this->setPosition(Vec2(pos.x + STEP_PLAYER, pos.y));
+		CCLOG("LEFT");
 		return true;
 	case DIRECTION_RIGHT:
-		this->setPosition(Vec2(pos.x - 25, pos.y));
+		this->setPosition(Vec2(pos.x - STEP_PLAYER, pos.y));
+		CCLOG("RIGHT");
 		return true;
 	case DIRECTION_TOP:
-		this->setPosition(Vec2(pos.x, pos.y + 25));
+		this->setPosition(Vec2(pos.x, pos.y - STEP_PLAYER));
+		CCLOG("TOP");
 		return true;
 	case DIRECTION_BOTTOM:
-		this->setPosition(Vec2(pos.x, pos.y - 25));
+		this->setPosition(Vec2(pos.x, pos.y + STEP_PLAYER));
+		CCLOG("BOTTOM");
 		return true;
 	default:
 		return false;
 	}
+	return false;
+}
+
+/*
+	
+*/
+Vec2 Player::getNextPosition(int direction) {
+	Vec2 currentPosition = getPosition();
+	switch (direction)
+	{
+	case DIRECTION_LEFT:
+		currentPosition.x - STEP_PLAYER, currentPosition.y;
+		return currentPosition;
+	case DIRECTION_RIGHT:
+		currentPosition.x + STEP_PLAYER, currentPosition.y;
+		return currentPosition;
+	case DIRECTION_TOP:
+		currentPosition.x, currentPosition.y + STEP_PLAYER;
+		return currentPosition;
+	case DIRECTION_BOTTOM:
+		currentPosition.x, currentPosition.y - STEP_PLAYER;
+		return currentPosition;
+	default:
+		return Vec2(0, 0);
+	}
+	return Vec2(0, 0);
 }

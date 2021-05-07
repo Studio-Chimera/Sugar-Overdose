@@ -77,7 +77,7 @@ void LevelSelectionScene::onClickPlayButton(Ref *sender, Widget::TouchEventType 
 	switch (type) {
 		
 	case Widget::TouchEventType::ENDED:
-		levelManager->openLevel("test1");
+		levelManager->openLevel("test2");
 		break;
 
 	default:
