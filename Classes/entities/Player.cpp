@@ -15,8 +15,8 @@ Player::Player()
 	_sprite = new Sprite;
 
 	// create a physic body
-	//auto physicsBody = PhysicsBody::createBox(Size(112.5f, 188.5f), PhysicsMaterial(0.1f, 1.0f, 0.0f));
-	auto physicsBody = PhysicsBody::createBox(Size(STEP_PLAYER, STEP_PLAYER), PHYSICSBODY_MATERIAL_DEFAULT);
+	auto physicsBody = PhysicsBody::createBox(Size(112.5f, 188.5f), PhysicsMaterial(0.1f, 1.0f, 0.0f));
+	//auto physicsBody = PhysicsBody::createBox(_sprite->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
 	physicsBody->setDynamic(false);
 
 	/*physicsBody->setRotationEnable(false);
@@ -185,15 +185,7 @@ void Player::stopAnimation(cocos2d::RepeatForever* ani) {
 bool Player::blockPlayerIfWalls(const int direction){
 
 	Vec2 nextPosition = getNextPosition(direction);
-
-	
-		//getPhysicsBody()->getShape()->get
 	Sprite* tile = Level::getInstance()->getTileCoordForPosition(nextPosition, _sprite->getContentSize());
-	//tile->getPosition();
-	//Size s; 
-	//s.width = 17.0f;
-	//s.height = 17.0f;
-	//tile->setContentSize(s);
 
 	auto body = PhysicsBody::createEdgeBox(Size(STEP_PLAYER, STEP_PLAYER), PHYSICSBODY_MATERIAL_DEFAULT, 1);
 	body->setDynamic(false);
@@ -240,7 +232,7 @@ bool Player::blockPlayer(const int direction) {
 }
 
 /*
-	
+	called when player is moving to calculate where he will be 
 */
 Vec2 Player::getNextPosition(int direction) {
 	Vec2 currentPosition = getPosition();

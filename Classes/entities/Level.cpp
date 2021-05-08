@@ -74,7 +74,8 @@ bool Level::init()
     float tileWidth = _tileMap->getTileSize().width;
     float tileHeight = _tileMap->getTileSize().height;
     int gid;
-    int currentPosInArray = 0;
+    int currentPosInVector = 0;
+    obstacles = new Vector<Rect*>;
 
     for (int i = 0; i < mapWidth; i++) {
         for (int y = 0; y < mapHeight; y++) {
@@ -82,12 +83,13 @@ bool Level::init()
             if (gid) {
                 float tileXPositon = i * tileWidth;
                 float tileYPosition = (mapHeight * tileHeight) - ((y + 1) * tileHeight);
-                Rect rect = Rect(tileXPositon, tileYPosition, tileWidth, tileHeight);
-                //Node noude = Node();
+                Rect* rect = new Rect(tileXPositon, tileYPosition, tileWidth, tileHeight);
                 
+                //Node noude = Node();                
                 //noude.addChild(react);
-                obstacles[currentPosInArray] = rect;
-                currentPosInArray++;
+                
+                obstacles->insert(currentPosInVector, rect);
+                currentPosInVector++;
             }
         }
     }
@@ -145,28 +147,24 @@ bool Level::init()
 /*
  return cocos2d-x coordonates, with tiled coordonates
 */
-Sprite* Level::getTileCoordForPosition(Vec2 position, Size size)
+Sprite* Level::getTileCoordForPosition(Vec2 position, Size sizePlayer)
 {
-    //int posX = position.x;
     float x = position.x / _tileMap->getTileSize().width;
-    //int y = position.y / _tileMap->getTileSize().height;
     float y = ((_tileMap->getMapSize().height * _tileMap->getTileSize().height) - position.y) / _tileMap->getTileSize().height;
-    //CCLOG("WALL x %f WALL y %f", x, y);
-    //player1->getSprite()->getPhysicsBody()->getFirstShape()->
+    
     Rect newReactangle = 
-        Rect(position.x + 2 - size.width / 2, 
-            position.y + 2 - size.height / 2,
-            size.width - 4, size.height - 4);
+        /*Rect(position.x + 2 - sizePlayer.width / 2,
+            position.y + 2 - sizePlayer.height / 2,
+            sizePlayer.width - 4, sizePlayer.height - 4);*/
+        Rect(position.x, position.y, sizePlayer.width, sizePlayer.height - 4);
 
     for (int i = 0; i < sizeof(obstacles); i++) {
-        if (newReactangle.intersectsRect(obstacles[i])) {
+        if (newReactangle.intersectsRect(*obstacles->at(i))) {
             CCLOG("true");
         }
     }
-    
 
     return _walls->getTileAt(Vec2(x, y));
-    //return _walls->getTileAt(position);
 }
 
 bool Level::onContactPreSolve(PhysicsContact& contact) {
