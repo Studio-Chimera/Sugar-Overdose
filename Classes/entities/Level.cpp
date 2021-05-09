@@ -57,7 +57,7 @@ bool Level::init()
 
 
     // prepare map
-    auto store = Store::GetInstance();
+    const auto store = Store::GetInstance();
     _tileMap = new TMXTiledMap();
     _tileMap->initWithTMXFile(store->g_mapName);
 
@@ -66,14 +66,14 @@ bool Level::init()
     _background->setTag(1);
     
     // prepare walls (obstacles)
-    auto wallsBody = PhysicsBody::createEdgeBox(Size(STEP_PLAYER, STEP_PLAYER), PHYSICSBODY_MATERIAL_DEFAULT, 3);
+    const auto wallsBody = PhysicsBody::createEdgeBox(Size(STEP_PLAYER, STEP_PLAYER), PHYSICSBODY_MATERIAL_DEFAULT, 3);
     _walls = _tileMap->getLayer("walls");
     _walls->setTag(2);
 
-    float mapWidth = _tileMap->getMapSize().width;
-    float mapHeight = _tileMap->getMapSize().height;
-    float tileWidth = _tileMap->getTileSize().width;
-    float tileHeight = _tileMap->getTileSize().height;
+    const float mapWidth = _tileMap->getMapSize().width;
+    const float mapHeight = _tileMap->getMapSize().height;
+    const float tileWidth = _tileMap->getTileSize().width;
+    const float tileHeight = _tileMap->getTileSize().height;
     int gid;
     int currentPosInVector = 0;
     float tileXPositon;
@@ -142,16 +142,23 @@ Sprite* Level::getTileCoordForPosition(Vec2 position, Size sizePlayer)
 {
     float x = position.x / _tileMap->getTileSize().width;
     float y = ((_tileMap->getMapSize().height * _tileMap->getTileSize().height) - position.y) / _tileMap->getTileSize().height;
+   
+    // missing code from commit 0091fbc - refacto(comments): clean code from useless comments
+    return _walls->getTileAt(Vec2(x, y));
+}
+
+bool Level::checkIfCollision(Vec2 nextPosition, Size sizePlayer)
+{
     
-    Rect newReactangle = Rect(position.x, position.y, sizePlayer.width, sizePlayer.height - 4);
+    Rect newReactangle = Rect(nextPosition.x, nextPosition.y, sizePlayer.width, sizePlayer.height - 4);
 
     for (int i = 0; i < sizeof(obstacles); i++) {
         if (newReactangle.intersectsRect(*obstacles->at(i))) {
-            CCLOG("true");
+            return(true);
         }
     }
 
-    return _walls->getTileAt(Vec2(x, y));
+    return(false);
 }
 
 /*

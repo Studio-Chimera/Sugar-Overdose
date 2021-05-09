@@ -31,7 +31,7 @@ public:
     CREATE_FUNC(Level);
 
     /*
-    getters
+        getters
     */
 
     static Level* getInstance();
@@ -40,7 +40,8 @@ public:
     Vector<TMXLayer*> getLayersLevel();
     //Vec2 Level::getTileCoordForPosition(Vec2 position);
     Sprite* Level::getTileCoordForPosition(Vec2 position, Size size);
-
+    
+    bool checkIfCollision(Vec2 nextPosition, Size sizePlayer);
     /*
     setters
     */
