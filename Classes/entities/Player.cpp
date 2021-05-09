@@ -231,21 +231,21 @@ bool Player::blockPlayer(const int direction) {
 	called when player is moving to calculate where he will be 
 */
 Vec2 Player::getNextPosition(int direction) {
-	Vec2 currentPosition = getPosition();
+	Vec2 nextPosition = getPosition();
 	switch (direction)
 	{
 	case DIRECTION_LEFT:
-		currentPosition.x - STEP_PLAYER, currentPosition.y;
-		return currentPosition;
+		nextPosition.x = getPosition().x - STEP_PLAYER;
+		return nextPosition;
 	case DIRECTION_RIGHT:
-		currentPosition.x + STEP_PLAYER, currentPosition.y;
-		return currentPosition;
+		nextPosition.x = getPosition().x + STEP_PLAYER;
+		return nextPosition;
 	case DIRECTION_TOP:
-		currentPosition.x, currentPosition.y + STEP_PLAYER;
-		return currentPosition;
+		nextPosition.y = getPosition().y + STEP_PLAYER;
+		return nextPosition;
 	case DIRECTION_BOTTOM:
-		currentPosition.x, currentPosition.y - STEP_PLAYER;
-		return currentPosition;
+		nextPosition.y = getPosition().y - STEP_PLAYER;
+		return nextPosition;
 	default:
 		return Vec2(0, 0);
 	}
