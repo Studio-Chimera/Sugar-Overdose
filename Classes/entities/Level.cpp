@@ -66,7 +66,6 @@ bool Level::init()
     _background->setTag(1);
     
     // prepare walls (obstacles)
-    const auto wallsBody = PhysicsBody::createEdgeBox(Size(STEP_PLAYER, STEP_PLAYER), PHYSICSBODY_MATERIAL_DEFAULT, 3);
     _walls = _tileMap->getLayer("walls");
     _walls->setTag(2);
 
@@ -86,8 +85,18 @@ bool Level::init()
             if (gid) {
                 tileXPositon = i * tileWidth;
                 tileYPosition = (mapHeight * tileHeight) - ((y + 1) * tileHeight);
-                Rect* rect = new Rect(tileXPositon, tileYPosition, tileWidth, tileHeight);
+                
+                Rect* rect = new Rect(tileXPositon + STEP_PLAYER, tileYPosition + STEP_PLAYER * 2, tileWidth, tileHeight);
+                const auto wallBody = PhysicsBody::createBox(Size(STEP_PLAYER * 2, STEP_PLAYER *  2), PHYSICSBODY_MATERIAL_DEFAULT);
+                wallBody->setDynamic(false);
+
+                Node* node = new Node();
+                node->addComponent(wallBody);
+                node->setPosition(Vec2(tileXPositon + 3, tileYPosition - 5));
+                
                 obstacles->insert(currentPosInVector, rect);
+                this->addChild(node);
+
                 currentPosInVector++;
             }
         }
@@ -102,8 +111,8 @@ bool Level::init()
     const auto playerHelper = new PlayerHelper();
     /*auto player1 = playerHelper->createPlayer(new Vec2(spawn1.at("x").asInt(), spawn1.at("y").asInt()));
     auto player2 = playerHelper->createPlayer(new Vec2(spawn2.at("x").asInt(), spawn2.at("y").asInt()));*/
-    auto player1 = playerHelper->createPlayer(new Vec2(100, 100), TYPE_PLAYER_ONE, this);
-    auto player2 = playerHelper->createPlayer(new Vec2(200, 200), TYPE_PLAYER_TWO, this);
+    auto player1 = playerHelper->createPlayer(new Vec2(200, 300), TYPE_PLAYER_ONE, this);
+    auto player2 = playerHelper->createPlayer(new Vec2(700, 300), TYPE_PLAYER_TWO, this);
     
     player1->getSprite()->getPhysicsBody()->setCollisionBitmask(1);
     player2->getSprite()->getPhysicsBody()->setCollisionBitmask(2);
@@ -154,6 +163,7 @@ bool Level::checkIfCollision(Vec2 nextPosition, Size sizePlayer)
 
     for (int i = 0; i < sizeof(obstacles); i++) {
         if (newReactangle.intersectsRect(*obstacles->at(i))) {
+            *obstacles->at(i);
             return(true);
         }
     }

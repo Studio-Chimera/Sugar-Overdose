@@ -184,6 +184,7 @@ bool Player::blockPlayerIfWalls(const int direction){
 	//Sprite* tile = Level::getInstance()->getTileCoordForPosition(nextPosition, _sprite->getContentSize());
 	
 	bool collision = Level::getInstance()->checkIfCollision(nextPosition, _sprite->getContentSize());
+	//bool collision = Level::getInstance()->checkIfCollision(getPosition(), _sprite->getContentSize());
 
 	auto body = PhysicsBody::createEdgeBox(Size(STEP_PLAYER, STEP_PLAYER), PHYSICSBODY_MATERIAL_DEFAULT, 1);
 	body->setDynamic(false);
@@ -241,15 +242,19 @@ Vec2 Player::getNextPosition(int direction) {
 	{
 	case DIRECTION_LEFT:
 		nextPosition.x = getPosition().x - STEP_PLAYER;
+		//nextPosition.x = getPosition().x - STEP_PLAYER / 3;
 		return nextPosition;
 	case DIRECTION_RIGHT:
 		nextPosition.x = getPosition().x + STEP_PLAYER;
+		//nextPosition.x = getPosition().x + STEP_PLAYER / 3;
 		return nextPosition;
 	case DIRECTION_TOP:
 		nextPosition.y = getPosition().y + STEP_PLAYER;
+		//nextPosition.y = getPosition().y + STEP_PLAYER / 3;
 		return nextPosition;
 	case DIRECTION_BOTTOM:
 		nextPosition.y = getPosition().y - STEP_PLAYER;
+		//nextPosition.y = getPosition().y - STEP_PLAYER / 3;
 		return nextPosition;
 	default:
 		return Vec2(0, 0);

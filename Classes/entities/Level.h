@@ -61,7 +61,6 @@ private:
     //Player* player4;
     
     Vector<Rect*>* obstacles;
-    /*Rect obstacles[75];*/
 
     TMXTiledMap* _tileMap;
     TMXLayer* _background;
