@@ -13,10 +13,11 @@ Player::Player()
 
 	
 	// create a physic body
-	auto physicsBody = PhysicsBody::createBox(Size(112.5f, 188.5f), PhysicsMaterial(0.1f, 1.0f, 0.0f));
+	auto physicsBody = PhysicsBody::createBox(Size(116.0f, 190.0f), PHYSICSBODY_MATERIAL_DEFAULT);
 	//auto physicsBody = PhysicsBody::createBox(_sprite->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
 	physicsBody->setDynamic(false);
 	physicsBody->setContactTestBitmask(true); // Allow collision to be detected
+	physicsBody->setPositionOffset(Vec2(55.0f, 94.0f));
 
 	//init sprite with a standing frame
 	_sprite = new Sprite;
