@@ -11,23 +11,16 @@ Player::Player()
 	// cache all .plist frames in cacher
 	_spriteCacher = SpriteFrameCache::getInstance();
 
-	//init sprite with a standing frame
-	_sprite = new Sprite;
-
+	
 	// create a physic body
 	auto physicsBody = PhysicsBody::createBox(Size(112.5f, 188.5f), PhysicsMaterial(0.1f, 1.0f, 0.0f));
 	//auto physicsBody = PhysicsBody::createBox(_sprite->getContentSize(), PHYSICSBODY_MATERIAL_DEFAULT);
 	physicsBody->setDynamic(false);
+	physicsBody->setContactTestBitmask(true); // Allow collision to be detected
 
-	/*physicsBody->setRotationEnable(false);
-	physicsBody->setGravityEnable(true);*/
-
-	//physicsBody->setCollisionBitmask(2); // Set a tag
-	physicsBody->setContactTestBitmask(true); // Allow to collision to be detected
-
-	//apply physicsBody to the sprite
-	//_sprite->addComponent(physicsBody);
-	_sprite->setPhysicsBody(physicsBody); // on charly tutorial
+	//init sprite with a standing frame
+	_sprite = new Sprite;
+	_sprite->setPhysicsBody(physicsBody); 
 
 
 	_sideMoveAnimation = new Animation;
@@ -132,12 +125,12 @@ void Player::setBottomMoveAnimation(Vector<SpriteFrame*> frames)
 void Player::moveLeft() {
 
 	bool blocked = blockPlayerIfWalls(DIRECTION_LEFT);
-	//if (!blocked) {
+	if (!blocked) {
 		_sprite->setFlipX(true);
 		_posX -= STEP_PLAYER;
 		auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 		_sprite->runAction(Spawn::create(Animate::create(_sideMoveAnimation), movement, nullptr));
-	//}
+	}
 }
 
 void Player::moveRight() {
@@ -152,6 +145,7 @@ void Player::moveRight() {
 }
 
 void Player::moveUp() {
+	
 	bool blocked = blockPlayerIfWalls(DIRECTION_TOP);
 	if (!blocked) {
 		_posY += STEP_PLAYER;
@@ -161,6 +155,7 @@ void Player::moveUp() {
 }
 
 void Player::moveDown() {
+	
 	bool blocked = blockPlayerIfWalls(DIRECTION_BOTTOM);
 	if (!blocked) {
 		_posY -= STEP_PLAYER;
@@ -190,6 +185,7 @@ bool Player::blockPlayerIfWalls(const int direction){
 	auto body = PhysicsBody::createEdgeBox(Size(STEP_PLAYER, STEP_PLAYER), PHYSICSBODY_MATERIAL_DEFAULT, 1);
 	body->setDynamic(false);
 	int id = 0;
+
 	if (tile) {
 		tile->setPhysicsBody(body);
 		SpriteBatchNode* spriteBatchNode = tile->getBatchNode();

@@ -65,6 +65,7 @@ bool Level::init()
     _background = _tileMap->getLayer("background");
     _background->setTag(1);
     
+    // prepare walls (obstacles)
     auto wallsBody = PhysicsBody::createEdgeBox(Size(STEP_PLAYER, STEP_PLAYER), PHYSICSBODY_MATERIAL_DEFAULT, 3);
     _walls = _tileMap->getLayer("walls");
     _walls->setTag(2);
@@ -75,34 +76,23 @@ bool Level::init()
     float tileHeight = _tileMap->getTileSize().height;
     int gid;
     int currentPosInVector = 0;
+    float tileXPositon;
+    float tileYPosition;
     obstacles = new Vector<Rect*>;
 
     for (int i = 0; i < mapWidth; i++) {
         for (int y = 0; y < mapHeight; y++) {
             gid = _walls->getTileGIDAt(Vec2(i, y));
             if (gid) {
-                float tileXPositon = i * tileWidth;
-                float tileYPosition = (mapHeight * tileHeight) - ((y + 1) * tileHeight);
+                tileXPositon = i * tileWidth;
+                tileYPosition = (mapHeight * tileHeight) - ((y + 1) * tileHeight);
                 Rect* rect = new Rect(tileXPositon, tileYPosition, tileWidth, tileHeight);
-                
-                //Node noude = Node();                
-                //noude.addChild(react);
-                
                 obstacles->insert(currentPosInVector, rect);
                 currentPosInVector++;
             }
         }
     }
-    
-    //auto* eazeaz = _walls->getTiles
-    auto *eazeaz = _walls->getTileSet();
-    
-    auto tileCoord = new Point(20, 20);
-    Size* size = new Size(5, 5);
-    Rect(*tileCoord, *size);
-
-    //_walls->setPhysicsBody(wallsBody);
-    
+        
     // get spawnpoint objects from objects
     //TMXObjectGroup* spawnPoints = _tileMap->objectGroupNamed("spawns");
     //auto spawn1 = spawnPoints->objectNamed("spawn 1");
@@ -118,45 +108,42 @@ bool Level::init()
     player1->getSprite()->getPhysicsBody()->setCollisionBitmask(1);
     player2->getSprite()->getPhysicsBody()->setCollisionBitmask(2);
     
-    // add the node to scene tree
-    this->addChild(edgeNode);
-    this->addChild(_tileMap);
-    this->addChild(player1->getSprite());
-    this->addChild(player2->getSprite());
-
+    
+    // set control players
     EventListenerKeyboard *player1Controller = std::get<EventListenerKeyboard*>(player1->getController());
     EventListenerKeyboard *player2Controller = std::get<EventListenerKeyboard*>(player2->getController());
 
     this->_eventDispatcher->addEventListenerWithSceneGraphPriority(player1Controller, player1->getSprite());
     this->_eventDispatcher->addEventListenerWithSceneGraphPriority(player2Controller, player2->getSprite());
 
-    // Enable collision detection
+    // enable collision detection
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = CC_CALLBACK_1(Level::onContactBegin, this);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 
-    //// Enable collision detection
     //auto contactListener2 = EventListenerPhysicsContact::create();
     //contactListener2->onContactPostSolve = CC_CALLBACK_1(Level::onContactPreSolve, this);
     //this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener2, this);
+
+    // add nodes to scene tree
+    this->addChild(edgeNode);
+    this->addChild(_tileMap);
+    this->addChild(player1->getSprite());
+    this->addChild(player2->getSprite());
 
     return true;
 }
 
 
 /*
- return cocos2d-x coordonates, with tiled coordonates
+    return cocos2d-x coordonates, with tiled coordonates
 */
 Sprite* Level::getTileCoordForPosition(Vec2 position, Size sizePlayer)
 {
     float x = position.x / _tileMap->getTileSize().width;
     float y = ((_tileMap->getMapSize().height * _tileMap->getTileSize().height) - position.y) / _tileMap->getTileSize().height;
     
-    Rect newReactangle = 
-        /*Rect(position.x + 2 - sizePlayer.width / 2,
-            position.y + 2 - sizePlayer.height / 2,
-            sizePlayer.width - 4, sizePlayer.height - 4);*/
-        Rect(position.x, position.y, sizePlayer.width, sizePlayer.height - 4);
+    Rect newReactangle = Rect(position.x, position.y, sizePlayer.width, sizePlayer.height - 4);
 
     for (int i = 0; i < sizeof(obstacles); i++) {
         if (newReactangle.intersectsRect(*obstacles->at(i))) {
@@ -167,25 +154,8 @@ Sprite* Level::getTileCoordForPosition(Vec2 position, Size sizePlayer)
     return _walls->getTileAt(Vec2(x, y));
 }
 
-bool Level::onContactPreSolve(PhysicsContact& contact) {
-
-
-    PhysicsBody* physicsBodyA = contact.getShapeA()->getBody();
-    PhysicsBody* physicsBodyB = contact.getShapeB()->getBody();
-    if ((1 == physicsBodyA->getCollisionBitmask() && 2 == physicsBodyB->getCollisionBitmask()) ||
-        (2 == physicsBodyA->getCollisionBitmask() && 1 == physicsBodyB->getCollisionBitmask()) ||
-        (2 == physicsBodyA->getCollisionBitmask() && 2 == physicsBodyB->getCollisionBitmask()))
-    {
-        physicsBodyA;
-        physicsBodyB;
-        CCLOG("COLLISIONS HAS OCCURED PRESOLVE");
-    }
-    return true;
-
-}
-
 /*
-* detects collisions
+    detects collisions
 */
 bool Level::onContactBegin(PhysicsContact& contact) {
     
