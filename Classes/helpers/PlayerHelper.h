@@ -4,8 +4,8 @@
 #include <string>
 #include <list>
 #include "cocos2d.h"
-#include <utils\Player.h>
-#include <utils\ControllerHelper.h>
+#include "entities/Player.h"
+#include "helpers/ControllerHelper.h"
 
 class PlayerHelper
 {
