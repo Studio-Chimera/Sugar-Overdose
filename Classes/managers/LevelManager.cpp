@@ -1,6 +1,6 @@
-#include "managers\LevelManager.h"
-#include "entities\Level.h"
-#include "utils\Store.h"
+#include "LevelManager.h"
+#include "entities/Level.h"
+#include "utils/Store.h"
 
 USING_NS_CC;
 
