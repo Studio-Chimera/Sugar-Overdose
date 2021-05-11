@@ -24,8 +24,8 @@ Level* Level::getInstance()
 Vector<TMXLayer*> Level::getLayersLevel() 
 {
     Vector<TMXLayer*> layersLevel;
-    layersLevel.pushBack(_walls);
-    layersLevel.pushBack(_background);
+    layersLevel.pushBack(tilesWalls);
+    layersLevel.pushBack(tilesBackground);
     return layersLevel;
 }
 
@@ -71,55 +71,71 @@ bool Level::init()
 
     // prepare map
     const auto store = Store::GetInstance();
-    _tileMap = new TMXTiledMap();
-    _tileMap->initWithTMXFile(store->g_mapName);
+    tileMap = new TMXTiledMap();
+    tileMap->initWithTMXFile(store->g_mapName);
 
     // prepare background
-    _background = _tileMap->getLayer("background");
-    _background->setTag(1);
+    tilesBackground = tileMap->getLayer("background");
+    //_background->setTag(1);
     
     // prepare walls (obstacles)
-    _walls = _tileMap->getLayer("walls");
-    _walls->setTag(1);
+    tilesWalls = tileMap->getLayer("walls");
+    //_walls->setTag(1);
 
     // prepare borders
-    _border = _tileMap->layerNamed("borders");
+    tilesBorders = tileMap->layerNamed("borders");
 
-    const float mapWidth = _tileMap->getMapSize().width;
-    const float mapHeight = _tileMap->getMapSize().height;
-    const float tileWidth = _tileMap->getTileSize().width;
-    const float tileHeight = _tileMap->getTileSize().height;
-    int gid;
-    int currentPosInVector = 0;
+    const float mapWidth = tileMap->getMapSize().width;
+    const float mapHeight = tileMap->getMapSize().height;
+    const float tileWidth = tileMap->getTileSize().width;
+    const float tileHeight = tileMap->getTileSize().height;
+    int wallGid = 0;
+    int borderGid = 0;
+
+    int currentPosInWallsVector = 0;
+    int currentPosInBordersVector = 0;
     float tileXPositon;
     float tileYPosition;
-    obstacles = new Vector<Rect*>;
+    obstaclesWalls = new Vector<Rect*>;
+    obstaclesBorders = new Vector<Rect*>;
 
     for (int i = 0; i < mapWidth; i++) {
         for (int y = 0; y < mapHeight; y++) {
-            gid = _walls->getTileGIDAt(Vec2(i, y));
-            if (gid) {
+            wallGid = tilesWalls->getTileGIDAt(Vec2(i, y));
+            borderGid = tilesBorders->getTileGIDAt(Vec2(i, y)); // CAN BE OPTIMISED
+            
+
+            if (wallGid != 0 || borderGid != 0) {
                 tileXPositon = i * tileWidth;
-                tileYPosition = (mapHeight * tileHeight) - ((y + 1) * tileHeight);
-                
+                tileYPosition = (mapHeight * tileHeight) - ((y + 1) * tileHeight); // Check if calcul is good
+
+                // set a physics body just for display and debug
                 Rect* rect = new Rect(tileXPositon + STEP_PLAYER, tileYPosition + STEP_PLAYER * 2, tileWidth, tileHeight);
-                const auto wallBody = PhysicsBody::createBox(Size(STEP_PLAYER * 2, STEP_PLAYER *  2), PHYSICSBODY_MATERIAL_DEFAULT);
-                wallBody->setDynamic(false);
+                const auto obstacleBody = PhysicsBody::createBox(Size(STEP_PLAYER * 2, STEP_PLAYER * 2), PHYSICSBODY_MATERIAL_DEFAULT);
+                obstacleBody->setDynamic(false);
 
                 Node* node = new Node();
-                node->addComponent(wallBody);
+                node->addComponent(obstacleBody);
                 node->setPosition(Vec2(tileXPositon + 3, tileYPosition - 5));
-                
-                obstacles->insert(currentPosInVector, rect);
+
                 this->addChild(node);
 
-                currentPosInVector++;
+                if (wallGid != 0) {
+                    obstaclesWalls->insert(currentPosInWallsVector, rect);
+                    currentPosInWallsVector++;
+                }
+                else if (borderGid != 0) {
+                    obstaclesBorders->insert(currentPosInBordersVector, rect);
+                    currentPosInBordersVector++;
+
+                }
+
             }
         }
     }
         
     // get spawnpoint objects from objects
-    TMXObjectGroup* spawnPoints = _tileMap->objectGroupNamed("spawns");
+    TMXObjectGroup* spawnPoints = tileMap->objectGroupNamed("spawns");
     //auto spawn1 = spawnPoints->objectNamed("spawn 1");
     //auto spawn2 = spawnPoints->objectNamed("spawn 2");
     auto spawn1 = spawnPoints->objectNamed("spawn 1");
@@ -149,7 +165,7 @@ bool Level::init()
 
     // add nodes to scene tree
     this->addChild(edgeNode);
-    this->addChild(_tileMap);
+    this->addChild(tileMap);
     this->addChild(player1->getSprite());
     this->addChild(player2->getSprite());
 
@@ -164,11 +180,11 @@ bool Level::init()
 */
 Sprite* Level::getTileCoordForPosition(Vec2 position, Size sizePlayer)
 {
-    float x = position.x / _tileMap->getTileSize().width;
-    float y = ((_tileMap->getMapSize().height * _tileMap->getTileSize().height) - position.y) / _tileMap->getTileSize().height;
+    float x = position.x / tileMap->getTileSize().width;
+    float y = ((tileMap->getMapSize().height * tileMap->getTileSize().height) - position.y) / tileMap->getTileSize().height;
    
     // missing code from commit 0091fbc - refacto(comments): clean code from useless comments
-    return _walls->getTileAt(Vec2(x, y));
+    return tilesWalls->getTileAt(Vec2(x, y));
 }
 
 /*
@@ -178,14 +194,20 @@ bool Level::checkIfCollision(Vec2 nextPosition, Size sizePlayer)
 {
     Rect newReactangle = Rect(nextPosition.x, nextPosition.y, sizePlayer.width, sizePlayer.height - 4);
 
-    for (int i = 0; i < sizeof(obstacles); i++) {
-        if (newReactangle.intersectsRect(*obstacles->at(i))) {
-            *obstacles->at(i);
-            return(true);
+    for (int i = 0; i < sizeof(obstaclesWalls); i++) {
+        if (newReactangle.intersectsRect(*obstaclesWalls->at(i))) {
+            *obstaclesWalls->at(i);
+            return true;
+        }
+    }
+    for (int i = 0; i < sizeof(obstaclesBorders); i++) {
+        if (newReactangle.intersectsRect(*obstaclesBorders->at(i))) {
+            *obstaclesBorders->at(i);
+            return true;
         }
     }
 
-    return(false);
+    return false;
 }
 
 /*
@@ -205,7 +227,7 @@ bool Level::onContactBegin(PhysicsContact& contact) {
     }
     else if (physicsBodyA->getCollisionBitmask() == 1 && physicsBodyB->getCollisionBitmask() == 2) 
     {
-        playerCollisionBorderMap(physicsBodyA, physicsBodyB);
+        //playerCollisionBorderMap(physicsBodyA, physicsBodyB);
     }
     return true;
 }

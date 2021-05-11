@@ -61,12 +61,13 @@ private:
     //Player* player3;
     //Player* player4;
     
-    Vector<Rect*>* obstacles;
+    Vector<Rect*>* obstaclesWalls;
+    Vector<Rect*>* obstaclesBorders;
 
-    TMXTiledMap* _tileMap;
-    TMXLayer* _background;
-    TMXLayer* _walls;
-    TMXLayer* _border;
+    TMXTiledMap* tileMap;
+    TMXLayer* tilesBackground;
+    TMXLayer* tilesWalls;
+    TMXLayer* tilesBorders;
     
     PhysicsWorld* _sceneWorld;
 
