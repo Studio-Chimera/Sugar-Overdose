@@ -21,6 +21,14 @@ Level* Level::getInstance()
     return levelInstance;
 }
 
+Vector<TMXLayer*> Level::getLayersLevel() 
+{
+    Vector<TMXLayer*> layersLevel;
+    layersLevel.pushBack(_walls);
+    layersLevel.pushBack(_background);
+    return layersLevel;
+}
+
 Scene* Level::scene()
 {
     // 'scene' is an autorelease object
@@ -72,7 +80,7 @@ bool Level::init()
     
     // prepare walls (obstacles)
     _walls = _tileMap->getLayer("walls");
-    _walls->setTag(2);
+    _walls->setTag(1);
 
     // prepare borders
     _border = _tileMap->layerNamed("borders");
@@ -124,7 +132,7 @@ bool Level::init()
     auto player1 = playerHelper->createPlayer(new Vec2(200, 300), TYPE_PLAYER_ONE, this);
     auto player2 = playerHelper->createPlayer(new Vec2(700, 300), TYPE_PLAYER_TWO, this);
 
-    player1->getSprite()->getPhysicsBody()->setCollisionBitmask(1);
+    player1->getSprite()->getPhysicsBody()->setCollisionBitmask(2);
     player2->getSprite()->getPhysicsBody()->setCollisionBitmask(2);
     
     // get & set players controls 
@@ -150,7 +158,9 @@ bool Level::init()
 
 
 /*
+    DEPRECATED
     return cocos2d-x coordonates, with tiled coordonates
+    
 */
 Sprite* Level::getTileCoordForPosition(Vec2 position, Size sizePlayer)
 {
@@ -161,9 +171,11 @@ Sprite* Level::getTileCoordForPosition(Vec2 position, Size sizePlayer)
     return _walls->getTileAt(Vec2(x, y));
 }
 
+/*
+    uses rectangles on all objects to detect collisions
+*/
 bool Level::checkIfCollision(Vec2 nextPosition, Size sizePlayer)
 {
-
     Rect newReactangle = Rect(nextPosition.x, nextPosition.y, sizePlayer.width, sizePlayer.height - 4);
 
     for (int i = 0; i < sizeof(obstacles); i++) {
@@ -174,7 +186,6 @@ bool Level::checkIfCollision(Vec2 nextPosition, Size sizePlayer)
     }
 
     return(false);
-
 }
 
 /*
@@ -259,15 +270,9 @@ void Level::playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBody
     }
 }
 
-
-
-Vector<TMXLayer*> Level::getLayersLevel() {
-    Vector<TMXLayer*> layersLevel;
-    layersLevel.pushBack(_walls);
-    layersLevel.pushBack(_background);
-    return layersLevel;
-}
-
+/*
+    
+*/
 void Level::playerCollisionBorderMap(PhysicsBody* physicsBodyA, PhysicsBody* physicsBodyB){
     
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
