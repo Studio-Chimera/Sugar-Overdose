@@ -58,24 +58,24 @@ bool Level::init()
     edgeBody->setDynamic(false);
 
     auto edgeNode = Node::create();
-    
     edgeNode->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
     edgeNode->setPhysicsBody(edgeBody);
-<<<<<<<< HEAD:Classes/entities/Level.cpp
-
 
     // prepare map
     const auto store = Store::GetInstance();
     _tileMap = new TMXTiledMap();
     _tileMap->initWithTMXFile(store->g_mapName);
 
-    // manage layers (from tmx file)
+    // prepare background
     _background = _tileMap->getLayer("background");
     _background->setTag(1);
     
     // prepare walls (obstacles)
     _walls = _tileMap->getLayer("walls");
     _walls->setTag(2);
+
+    // prepare borders
+    _border = _tileMap->layerNamed("borders");
 
     const float mapWidth = _tileMap->getMapSize().width;
     const float mapHeight = _tileMap->getMapSize().height;
@@ -111,27 +111,9 @@ bool Level::init()
     }
         
     // get spawnpoint objects from objects
-    //TMXObjectGroup* spawnPoints = _tileMap->objectGroupNamed("spawns");
+    TMXObjectGroup* spawnPoints = _tileMap->objectGroupNamed("spawns");
     //auto spawn1 = spawnPoints->objectNamed("spawn 1");
     //auto spawn2 = spawnPoints->objectNamed("spawn 2");
-    edgeNode->setOpacity(0);
-
-
-    // init map
-    auto store = Store::GetInstance();
-    _tileMap = new TMXTiledMap();
-    _tileMap->initWithTMXFile(store->g_mapName);
-
-    // find layer (from tmx file)
-    _background = _tileMap->layerNamed("background");
-    _walls = _tileMap->layerNamed("walls");
-    _border = _tileMap->layerNamed("borders");
-    Value customProperty = _border->getProperty("collisionable");
-    
-    auto playerHelper = new PlayerHelper();
-
-    // get spawnpoint object from objects
-    TMXObjectGroup* spawnPoints = _tileMap->objectGroupNamed("spawns");
     auto spawn1 = spawnPoints->objectNamed("spawn 1");
     auto spawn2 = spawnPoints->objectNamed("spawn 2");
 
@@ -145,14 +127,6 @@ bool Level::init()
     player1->getSprite()->getPhysicsBody()->setCollisionBitmask(1);
     player2->getSprite()->getPhysicsBody()->setCollisionBitmask(2);
     
-
-    
-    // add the nodes to scene tree
-    this->addChild(_tileMap);
-    this->addChild(player1->getSprite());
-    this->addChild(player2->getSprite());
-    this->addChild(edgeNode);
-
     // get & set players controls 
     EventListenerKeyboard *player1Controller = std::get<EventListenerKeyboard*>(player1->getController());
     EventListenerKeyboard *player2Controller = std::get<EventListenerKeyboard*>(player2->getController());
@@ -162,19 +136,8 @@ bool Level::init()
 
     // enable collision detection
     auto contactListener = EventListenerPhysicsContact::create();
-    contactListener->onContactBegin = CC_CALLBACK_1(Level::onContactBegin, this);
-    contactListener->onContactPreSolve = CC_CALLBACK_2(Level::onContactPreSolve, this);
-    contactListener->onContactPostSolve = CC_CALLBACK_2(Level::onContactPostSolve, this);
-
+    contactListener->onContactBegin = CC_CALLBACK_1(Level::onContactBegin, this);    
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
-    
-    return true;
-}
-
-
-    //auto contactListener2 = EventListenerPhysicsContact::create();
-    //contactListener2->onContactPostSolve = CC_CALLBACK_1(Level::onContactPreSolve, this);
-    //this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener2, this);
 
     // add nodes to scene tree
     this->addChild(edgeNode);
@@ -200,7 +163,7 @@ Sprite* Level::getTileCoordForPosition(Vec2 position, Size sizePlayer)
 
 bool Level::checkIfCollision(Vec2 nextPosition, Size sizePlayer)
 {
-    
+
     Rect newReactangle = Rect(nextPosition.x, nextPosition.y, sizePlayer.width, sizePlayer.height - 4);
 
     for (int i = 0; i < sizeof(obstacles); i++) {
@@ -211,6 +174,8 @@ bool Level::checkIfCollision(Vec2 nextPosition, Size sizePlayer)
     }
 
     return(false);
+
+}
 
 /*
 * detects collisions
@@ -233,68 +198,6 @@ bool Level::onContactBegin(PhysicsContact& contact) {
     }
     return true;
 }
-
-bool Level::onContactPreSolve(PhysicsContact& contact, PhysicsContactPreSolve& solve) {
-
-    PhysicsBody* physicsBodyA = contact.getShapeA()->getBody();
-    PhysicsBody* physicsBodyB = contact.getShapeB()->getBody();
-    //CCLOG(physicsBodyA->getNode()->isRunning() ? "a true" : " a false");
-    //CCLOG(physicsBodyB->getNode()->isRunning() ? " b true" : " b false");
-
-    //ssize_t sizeA = physicsBodyA->getNode()->getNumberOfRunningActions();
-    //CCLOG("%d : ", sizeA);
-    
-    //physicsBodyA->getOwner()->cleanup();
-
-    //ssize_t sizeA_2 = physicsBodyA->getNode()->getNumberOfRunningActions();
-    //CCLOG("%d : ", sizeA_2);
-
-    /*physicsBodyA->setVelocity(Vec2(0.0f, 0.0f));
-    physicsBodyA->setMoment(0.0f);
-    physicsBodyA->applyForce(Vec2(0.0f, 0.0f), Vec2(0.0f, 0.0f));
-    physicsBodyA->resetForces();
-
-    physicsBodyB->setVelocity(Vec2(0.0f, 0.0f));
-    physicsBodyB->setMoment(0.0f);
-    physicsBodyB->applyForce(Vec2(0.0f, 0.0f), Vec2(0.0f, 0.0f));
-    physicsBodyB->resetForces();*/
-
-    //solve.setFriction(0.0f);
-    //solve.setRestitution(0.0f);
-    //solve.setSurfaceVelocity(Vec2(0.0f, 0.0f));
-    
-    CCLOG("COLLISIONS HAS OCCURED PreSolve");
-    return true;
-}
-
-/**
-* Start calcul
-*/
-void Level::onContactPostSolve(PhysicsContact& contact, const PhysicsContactPostSolve& solve) {
-    
-    PhysicsBody* physicsBodyA = contact.getShapeA()->getBody();
-    PhysicsBody* physicsBodyB = contact.getShapeB()->getBody();
-
-    /*physicsBodyA->setVelocity(Vec2(0.0f, 0.0f));
-    physicsBodyA->setMoment(0.0f);
-    physicsBodyA->applyForce(Vec2(0.0f, 0.0f), Vec2(0.0f, 0.0f));
-    physicsBodyA->resetForces();
-
-    physicsBodyB->setVelocity(Vec2(0.0f, 0.0f));
-    physicsBodyB->setMoment(0.0f);
-    physicsBodyB->applyForce(Vec2(0.0f, 0.0f), Vec2(0.0f, 0.0f));
-    physicsBodyB->resetForces();*/
-
-    CCLOG("solve.getFriction() : %d ", solve.getFriction());
-    CCLOG("solve.getRestitution() : %d ", solve.getRestitution());
-    CCLOG("solve.getSurfaceVelocity().x : %d ", solve.getSurfaceVelocity().x);
-    CCLOG("solve.getSurfaceVelocity().y : %d ", solve.getSurfaceVelocity().y);
-
-    CCLOG("physicsBodyA->getPosition().x: %d ", physicsBodyA->getPosition().x);
-    CCLOG("physicsBodyA->getPosition().y: %d ", physicsBodyA->getPosition().y);
-    CCLOG("COLLISIONS HAS OCCURED PostSolve");
-}
-
 
 /*
     detects collisions

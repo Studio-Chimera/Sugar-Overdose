@@ -22,13 +22,15 @@ public:
     virtual bool init();
     static Scene* scene();
     bool onContactBegin(PhysicsContact& contact); // first step collision
-    bool onContactPreSolve(PhysicsContact& contact); // second step collision
     
+    void playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBodyB);
+    void playerCollisionBorderMap(PhysicsBody* physicsBodyA, PhysicsBody* physicsBodyB);
+    bool checkIfCollision(Vec2 nextPosition, Size sizePlayer);
+
     Level(Level& other) = delete;
     void operator=(const Level&) = delete;
 
-    // implement the "static create()" method manually
-    CREATE_FUNC(Level);
+    CREATE_FUNC(Level); // implement the "static create()" method manually
 
     /*
         getters
@@ -41,9 +43,8 @@ public:
     //Vec2 Level::getTileCoordForPosition(Vec2 position);
     Sprite* Level::getTileCoordForPosition(Vec2 position, Size size);
     
-    bool checkIfCollision(Vec2 nextPosition, Size sizePlayer);
     /*
-    setters
+        setters
     */
     
 
@@ -65,6 +66,7 @@ private:
     TMXTiledMap* _tileMap;
     TMXLayer* _background;
     TMXLayer* _walls;
+    TMXLayer* _border;
     
     PhysicsWorld* _sceneWorld;
 

@@ -87,10 +87,10 @@ void Player::setPosY(int newPos)
 	_posY = newPos;
 }
 
-void Player::setPosition(Vec2* position)
+void Player::setPosition(Vec2 position)
 {
-	_posX = position->x;
-	_posY = position->y;
+	_posX = position.x;
+	_posY = position.y;
 }
 
 void Player::setSideMoveAnimation(Vector<SpriteFrame*> frames)
