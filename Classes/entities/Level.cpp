@@ -111,12 +111,14 @@ bool Level::init()
 
                 // set a physics body just for display and debug
                 Rect* rect = new Rect(tileXPositon + STEP_PLAYER, tileYPosition + STEP_PLAYER * 2, tileWidth, tileHeight);
+                //const auto obstacleBody = PhysicsBody::createBox(Size(STEP_PLAYER + 17, STEP_PLAYER + 17), PHYSICSBODY_MATERIAL_DEFAULT);
                 const auto obstacleBody = PhysicsBody::createBox(Size(STEP_PLAYER * 2, STEP_PLAYER * 2), PHYSICSBODY_MATERIAL_DEFAULT);
                 obstacleBody->setDynamic(false);
 
                 Node* node = new Node();
                 node->addComponent(obstacleBody);
-                node->setPosition(Vec2(tileXPositon + 3, tileYPosition - 5));
+                node->setPosition(Vec2(tileXPositon - 4, tileYPosition - 8));
+                //node->setPosition(Vec2(tileXPositon  , tileYPosition));
 
                 this->addChild(node);
 
@@ -136,17 +138,13 @@ bool Level::init()
         
     // get spawnpoint objects from objects
     TMXObjectGroup* spawnPoints = tileMap->objectGroupNamed("spawns");
-    //auto spawn1 = spawnPoints->objectNamed("spawn 1");
-    //auto spawn2 = spawnPoints->objectNamed("spawn 2");
     auto spawn1 = spawnPoints->objectNamed("spawn 1");
     auto spawn2 = spawnPoints->objectNamed("spawn 2");
 
     // spawn players
     const auto playerHelper = new PlayerHelper();
-    /*auto player1 = playerHelper->createPlayer(new Vec2(spawn1.at("x").asInt(), spawn1.at("y").asInt()));
-    auto player2 = playerHelper->createPlayer(new Vec2(spawn2.at("x").asInt(), spawn2.at("y").asInt()));*/
-    auto player1 = playerHelper->createPlayer(new Vec2(200, 300), TYPE_PLAYER_ONE, this);
-    auto player2 = playerHelper->createPlayer(new Vec2(700, 300), TYPE_PLAYER_TWO, this);
+    auto player1 = playerHelper->createPlayer(new Vec2(spawn1.at("x").asInt(), spawn1.at("y").asInt()), TYPE_PLAYER_ONE, this);
+    auto player2 = playerHelper->createPlayer(new Vec2(spawn2.at("x").asInt(), spawn2.at("y").asInt()), TYPE_PLAYER_TWO, this);
 
     player1->getSprite()->getPhysicsBody()->setCollisionBitmask(2);
     player2->getSprite()->getPhysicsBody()->setCollisionBitmask(2);
@@ -176,16 +174,15 @@ bool Level::init()
 /*
     DEPRECATED
     return cocos2d-x coordonates, with tiled coordonates
-    
 */
-Sprite* Level::getTileCoordForPosition(Vec2 position, Size sizePlayer)
-{
-    float x = position.x / tileMap->getTileSize().width;
-    float y = ((tileMap->getMapSize().height * tileMap->getTileSize().height) - position.y) / tileMap->getTileSize().height;
-   
-    // missing code from commit 0091fbc - refacto(comments): clean code from useless comments
-    return tilesWalls->getTileAt(Vec2(x, y));
-}
+//Sprite* Level::getTileCoordForPosition(Vec2 position, Size sizePlayer)
+//{
+//    float x = position.x / tileMap->getTileSize().width;
+//    float y = ((tileMap->getMapSize().height * tileMap->getTileSize().height) - position.y) / tileMap->getTileSize().height;
+//   
+//    // missing code from commit 0091fbc - refacto(comments): clean code from useless comments
+//    return tilesWalls->getTileAt(Vec2(x, y));
+//}
 
 /*
     uses rectangles on all objects to detect collisions
@@ -267,7 +264,7 @@ void Level::playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBody
         float newPositionX = positionPlayerA.x - STEP_PLAYER;
         Vec2 newPosition(newPositionX, positionPlayerA.y);
         physicsBodyA->getOwner()->setPosition(newPosition);
-
+        //physicsBodyA->setPositionOffset(Vec2(0.0, 0.0));
     }
 
     // Contact from right side
@@ -275,6 +272,7 @@ void Level::playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBody
         float newPositionX = positionPlayerA.x + STEP_PLAYER;
         Vec2 newPosition(newPositionX, positionPlayerA.y);
         physicsBodyA->getOwner()->setPosition(newPosition);
+        //physicsBodyA->setPositionOffset(Vec2(0.0, 0.0));
     }
 
     // Contact from top side
@@ -282,6 +280,7 @@ void Level::playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBody
         float newPositionY = positionPlayerA.y + STEP_PLAYER;
         Vec2 newPosition(positionPlayerA.x, newPositionY);
         physicsBodyA->getOwner()->setPosition(newPosition);
+        //physicsBodyA->setPositionOffset(Vec2(0.0, 0.0));
     }
 
     // Contact from bot side
@@ -289,6 +288,7 @@ void Level::playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBody
         float newPositionY = positionPlayerA.y - STEP_PLAYER;
         Vec2 newPosition(positionPlayerA.x, newPositionY);
         physicsBodyA->getOwner()->setPosition(newPosition);
+        //physicsBodyA->setPositionOffset(Vec2(0.0, 0.0));
     }
 }
 

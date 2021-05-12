@@ -175,11 +175,6 @@ bool Player::blockPlayerIfWalls(const int direction) {
 	//Sprite* tile = Level::getInstance()->getTileCoordForPosition(nextPosition, _sprite->getContentSize());
 
 	bool collision = Level::getInstance()->checkIfCollision(nextPosition, _sprite->getContentSize());
-	//bool collision = Level::getInstance()->checkIfCollision(getPosition(), _sprite->getContentSize());
-
-	auto body = PhysicsBody::createEdgeBox(Size(STEP_PLAYER, STEP_PLAYER), PHYSICSBODY_MATERIAL_DEFAULT, 1);
-	body->setDynamic(false);
-	int id = 0;
 
 	//if (tile) {
 	if (collision) {
@@ -188,9 +183,9 @@ bool Player::blockPlayerIfWalls(const int direction) {
 		 //id = spriteBatchNode->getTag();
 		 //if (id == 2) { // Tag 2 is walls
 			 //return true;
-			 //return blockPlayer(direction);
-		 //}
-		return true;
+		return blockPlayer(direction);
+		//}
+		//return true;
 	}
 	return false;
 }
@@ -204,20 +199,20 @@ bool Player::blockPlayer(const int direction) {
 	{
 	case DIRECTION_LEFT:
 		this->setPosition(Vec2(pos.x + STEP_PLAYER, pos.y));
-		CCLOG("LEFT");
 		return true;
+
 	case DIRECTION_RIGHT:
 		this->setPosition(Vec2(pos.x - STEP_PLAYER, pos.y));
-		CCLOG("RIGHT");
 		return true;
+
 	case DIRECTION_TOP:
 		this->setPosition(Vec2(pos.x, pos.y - STEP_PLAYER));
-		CCLOG("TOP");
 		return true;
+
 	case DIRECTION_BOTTOM:
 		this->setPosition(Vec2(pos.x, pos.y + STEP_PLAYER));
-		CCLOG("BOTTOM");
 		return true;
+	
 	default:
 		return false;
 	}
@@ -233,22 +228,22 @@ Vec2 Player::getNextPosition(int direction) {
 	{
 	case DIRECTION_LEFT:
 		nextPosition.x = getPosition().x - STEP_PLAYER;
-		//nextPosition.x = getPosition().x - STEP_PLAYER / 3;
 		return nextPosition;
+	
 	case DIRECTION_RIGHT:
 		nextPosition.x = getPosition().x + STEP_PLAYER;
-		//nextPosition.x = getPosition().x + STEP_PLAYER / 3;
 		return nextPosition;
+	
 	case DIRECTION_TOP:
 		nextPosition.y = getPosition().y + STEP_PLAYER;
-		//nextPosition.y = getPosition().y + STEP_PLAYER / 3;
 		return nextPosition;
+	
 	case DIRECTION_BOTTOM:
 		nextPosition.y = getPosition().y - STEP_PLAYER;
-		//nextPosition.y = getPosition().y - STEP_PLAYER / 3;
 		return nextPosition;
+	
 	default:
-		return Vec2(0, 0);
+		return nextPosition;
 	}
-	return Vec2(0, 0);
+	return nextPosition;
 }
