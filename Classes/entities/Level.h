@@ -41,7 +41,7 @@ public:
     //int getTileGid(Vec2 position);
     Vector<TMXLayer*> getLayersLevel();
     //Vec2 Level::getTileCoordForPosition(Vec2 position);
-    Sprite* Level::getTileCoordForPosition(Vec2 position, Size size);
+    //Sprite* Level::getTileCoordForPosition(Vec2 position, Size size);
     
     /*
         setters
