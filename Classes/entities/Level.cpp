@@ -9,11 +9,9 @@
 using namespace cocos2d;
 
 Level* Level::levelInstance = nullptr;
-//std::mutex Level::mutex;
 
 Level* Level::getInstance()
 {
-    //std::lock_guard<std::mutex> lock(mutex);
     if (levelInstance == nullptr)
     {
         levelInstance = new Level();
@@ -34,7 +32,6 @@ Scene* Level::scene()
     // 'scene' is an autorelease object
     Scene* scene = Scene::createWithPhysics();
     scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-    //scene->getPhysicsWorld()->setGravity(Vec2(0.0f, 0.0f));
 
     // 'layer' is an autorelease object
     levelInstance = Level::getInstance()->create();
@@ -59,16 +56,6 @@ bool Level::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
-    // create border map edgeNode
-    auto edgeBody = PhysicsBody::createEdgeBox(visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 1);
-    edgeBody->setCollisionBitmask(1); // Set a tag
-    edgeBody->setContactTestBitmask(true); // Allow to collision to be detected
-    edgeBody->setDynamic(false);
-
-    auto edgeNode = Node::create();
-    edgeNode->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-    edgeNode->setPhysicsBody(edgeBody);
-
     // prepare map
     const auto store = Store::GetInstance();
     tileMap = new TMXTiledMap();
@@ -76,11 +63,9 @@ bool Level::init()
 
     // prepare background
     tilesBackground = tileMap->getLayer("background");
-    //_background->setTag(1);
     
     // prepare walls (obstacles)
     tilesWalls = tileMap->getLayer("walls");
-    //_walls->setTag(1);
 
     // prepare borders
     tilesBorders = tileMap->layerNamed("borders");
@@ -162,27 +147,13 @@ bool Level::init()
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 
     // add nodes to scene tree
-    this->addChild(edgeNode);
+    //this->addChild(edgeNode);
     this->addChild(tileMap);
     this->addChild(player1->getSprite());
     this->addChild(player2->getSprite());
 
     return true;
 }
-
-
-/*
-    DEPRECATED
-    return cocos2d-x coordonates, with tiled coordonates
-*/
-//Sprite* Level::getTileCoordForPosition(Vec2 position, Size sizePlayer)
-//{
-//    float x = position.x / tileMap->getTileSize().width;
-//    float y = ((tileMap->getMapSize().height * tileMap->getTileSize().height) - position.y) / tileMap->getTileSize().height;
-//   
-//    // missing code from commit 0091fbc - refacto(comments): clean code from useless comments
-//    return tilesWalls->getTileAt(Vec2(x, y));
-//}
 
 /*
     uses rectangles on all objects to detect collisions
@@ -222,10 +193,6 @@ bool Level::onContactBegin(PhysicsContact& contact) {
     {
         playersCollision(physicsBodyA, physicsBodyB);
     }
-    else if (physicsBodyA->getCollisionBitmask() == 1 && physicsBodyB->getCollisionBitmask() == 2) 
-    {
-        //playerCollisionBorderMap(physicsBodyA, physicsBodyB);
-    }
     return true;
 }
 
@@ -264,7 +231,6 @@ void Level::playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBody
         float newPositionX = positionPlayerA.x - STEP_PLAYER;
         Vec2 newPosition(newPositionX, positionPlayerA.y);
         physicsBodyA->getOwner()->setPosition(newPosition);
-        //physicsBodyA->setPositionOffset(Vec2(0.0, 0.0));
     }
 
     // Contact from right side
@@ -272,7 +238,6 @@ void Level::playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBody
         float newPositionX = positionPlayerA.x + STEP_PLAYER;
         Vec2 newPosition(newPositionX, positionPlayerA.y);
         physicsBodyA->getOwner()->setPosition(newPosition);
-        //physicsBodyA->setPositionOffset(Vec2(0.0, 0.0));
     }
 
     // Contact from top side
@@ -280,7 +245,6 @@ void Level::playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBody
         float newPositionY = positionPlayerA.y + STEP_PLAYER;
         Vec2 newPosition(positionPlayerA.x, newPositionY);
         physicsBodyA->getOwner()->setPosition(newPosition);
-        //physicsBodyA->setPositionOffset(Vec2(0.0, 0.0));
     }
 
     // Contact from bot side
@@ -288,75 +252,5 @@ void Level::playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBody
         float newPositionY = positionPlayerA.y - STEP_PLAYER;
         Vec2 newPosition(positionPlayerA.x, newPositionY);
         physicsBodyA->getOwner()->setPosition(newPosition);
-        //physicsBodyA->setPositionOffset(Vec2(0.0, 0.0));
     }
 }
-
-/*
-    
-*/
-void Level::playerCollisionBorderMap(PhysicsBody* physicsBodyA, PhysicsBody* physicsBodyB){
-    
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    float maxWidthBorder = Director::getInstance()->getOpenGLView()->getDesignResolutionSize().width;
-    float maxHeightBorder = Director::getInstance()->getOpenGLView()->getDesignResolutionSize().height;
-    float borderLeft = origin.x + STEP_PLAYER * 3;
-    float borderRight = maxWidthBorder - STEP_PLAYER * 3;
-    float borderTop = maxHeightBorder - STEP_PLAYER * 4;
-    float borderBottom = origin.y + STEP_PLAYER * 4;
-
-    Node* player = physicsBodyB->getNode();
-    Size sizePlayer = player->getContentSize();
-    Vec2 positionPlayer = physicsBodyB->getPosition();
-
-    // Contact on left border 
-    if (positionPlayer.x <= borderLeft) {
-        Vec2 currentPositon = physicsBodyB->getOwner()->getPosition();
-        currentPositon.x = currentPositon.x + STEP_PLAYER;
-        physicsBodyB->getOwner()->setPosition(currentPositon);
-    
-    // Contact on right border 
-    } else if (positionPlayer.x >= borderRight) {
-        Vec2 currentPositon = physicsBodyB->getOwner()->getPosition();
-        currentPositon.x = currentPositon.x - STEP_PLAYER;
-        physicsBodyB->getOwner()->setPosition(currentPositon);
-    
-    // Contact on top border 
-    }
-    else if (positionPlayer.y >= borderTop) {
-        Vec2 currentPositon = physicsBodyB->getOwner()->getPosition();
-        currentPositon.y = currentPositon.y - STEP_PLAYER;
-        physicsBodyB->getOwner()->setPosition(currentPositon);
-
-        // Contact on bottom border
-    } else if (positionPlayer.y <= borderBottom) {
-        Vec2 currentPositon = physicsBodyB->getOwner()->getPosition();
-        currentPositon.y = currentPositon.y + STEP_PLAYER;
-        physicsBodyB->getOwner()->setPosition(currentPositon);
-    }   
-}
-
-//Point Level::tileCoordForPosition(CCPoint position)
-//{
-//    int x = position.x / _tileMap->getTileSize().width;
-//    int y = ((_tileMap->getMapSize().height * _tileMap->getTileSize().height) - position.y) / _tileMap->getTileSize().height;
-//    return ccp(x, y);
-//}
-
-
-//void Level::setPlayerPosition(CCPoint position)
-//{
-//    CCPoint tileCoord = this->tileCoordForPosition(position);
-//    int tileGid = _border->tileGIDAt(tileCoord);
-//    if (tileGid) {
-//        CCDictionary* properties = _tileMap->propertiesForGID(tileGid);
-//        if (properties) {
-//            CCString* collision = new CCString();
-//            *collision = *properties->valueForKey("collisionable");
-//            if (collision && (collision->compare("True") == 0)) {
-//                return;
-//            }
-//        }
-//    }
-//    _player->setPosition(position);
-//}
