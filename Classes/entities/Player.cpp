@@ -28,9 +28,7 @@ Player::Player()
 	_bottomMoveAnimation = new Animation;
 }
 
-Player::~Player()
-{
-}
+Player::~Player(){}
 
 
 // ###################################################
@@ -164,28 +162,14 @@ void Player::plantBomb() {
 	//Todo
 }
 
-void Player::stopAnimation(cocos2d::RepeatForever* ani) {
-	CCLOG("STOP ANIMATION");
-	_sprite->stopAction(ani);
-}
-
 bool Player::blockPlayerIfWalls(const int direction) {
 
 	Vec2 nextPosition = getNextPosition(direction);
-	//Sprite* tile = Level::getInstance()->getTileCoordForPosition(nextPosition, _sprite->getContentSize());
 
 	bool collision = Level::getInstance()->checkIfCollision(nextPosition, _sprite->getContentSize());
 
-	//if (tile) {
 	if (collision) {
-		//tile->setPhysicsBody(body);
-		//SpriteBatchNode* spriteBatchNode = tile->getBatchNode();
-		 //id = spriteBatchNode->getTag();
-		 //if (id == 2) { // Tag 2 is walls
-			 //return true;
 		return blockPlayer(direction);
-		//}
-		//return true;
 	}
 	return false;
 }

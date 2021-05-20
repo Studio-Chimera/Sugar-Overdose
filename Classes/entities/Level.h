@@ -24,7 +24,6 @@ public:
     bool onContactBegin(PhysicsContact& contact); // first step collision
     
     void playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBodyB);
-    void playerCollisionBorderMap(PhysicsBody* physicsBodyA, PhysicsBody* physicsBodyB);
     bool checkIfCollision(Vec2 nextPosition, Size sizePlayer);
 
     Level(Level& other) = delete;

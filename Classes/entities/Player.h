@@ -54,7 +54,6 @@ public:
     void moveUp();
     void moveDown();
     void plantBomb();
-    void stopAnimation(cocos2d::RepeatForever* ani);
     bool blockPlayerIfWalls(const int direction);
     bool blockPlayer(const int direction);
 
