@@ -1,6 +1,7 @@
 #pragma once
 #ifndef __LEVEL_SCENE_H__
 #define __LEVEL_SCENE_H__
+
 #include "cocos2d.h"
 #include "Player.h"
 #include "utils/Definitions.h"
@@ -48,6 +49,7 @@ private:
     
     Vector<Rect*>* obstaclesWalls;
     Vector<Rect*>* obstaclesBorders;
+    vector<vector<string>>* map;
 
     TMXTiledMap* tileMap;
     TMXLayer* tilesBackground;

@@ -77,10 +77,15 @@ bool Level::init()
 
     int currentPosInWallsVector = 0;
     int currentPosInBordersVector = 0;
-    float tileXPositon;
-    float tileYPosition;
+    float tileXPositon = 0;
+    float tileYPosition = 0;
+    
     obstaclesWalls = new Vector<Rect*>;
     obstaclesBorders = new Vector<Rect*>;
+
+    map = new vector<vector<string>>;
+    vector<string> currentColMap;
+
 
     for (int i = 0; i < mapWidth; i++) {
         for (int y = 0; y < mapHeight; y++) {
@@ -89,24 +94,32 @@ bool Level::init()
             
 
             if (wallGid != 0 || borderGid != 0) {
-                tileXPositon = i * tileWidth;
-                float tileYPositionOLD = (mapHeight * tileHeight) - ((y + 1) * tileHeight); // Check if calcul is good
-                tileYPosition = y * tileHeight; // Check if calcul is good
+                //tileXPositon = i * tileWidth;
+                //float tileYPositionOLD = (mapHeight * tileHeight) - ((y + 1) * tileHeight); // Check if calcul is good
+                //tileYPosition = y * tileHeight; // Check if calcul is good
+                
 
-                Rect* rect = new Rect(tileXPositon, tileYPosition, tileWidth, tileHeight);
+                //Rect* rect = new Rect(tileXPositon, tileYPosition, tileWidth, tileHeight);
 
 
                 if (wallGid != 0) {
-                    obstaclesWalls->insert(currentPosInWallsVector, rect);
-                    currentPosInWallsVector++;
+                    currentColMap.push_back("Wall");
+                    
+                    //obstaclesWalls->insert(currentPosInWallsVector, rect);
+                    //currentPosInWallsVector++;
                 }
-                else if (borderGid != 0) {
-                    obstaclesBorders->insert(currentPosInBordersVector, rect);
-                    currentPosInBordersVector++;
 
+                else if (borderGid != 0) {
+                    currentColMap.push_back("Border");                    
+                    //obstaclesBorders->insert(currentPosInBordersVector, rect);
+                    //currentPosInBordersVector++;
                 }
 
             }
+        }
+        if (!currentColMap.empty()) {
+            map->push_back(currentColMap);
+            currentColMap.clear();
         }
     }
         
