@@ -56,12 +56,14 @@ public:
     void plantBomb();
     bool blockPlayerIfWalls(const int direction);
     bool blockPlayer(const int direction);
-
+    
+    int orthPosX;
+    int orthPosY;
 
 private:
     
-    int _posX;
-    int _posY;
+    float _posX;
+    float _posY;
 
     SpriteFrameCache* _spriteCacher;
     Sprite* _sprite;
