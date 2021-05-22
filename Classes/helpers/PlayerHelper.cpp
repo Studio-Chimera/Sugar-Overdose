@@ -33,12 +33,26 @@ std::list<Player*> PlayerHelper::getPlayers()
 // Methods
 // ###################################################
 
-// call this one to have your new player instance
+/*
+	call this one to have your new player instance
+	type arg is a const "TYPE_PLAYER_X"
+*/
 Player* PlayerHelper::createPlayer(Vec2* position, int type, Level* level)
 {
 	//create player instance
     auto player = new Player;
 	player->setPosition(*position);
+	switch (type) {
+	case TYPE_PLAYER_ONE:
+		player->orthPosX = 1;
+		player->orthPosY = 4;
+		break;
+	case TYPE_PLAYER_TWO:
+		player->orthPosX = 1;
+		player->orthPosY = 1;
+		break;
+	}
+
 	//player->setLevel(level);
 	setPlayerSprites(player);
 

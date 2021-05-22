@@ -45,6 +45,7 @@ int Player::getPosY()
 {
 	return _posY;
 }
+
 Vec2 Player::getPosition()
 {
 	return Vec2(_posX, _posY);
@@ -115,7 +116,12 @@ void Player::moveLeft() {
 		_posX -= STEP_PLAYER;
 		auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 		_sprite->runAction(Spawn::create(Animate::create(_sideMoveAnimation), movement, nullptr));
+		return;
 	}
+	_posX -= STEP_PLAYER;
+
+	CCLOG("%f", this->getPosition().x);
+	CCLOG("%f", this->getPosition().y);
 }
 
 void Player::moveRight() {
@@ -126,7 +132,11 @@ void Player::moveRight() {
 		_posX += STEP_PLAYER;
 		auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 		_sprite->runAction(Spawn::create(Animate::create(_sideMoveAnimation), movement, nullptr));
+		return;
 	}
+	_posX += STEP_PLAYER;
+	CCLOG("%f", this->getPosition().x);
+	CCLOG("%f", this->getPosition().y);
 }
 
 void Player::moveUp() {
@@ -136,7 +146,13 @@ void Player::moveUp() {
 		_posY += STEP_PLAYER;
 		auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 		_sprite->runAction(Spawn::create(Animate::create(_topMoveAnimation), movement, nullptr));
+		return;
 	}
+	_posY += STEP_PLAYER;
+
+	CCLOG("%f", this->getPosition().x);
+	CCLOG("%f", this->getPosition().y);
+
 }
 
 void Player::moveDown() {
@@ -146,7 +162,12 @@ void Player::moveDown() {
 		_posY -= STEP_PLAYER;
 		auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 		_sprite->runAction(Spawn::create(Animate::create(_bottomMoveAnimation), movement, nullptr));
+		return;
 	}
+	_posY -= STEP_PLAYER;
+
+	CCLOG("%f", this->getPosition().x);
+	CCLOG("%f", this->getPosition().y);
 }
 
 void Player::plantBomb() {
@@ -156,12 +177,13 @@ void Player::plantBomb() {
 bool Player::blockPlayerIfWalls(const int direction) {
 
 	Vec2 nextPosition = getNextPosition(direction);
-
 	//bool collision = Level::getInstance()->checkIfCollision(nextPosition, _sprite->getContentSize());
+	bool collision = Level::getInstance()->NEWcheckIfCollision(nextPosition);
 
-	//if (collision) {
-	//	return blockPlayer(direction);
-	//}
+	if (collision) {
+
+		return blockPlayer(direction);
+	}
 	return false;
 }
 
@@ -174,18 +196,22 @@ bool Player::blockPlayer(const int direction) {
 	{
 	case DIRECTION_LEFT:
 		this->setPosition(Vec2(pos.x + STEP_PLAYER, pos.y));
+		this->orthPosX += 1;
 		return true;
 
 	case DIRECTION_RIGHT:
 		this->setPosition(Vec2(pos.x - STEP_PLAYER, pos.y));
+		this->orthPosX -= 1;
 		return true;
 
 	case DIRECTION_TOP:
 		this->setPosition(Vec2(pos.x, pos.y - STEP_PLAYER));
+		this->orthPosY += 1;
 		return true;
 
 	case DIRECTION_BOTTOM:
 		this->setPosition(Vec2(pos.x, pos.y + STEP_PLAYER));
+		this->orthPosY -= 1;
 		return true;
 	
 	default:
@@ -195,30 +221,44 @@ bool Player::blockPlayer(const int direction) {
 }
 
 /*
-	called when player is moving to calculate where he will be
+	called when player is moving to calculate where he will be next step
 */
 Vec2 Player::getNextPosition(int direction) {
 	Vec2 nextPosition = getPosition();
+	Vec2 nextTiledPosition;
 	switch (direction)
 	{
 	case DIRECTION_LEFT:
-		nextPosition.x = getPosition().x - STEP_PLAYER;
-		return nextPosition;
+		this->orthPosX -= 1;
+		nextTiledPosition.x = this->orthPosX;
+		nextTiledPosition.y = this->orthPosY;
+		//nextPosition.x = getPosition().x - STEP_PLAYER;
+		
+		return nextTiledPosition;
 	
 	case DIRECTION_RIGHT:
-		nextPosition.x = getPosition().x + STEP_PLAYER;
-		return nextPosition;
+		this->orthPosX += 1;
+		nextTiledPosition.x = this->orthPosX;
+		nextTiledPosition.y = this->orthPosY;
+		//nextPosition.x = getPosition().x + STEP_PLAYER;
+		return nextTiledPosition;
 	
 	case DIRECTION_TOP:
-		nextPosition.y = getPosition().y + STEP_PLAYER;
-		return nextPosition;
+		//nextPosition.y = getPosition().y + STEP_PLAYER;
+		this->orthPosY -= 1;
+		nextTiledPosition.y = this->orthPosY;
+		nextTiledPosition.x = this->orthPosX;
+		return nextTiledPosition;
 	
 	case DIRECTION_BOTTOM:
-		nextPosition.y = getPosition().y - STEP_PLAYER;
-		return nextPosition;
+		//nextPosition.y = getPosition().y - STEP_PLAYER;
+		this->orthPosY += 1;
+		nextTiledPosition.y = this->orthPosY;
+		nextTiledPosition.x = this->orthPosX;
+		return nextTiledPosition;
 	
 	default:
-		return nextPosition;
+		return 0;
+		//return nextPosition;
 	}
-	return nextPosition;
 }

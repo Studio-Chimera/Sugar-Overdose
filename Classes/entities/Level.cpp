@@ -5,6 +5,7 @@
 #include "helpers/PlayerHelper.h"
 #include "entities/Player.h"
 #include <proj.win32/PhysicsShapeCache.h>
+#include <external/bullet/include/bullet/LinearMath/btAlignedAllocator.h>
 
 using namespace cocos2d;
 
@@ -114,7 +115,9 @@ bool Level::init()
                     //obstaclesBorders->insert(currentPosInBordersVector, rect);
                     //currentPosInBordersVector++;
                 }
-
+            }
+            else {
+                currentColMap.push_back("Empty");
             }
         }
         if (!currentColMap.empty()) {
@@ -130,8 +133,8 @@ bool Level::init()
 
     // spawn players
     const auto playerHelper = new PlayerHelper();
-    auto player1 = playerHelper->createPlayer(new Vec2(spawn1.at("x").asInt(), spawn1.at("y").asInt()), TYPE_PLAYER_ONE, this);
-    auto player2 = playerHelper->createPlayer(new Vec2(spawn2.at("x").asInt(), spawn2.at("y").asInt()), TYPE_PLAYER_TWO, this);
+    auto player1 = playerHelper->createPlayer(new Vec2(spawn1.at("x").asFloat(), spawn1.at("y").asFloat()), TYPE_PLAYER_ONE, this);
+    auto player2 = playerHelper->createPlayer(new Vec2(spawn2.at("x").asFloat(), spawn2.at("y").asFloat()), TYPE_PLAYER_TWO, this);
 
     
     // get & set players controls 
@@ -153,6 +156,53 @@ bool Level::init()
     this->addChild(player2->getSprite());
 
     return true;
+}
+
+/*
+    uses new player positions on all objects to detect collisions
+*/
+bool Level::NEWcheckIfCollision(Vec2 nextPosition)
+{
+    
+
+    /*
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
+
+    */
+    int sizeMap = sizeof(map);
+    string tile = map->at(nextPosition.x).at(nextPosition.y);
+    if (tile != "Empty") {
+        return true;
+    }
+    
+    return false;
 }
 
 /*
@@ -194,7 +244,7 @@ bool Level::onContactBegin(PhysicsContact& contact) {
     // check if the bodies have collided
     if (physicsBodyA->getCollisionBitmask() == 2 && physicsBodyB->getCollisionBitmask() == 2)
     {
-        //playersCollision(physicsBodyA, physicsBodyB);
+        playersCollision(physicsBodyA, physicsBodyB);
     }
     return true;
 }
