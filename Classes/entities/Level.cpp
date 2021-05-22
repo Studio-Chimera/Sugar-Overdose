@@ -30,12 +30,10 @@ Vector<TMXLayer*> Level::getLayersLevel()
 Scene* Level::scene()
 {
     // 'scene' is an autorelease object
-    Scene* scene = Scene::createWithPhysics();
-    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    Scene* scene = Scene::create();
 
     // 'layer' is an autorelease object
     levelInstance = Level::getInstance()->create();
-    levelInstance->createPhysicalWorld(scene->getPhysicsWorld());
     scene->addChild(levelInstance);
 
     return scene;
@@ -92,20 +90,11 @@ bool Level::init()
 
             if (wallGid != 0 || borderGid != 0) {
                 tileXPositon = i * tileWidth;
-                tileYPosition = (mapHeight * tileHeight) - ((y + 1) * tileHeight); // Check if calcul is good
+                float tileYPositionOLD = (mapHeight * tileHeight) - ((y + 1) * tileHeight); // Check if calcul is good
+                tileYPosition = y * tileHeight; // Check if calcul is good
 
-                // set a physics body just for display and debug
-                Rect* rect = new Rect(tileXPositon + STEP_PLAYER, tileYPosition + STEP_PLAYER * 2, tileWidth, tileHeight);
-                //const auto obstacleBody = PhysicsBody::createBox(Size(STEP_PLAYER + 17, STEP_PLAYER + 17), PHYSICSBODY_MATERIAL_DEFAULT);
-                const auto obstacleBody = PhysicsBody::createBox(Size(STEP_PLAYER * 2, STEP_PLAYER * 2), PHYSICSBODY_MATERIAL_DEFAULT);
-                obstacleBody->setDynamic(false);
+                Rect* rect = new Rect(tileXPositon, tileYPosition, tileWidth, tileHeight);
 
-                Node* node = new Node();
-                node->addComponent(obstacleBody);
-                node->setPosition(Vec2(tileXPositon - 4, tileYPosition - 8));
-                //node->setPosition(Vec2(tileXPositon  , tileYPosition));
-
-                this->addChild(node);
 
                 if (wallGid != 0) {
                     obstaclesWalls->insert(currentPosInWallsVector, rect);
@@ -131,8 +120,6 @@ bool Level::init()
     auto player1 = playerHelper->createPlayer(new Vec2(spawn1.at("x").asInt(), spawn1.at("y").asInt()), TYPE_PLAYER_ONE, this);
     auto player2 = playerHelper->createPlayer(new Vec2(spawn2.at("x").asInt(), spawn2.at("y").asInt()), TYPE_PLAYER_TWO, this);
 
-    player1->getSprite()->getPhysicsBody()->setCollisionBitmask(2);
-    player2->getSprite()->getPhysicsBody()->setCollisionBitmask(2);
     
     // get & set players controls 
     EventListenerKeyboard *player1Controller = std::get<EventListenerKeyboard*>(player1->getController());
@@ -160,15 +147,18 @@ bool Level::init()
 */
 bool Level::checkIfCollision(Vec2 nextPosition, Size sizePlayer)
 {
-    Rect newReactangle = Rect(nextPosition.x, nextPosition.y, sizePlayer.width, sizePlayer.height - 4);
+    Rect newReactangle = Rect(nextPosition.x, nextPosition.y, sizePlayer.width, sizePlayer.height);
+    
+    int sizeObstaclesWalls = sizeof(obstaclesWalls);
+    int sizeObstaclesBorders = sizeof(obstaclesBorders);
 
-    for (int i = 0; i < sizeof(obstaclesWalls); i++) {
+    for (int i = 0; i < sizeObstaclesWalls; i++) {
         if (newReactangle.intersectsRect(*obstaclesWalls->at(i))) {
             *obstaclesWalls->at(i);
             return true;
         }
     }
-    for (int i = 0; i < sizeof(obstaclesBorders); i++) {
+    for (int i = 0; i < sizeObstaclesBorders; i++) {
         if (newReactangle.intersectsRect(*obstaclesBorders->at(i))) {
             *obstaclesBorders->at(i);
             return true;
@@ -191,7 +181,7 @@ bool Level::onContactBegin(PhysicsContact& contact) {
     // check if the bodies have collided
     if (physicsBodyA->getCollisionBitmask() == 2 && physicsBodyB->getCollisionBitmask() == 2)
     {
-        playersCollision(physicsBodyA, physicsBodyB);
+        //playersCollision(physicsBodyA, physicsBodyB);
     }
     return true;
 }
