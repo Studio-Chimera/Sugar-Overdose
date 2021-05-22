@@ -157,11 +157,11 @@ bool Player::blockPlayerIfWalls(const int direction) {
 
 	Vec2 nextPosition = getNextPosition(direction);
 
-	bool collision = Level::getInstance()->checkIfCollision(nextPosition, _sprite->getContentSize());
+	//bool collision = Level::getInstance()->checkIfCollision(nextPosition, _sprite->getContentSize());
 
-	if (collision) {
-		return blockPlayer(direction);
-	}
+	//if (collision) {
+	//	return blockPlayer(direction);
+	//}
 	return false;
 }
 
