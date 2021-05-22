@@ -77,7 +77,7 @@ void LevelSelectionScene::onClickPlayButton(Ref *sender, Widget::TouchEventType 
 	switch (type) {
 		
 	case Widget::TouchEventType::ENDED:
-		levelManager->openLevel("test1 - Copie");
+		levelManager->openLevel("blueMap");
 		break;
 
 	default:
