@@ -135,6 +135,8 @@ bool Level::init()
     const auto playerHelper = new PlayerHelper();
     auto player1 = playerHelper->createPlayer(new Vec2(spawn1.at("x").asFloat(), spawn1.at("y").asFloat()), TYPE_PLAYER_ONE, this);
     auto player2 = playerHelper->createPlayer(new Vec2(spawn2.at("x").asFloat(), spawn2.at("y").asFloat()), TYPE_PLAYER_TWO, this);
+    map->at(player1->orthPosX).at(player1->orthPosY) = "Player";
+    map->at(player2->orthPosX).at(player2->orthPosY) = "Player";
 
     
     // get & set players controls 
@@ -161,48 +163,58 @@ bool Level::init()
 /*
     uses new player positions on all objects to detect collisions
 */
-bool Level::NEWcheckIfCollision(Vec2 nextPosition)
+bool Level::NEWcheckIfCollision(Vec2 nextTiledPosition, int direction)
 {
     
 
     /*
     BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
     BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
 
     */
     int sizeMap = sizeof(map);
-    string tile = map->at(nextPosition.x).at(nextPosition.y);
+    string tile = map->at(nextTiledPosition.x).at(nextTiledPosition.y);
     if (tile != "Empty") {
         return true;
     }
     
+    map->at(nextTiledPosition.x).at(nextTiledPosition.y) = "Player";
+    cleanOldPosition(nextTiledPosition, direction);
     return false;
+}
+
+/*
+    called when player move to free old case and 
+    permit to other players to come in this case
+*/
+void Level::cleanOldPosition(Vec2 nextTiledPosition, int direction) {
+    
+    float oldTiledPosition;
+    switch (direction)
+    {
+    case DIRECTION_LEFT:
+        oldTiledPosition = nextTiledPosition.x + 1;
+        map->at(oldTiledPosition).at(nextTiledPosition.y) = "Empty";
+        return;
+
+    case DIRECTION_RIGHT:
+        oldTiledPosition = nextTiledPosition.x - 1;
+        map->at(oldTiledPosition).at(nextTiledPosition.y) = "Empty";
+        return;
+
+    case DIRECTION_TOP:
+        oldTiledPosition = nextTiledPosition.y + 1;
+        map->at(nextTiledPosition.x).at(oldTiledPosition) = "Empty";
+        return;
+
+    case DIRECTION_BOTTOM:
+        oldTiledPosition = nextTiledPosition.y - 1;
+        map->at(nextTiledPosition.x).at(oldTiledPosition) = "Empty";
+        return;
+
+    default:
+        return;
+    }
 }
 
 /*
@@ -244,7 +256,7 @@ bool Level::onContactBegin(PhysicsContact& contact) {
     // check if the bodies have collided
     if (physicsBodyA->getCollisionBitmask() == 2 && physicsBodyB->getCollisionBitmask() == 2)
     {
-        playersCollision(physicsBodyA, physicsBodyB);
+        //playersCollision(physicsBodyA, physicsBodyB);
     }
     return true;
 }
