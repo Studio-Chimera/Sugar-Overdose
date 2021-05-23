@@ -26,7 +26,8 @@ public:
     
     void playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBodyB);
     bool checkIfCollision(Vec2 nextPosition, Size sizePlayer);
-    bool NEWcheckIfCollision(Vec2 nextPosition);
+    bool NEWcheckIfCollision(Vec2 nextPosition, int direction);
+    void cleanOldPosition(Vec2 nextTiledPosition, int direction);
 
     Level(Level& other) = delete;
     void operator=(const Level&) = delete;

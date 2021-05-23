@@ -111,8 +111,8 @@ void Player::setBottomMoveAnimation(Vector<SpriteFrame*> frames)
 void Player::moveLeft() {
 
 	bool blocked = blockPlayerIfWalls(DIRECTION_LEFT);
+	_sprite->setFlipX(true);
 	if (!blocked) {
-		_sprite->setFlipX(true);
 		_posX -= STEP_PLAYER;
 		auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 		_sprite->runAction(Spawn::create(Animate::create(_sideMoveAnimation), movement, nullptr));
@@ -127,16 +127,14 @@ void Player::moveLeft() {
 void Player::moveRight() {
 
 	bool blocked = blockPlayerIfWalls(DIRECTION_RIGHT);
+	_sprite->setFlipX(false);
 	if (!blocked) {
-		_sprite->setFlipX(false);
 		_posX += STEP_PLAYER;
 		auto movement = MoveTo::create(TIME_WALK_ANIMATION, getPosition());
 		_sprite->runAction(Spawn::create(Animate::create(_sideMoveAnimation), movement, nullptr));
 		return;
 	}
 	_posX += STEP_PLAYER;
-	CCLOG("%f", this->getPosition().x);
-	CCLOG("%f", this->getPosition().y);
 }
 
 void Player::moveUp() {
@@ -178,7 +176,7 @@ bool Player::blockPlayerIfWalls(const int direction) {
 
 	Vec2 nextPosition = getNextPosition(direction);
 	//bool collision = Level::getInstance()->checkIfCollision(nextPosition, _sprite->getContentSize());
-	bool collision = Level::getInstance()->NEWcheckIfCollision(nextPosition);
+	bool collision = Level::getInstance()->NEWcheckIfCollision(nextPosition, direction);
 
 	if (collision) {
 
