@@ -6,6 +6,7 @@
 #include "entities/Player.h"
 #include <proj.win32/PhysicsShapeCache.h>
 #include <external/bullet/include/bullet/LinearMath/btAlignedAllocator.h>
+#include "Bomb.h"
 
 using namespace cocos2d;
 
@@ -76,17 +77,8 @@ bool Level::init()
     int wallGid = 0;
     int borderGid = 0;
 
-    int currentPosInWallsVector = 0;
-    int currentPosInBordersVector = 0;
-    float tileXPositon = 0;
-    float tileYPosition = 0;
-    
-    obstaclesWalls = new Vector<Rect*>;
-    obstaclesBorders = new Vector<Rect*>;
-
     map = new vector<vector<string>>;
     vector<string> currentColMap;
-
 
     for (int i = 0; i < mapWidth; i++) {
         for (int y = 0; y < mapHeight; y++) {
@@ -95,31 +87,20 @@ bool Level::init()
             
 
             if (wallGid != 0 || borderGid != 0) {
-                //tileXPositon = i * tileWidth;
-                //float tileYPositionOLD = (mapHeight * tileHeight) - ((y + 1) * tileHeight); // Check if calcul is good
-                //tileYPosition = y * tileHeight; // Check if calcul is good
                 
-
-                //Rect* rect = new Rect(tileXPositon, tileYPosition, tileWidth, tileHeight);
-
-
                 if (wallGid != 0) {
                     currentColMap.push_back("Wall");
-                    
-                    //obstaclesWalls->insert(currentPosInWallsVector, rect);
-                    //currentPosInWallsVector++;
                 }
 
                 else if (borderGid != 0) {
-                    currentColMap.push_back("Border");                    
-                    //obstaclesBorders->insert(currentPosInBordersVector, rect);
-                    //currentPosInBordersVector++;
+                    currentColMap.push_back("Border");
                 }
             }
             else {
                 currentColMap.push_back("Empty");
             }
         }
+        
         if (!currentColMap.empty()) {
             map->push_back(currentColMap);
             currentColMap.clear();
@@ -146,16 +127,13 @@ bool Level::init()
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(player1Controller, player1->getSprite());
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(player2Controller, player2->getSprite());
 
-    // enable collision detection
-    auto contactListener = EventListenerPhysicsContact::create();
-    contactListener->onContactBegin = CC_CALLBACK_1(Level::onContactBegin, this);    
-    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
-
-    // add nodes to scene tree
-    //this->addChild(edgeNode);
     this->addChild(tileMap);
     this->addChild(player1->getSprite());
     this->addChild(player2->getSprite());
+
+    //auto bsprite = Bomb::create();
+    //bsprite->setPosition(0, 0);
+    //this->addChild(bsprite, 0);
 
     return true;
 }
@@ -163,16 +141,9 @@ bool Level::init()
 /*
     uses new player positions on all objects to detect collisions
 */
-bool Level::NEWcheckIfCollision(Vec2 nextTiledPosition, int direction)
+bool Level::checkIfCollision(Vec2 nextTiledPosition, int direction)
 {
-    
 
-    /*
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-    BLOQUER LES TOUCHES MULTIPLEs !!!!!!!!!!!!!!!!!!!!!!!!
-
-    */
-    int sizeMap = sizeof(map);
     string tile = map->at(nextTiledPosition.x).at(nextTiledPosition.y);
     if (tile != "Empty") {
         return true;
@@ -214,108 +185,5 @@ void Level::cleanOldPosition(Vec2 nextTiledPosition, int direction) {
 
     default:
         return;
-    }
-}
-
-/*
-    uses rectangles on all objects to detect collisions
-*/
-bool Level::checkIfCollision(Vec2 nextPosition, Size sizePlayer)
-{
-    Rect newReactangle = Rect(nextPosition.x, nextPosition.y, sizePlayer.width, sizePlayer.height);
-    
-    int sizeObstaclesWalls = sizeof(obstaclesWalls);
-    int sizeObstaclesBorders = sizeof(obstaclesBorders);
-
-    for (int i = 0; i < sizeObstaclesWalls; i++) {
-        if (newReactangle.intersectsRect(*obstaclesWalls->at(i))) {
-            *obstaclesWalls->at(i);
-            return true;
-        }
-    }
-    for (int i = 0; i < sizeObstaclesBorders; i++) {
-        if (newReactangle.intersectsRect(*obstaclesBorders->at(i))) {
-            *obstaclesBorders->at(i);
-            return true;
-        }
-    }
-
-    return false;
-}
-
-/*
-* detects collisions
-* collisionBitmask 2 => players
-* collisionBitmask 1 => border  
-*/
-bool Level::onContactBegin(PhysicsContact& contact) {
-    
-    PhysicsBody* physicsBodyA = contact.getShapeA()->getBody(); // A is who create the conctact
-    PhysicsBody* physicsBodyB = contact.getShapeB()->getBody(); // B is who is undergo contact    
-
-    // check if the bodies have collided
-    if (physicsBodyA->getCollisionBitmask() == 2 && physicsBodyB->getCollisionBitmask() == 2)
-    {
-        //playersCollision(physicsBodyA, physicsBodyB);
-    }
-    return true;
-}
-
-/*
-    detects collisions
- 	when : collision have been trigger between 2 players
- 	do : move back player which made the collision
-*/
-void Level::playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBodyB) {
-    Node* playerA = physicsBodyA->getOwner();
-    Size sizeA = playerA->getContentSize();
-    Vec2 positionPlayerA = playerA->getPosition();
-
-    Node* playerB = physicsBodyB->getOwner();
-    Size sizeB = playerB->getContentSize();
-    Vec2 positionPlayerB = playerB->getPosition();
-
-    float xMaxPlayerA = positionPlayerA.x + sizeA.width;
-    float xMaxPlayerB = positionPlayerB.x + sizeB.width;
-    float yMaxPlayerA = positionPlayerA.y + sizeA.height;
-    float yMaxPlayerB = positionPlayerB.y + sizeB.height;
-
-    // used to compute if player is in range of hitbox(~ + or - one STEP_PLAYER)
-    float borderLeftPlayerB_MinRange = positionPlayerB.x - STEP_PLAYER;
-    float borderLeftPlayerB_MaxRange = positionPlayerB.x + STEP_PLAYER;
-
-    float borderRightPlayerB_MinRange = xMaxPlayerB - STEP_PLAYER;
-    float borderRightPlayerB_MaxRange = xMaxPlayerB + STEP_PLAYER;
-
-    float borderTopPlayerB_MinRange = yMaxPlayerB - STEP_PLAYER;
-    float borderTopPlayerB_MaxRange = yMaxPlayerB + STEP_PLAYER;
-
-
-    // Contact from left side
-    if (xMaxPlayerA >= borderLeftPlayerB_MinRange && xMaxPlayerA <= borderLeftPlayerB_MaxRange) {
-        float newPositionX = positionPlayerA.x - STEP_PLAYER;
-        Vec2 newPosition(newPositionX, positionPlayerA.y);
-        physicsBodyA->getOwner()->setPosition(newPosition);
-    }
-
-    // Contact from right side
-    else if (positionPlayerA.x >= borderRightPlayerB_MinRange && positionPlayerA.x <= borderRightPlayerB_MaxRange) {
-        float newPositionX = positionPlayerA.x + STEP_PLAYER;
-        Vec2 newPosition(newPositionX, positionPlayerA.y);
-        physicsBodyA->getOwner()->setPosition(newPosition);
-    }
-
-    // Contact from top side
-    else if (positionPlayerA.y >= borderTopPlayerB_MinRange && positionPlayerA.y <= borderTopPlayerB_MaxRange) {
-        float newPositionY = positionPlayerA.y + STEP_PLAYER;
-        Vec2 newPosition(positionPlayerA.x, newPositionY);
-        physicsBodyA->getOwner()->setPosition(newPosition);
-    }
-
-    // Contact from bot side
-    else {
-        float newPositionY = positionPlayerA.y - STEP_PLAYER;
-        Vec2 newPosition(positionPlayerA.x, newPositionY);
-        physicsBodyA->getOwner()->setPosition(newPosition);
     }
 }

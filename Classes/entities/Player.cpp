@@ -104,6 +104,7 @@ void Player::setBottomMoveAnimation(Vector<SpriteFrame*> frames)
 	const unsigned int loop = 1;
 	_bottomMoveAnimation->initWithSpriteFrames(frames, delay, loop);
 }
+
 // ###################################################
 // Methods
 // ###################################################
@@ -119,9 +120,6 @@ void Player::moveLeft() {
 		return;
 	}
 	_posX -= STEP_PLAYER;
-
-	CCLOG("%f", this->getPosition().x);
-	CCLOG("%f", this->getPosition().y);
 }
 
 void Player::moveRight() {
@@ -148,9 +146,6 @@ void Player::moveUp() {
 	}
 	_posY += STEP_PLAYER;
 
-	CCLOG("%f", this->getPosition().x);
-	CCLOG("%f", this->getPosition().y);
-
 }
 
 void Player::moveDown() {
@@ -163,9 +158,6 @@ void Player::moveDown() {
 		return;
 	}
 	_posY -= STEP_PLAYER;
-
-	CCLOG("%f", this->getPosition().x);
-	CCLOG("%f", this->getPosition().y);
 }
 
 void Player::plantBomb() {
@@ -175,8 +167,7 @@ void Player::plantBomb() {
 bool Player::blockPlayerIfWalls(const int direction) {
 
 	Vec2 nextPosition = getNextPosition(direction);
-	//bool collision = Level::getInstance()->checkIfCollision(nextPosition, _sprite->getContentSize());
-	bool collision = Level::getInstance()->NEWcheckIfCollision(nextPosition, direction);
+	bool collision = Level::getInstance()->checkIfCollision(nextPosition, direction);
 
 	if (collision) {
 
@@ -230,26 +221,21 @@ Vec2 Player::getNextPosition(int direction) {
 		this->orthPosX -= 1;
 		nextTiledPosition.x = this->orthPosX;
 		nextTiledPosition.y = this->orthPosY;
-		//nextPosition.x = getPosition().x - STEP_PLAYER;
-		
 		return nextTiledPosition;
 	
 	case DIRECTION_RIGHT:
 		this->orthPosX += 1;
 		nextTiledPosition.x = this->orthPosX;
 		nextTiledPosition.y = this->orthPosY;
-		//nextPosition.x = getPosition().x + STEP_PLAYER;
 		return nextTiledPosition;
 	
 	case DIRECTION_TOP:
-		//nextPosition.y = getPosition().y + STEP_PLAYER;
 		this->orthPosY -= 1;
 		nextTiledPosition.y = this->orthPosY;
 		nextTiledPosition.x = this->orthPosX;
 		return nextTiledPosition;
 	
 	case DIRECTION_BOTTOM:
-		//nextPosition.y = getPosition().y - STEP_PLAYER;
 		this->orthPosY += 1;
 		nextTiledPosition.y = this->orthPosY;
 		nextTiledPosition.x = this->orthPosX;
@@ -257,6 +243,5 @@ Vec2 Player::getNextPosition(int direction) {
 	
 	default:
 		return 0;
-		//return nextPosition;
 	}
 }

@@ -22,11 +22,9 @@ public:
 
     virtual bool init();
     static Scene* scene();
-    bool onContactBegin(PhysicsContact& contact); // first step collision
     
     void playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBodyB);
-    bool checkIfCollision(Vec2 nextPosition, Size sizePlayer);
-    bool NEWcheckIfCollision(Vec2 nextPosition, int direction);
+    bool checkIfCollision(Vec2 nextPosition, int direction);
     void cleanOldPosition(Vec2 nextTiledPosition, int direction);
 
     Level(Level& other) = delete;
@@ -58,6 +56,5 @@ private:
     TMXLayer* tilesWalls;
     TMXLayer* tilesBorders;
 };
-
 
 #endif // __LEVEL_SCENE_H__
