@@ -131,9 +131,9 @@ bool Level::init()
     this->addChild(player1->getSprite());
     this->addChild(player2->getSprite());
 
-    //auto bsprite = Bomb::create();
-    //bsprite->setPosition(0, 0);
-    //this->addChild(bsprite, 0);
+    auto bomb = new Bomb();
+    bomb->getSprite()->setPosition(250, 350);
+    this->addChild(bomb->getSprite());
 
     return true;
 }

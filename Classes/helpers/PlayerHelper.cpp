@@ -56,9 +56,7 @@ Player* PlayerHelper::createPlayer(Vec2* position, int type, Level* level)
 	//player->setLevel(level);
 	setPlayerSprites(player);
 
-	// add players special features
-	player->getSprite();
-
+	// add players special 
     auto controllerHelper = new ControllerHelper;
 	controllerHelper->addControls(player, type); //to use controls on scene add: this->_eventDispatcher->addEventListenerWithSceneGraphPriority(player->getController(), player->getSprite());
 
@@ -75,12 +73,12 @@ void PlayerHelper::setPlayerSprites(Player* player)
 	std::stringstream plistFile;
 	plistFile << "sprites/player/player"<< playerNumber+1 << "/player" << playerNumber + 1 << ".plist";
 	player->getSpritecacher()->addSpriteFramesWithFile(plistFile.str());
+	
+	// set all sprites
 	std::stringstream standPng;
 	standPng << "player" << playerNumber + 1 << "_stand.png";
-
-	// set all sprites
 	player->getSprite()->initWithSpriteFrameName(standPng.str());
-	
+
 	// create the animations with sprites
 	createSideMoveAnimation(playerNumber, player);
 	createTopMoveAnimation(playerNumber, player);

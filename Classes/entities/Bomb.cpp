@@ -1,31 +1,53 @@
 #include "Bomb.h"
 
-bool Bomb::init()
-{
-    return true;
+//bool Bomb::init()
+//{
+//    return true;
+//}
+
+Bomb::Bomb(){
+    //Bomb* b_Sprite = new Bomb();
+
+    _spriteCacher = SpriteFrameCache::getInstance();
+
+    std::stringstream plistFile;
+    plistFile << "sprites/bomb/bomb_.plist";
+    _spriteCacher->addSpriteFramesWithFile(plistFile.str());
+
+    std::stringstream standPng;
+    standPng << "bomb2_reduced.png";
+    this->_sprite = new Sprite;
+    auto myfile = standPng.str();
+    _sprite->initWithSpriteFrameName(myfile);
 }
 
-Bomb::Bomb()
+Bomb::~Bomb(){}
+
+Sprite* Bomb::getSprite()
 {
+    return _sprite;
 }
 
-Bomb::~Bomb()
+SpriteFrameCache* Bomb::getSpritecacher()
 {
+    return _spriteCacher;
 }
+
 
 Bomb* Bomb::create()
 {
-    Bomb* b_Sprite = new Bomb();
+    
+  
+    
+    //if (b_Sprite->initWithSpriteFrameName("/sprites/bomb/bomb1.png"))
+    //{
+    //    b_Sprite->init();
 
-    if (b_Sprite && b_Sprite->initWithSpriteFrameName("/sprites/bomb/bomb1.png"))
-    {
-        b_Sprite->init();
+    //    b_Sprite->autorelease();
 
-        b_Sprite->autorelease();
-
-        return b_Sprite;
-    };
-    CC_SAFE_DELETE(b_Sprite);
+    //    return b_Sprite;
+    //};
+    //CC_SAFE_DELETE(b_Sprite);
     return nullptr;
 }
 
