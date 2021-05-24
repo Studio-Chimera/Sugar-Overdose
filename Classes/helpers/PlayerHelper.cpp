@@ -44,12 +44,10 @@ Player* PlayerHelper::createPlayer(Vec2* position, int type, Level* level)
 	player->setPosition(*position);
 	switch (type) {
 	case TYPE_PLAYER_ONE:
-		player->orthPosX = 1;
-		player->orthPosY = 4;
+		player->setCustomTiledPosition(new Vec2(1.0f, 4.0f));
 		break;
 	case TYPE_PLAYER_TWO:
-		player->orthPosX = 1;
-		player->orthPosY = 1;
+		player->setCustomTiledPosition(new Vec2(1.0f, 1.0f));
 		break;
 	}
 

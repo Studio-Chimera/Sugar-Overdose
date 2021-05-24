@@ -18,7 +18,7 @@ public:
     // Setters
     // ###################################################
 
-    void setBPosition(Vec2 position);
+    void setCustomTiledPosition(Vec2* customTiledPosition);
 
     // ###################################################
     // Getters
@@ -26,6 +26,8 @@ public:
 
     Sprite* getSprite();
     SpriteFrameCache* getSpritecacher();
+    Vec2* getCustomTiledPosition();
+
 
     int x;
     int y;
@@ -33,6 +35,8 @@ public:
 private:
     //virtual bool init();
     
+    int customTiledPosX;
+    int customTiledPosY;
     Sprite* _sprite;
     SpriteFrameCache* _spriteCacher;
 

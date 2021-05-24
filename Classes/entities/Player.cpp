@@ -161,10 +161,22 @@ void Player::moveDown() {
 	_posY -= STEP_PLAYER;
 }
 
+
+
 void Player::plantBomb() {
 	auto bomb = new Bomb();
-	bomb->getSprite()->setPosition(getPosition());  
+	bomb->getSprite()->setPosition(getPosition());
+	bomb->setCustomTiledPosition(getCustomTiledPosition());
+
 	Level::getInstance()->addChild(bomb->getSprite());
+
+	_sprite->runAction(Sequence::create(
+		DelayTime::create(TIME_EXPLOSION),
+		CallFunc::create(CC_CALLBACK_0(Player::explosion, this, bomb)), nullptr));
+}
+
+void Player::explosion(Bomb* bomb) {
+	bomb->getSprite()->removeFromParent();
 }
 
 bool Player::blockPlayerIfWalls(const int direction) {
@@ -188,22 +200,22 @@ bool Player::blockPlayer(const int direction) {
 	{
 	case DIRECTION_LEFT:
 		this->setPosition(Vec2(pos.x + STEP_PLAYER, pos.y));
-		this->orthPosX += 1;
+		this->customTiledPosX += 1;
 		return true;
 
 	case DIRECTION_RIGHT:
 		this->setPosition(Vec2(pos.x - STEP_PLAYER, pos.y));
-		this->orthPosX -= 1;
+		this->customTiledPosX -= 1;
 		return true;
 
 	case DIRECTION_TOP:
 		this->setPosition(Vec2(pos.x, pos.y - STEP_PLAYER));
-		this->orthPosY += 1;
+		this->customTiledPosY += 1;
 		return true;
 
 	case DIRECTION_BOTTOM:
 		this->setPosition(Vec2(pos.x, pos.y + STEP_PLAYER));
-		this->orthPosY -= 1;
+		this->customTiledPosY -= 1;
 		return true;
 	
 	default:
@@ -221,30 +233,39 @@ Vec2 Player::getNextPosition(int direction) {
 	switch (direction)
 	{
 	case DIRECTION_LEFT:
-		this->orthPosX -= 1;
-		nextTiledPosition.x = this->orthPosX;
-		nextTiledPosition.y = this->orthPosY;
+		this->customTiledPosX -= 1;
+		nextTiledPosition.x = this->customTiledPosX;
+		nextTiledPosition.y = this->customTiledPosY;
 		return nextTiledPosition;
 	
 	case DIRECTION_RIGHT:
-		this->orthPosX += 1;
-		nextTiledPosition.x = this->orthPosX;
-		nextTiledPosition.y = this->orthPosY;
+		this->customTiledPosX += 1;
+		nextTiledPosition.x = this->customTiledPosX;
+		nextTiledPosition.y = this->customTiledPosY;
 		return nextTiledPosition;
 	
 	case DIRECTION_TOP:
-		this->orthPosY -= 1;
-		nextTiledPosition.y = this->orthPosY;
-		nextTiledPosition.x = this->orthPosX;
+		this->customTiledPosY -= 1;
+		nextTiledPosition.y = this->customTiledPosY;
+		nextTiledPosition.x = this->customTiledPosX;
 		return nextTiledPosition;
 	
 	case DIRECTION_BOTTOM:
-		this->orthPosY += 1;
-		nextTiledPosition.y = this->orthPosY;
-		nextTiledPosition.x = this->orthPosX;
+		this->customTiledPosY += 1;
+		nextTiledPosition.y = this->customTiledPosY;
+		nextTiledPosition.x = this->customTiledPosX;
 		return nextTiledPosition;
 	
 	default:
 		return 0;
 	}
+}
+
+Vec2* Player::getCustomTiledPosition() {
+	return new Vec2(customTiledPosX, customTiledPosY);
+}
+
+void Player::setCustomTiledPosition(Vec2* customTiledPosition) {
+	customTiledPosX = customTiledPosition->x;
+	customTiledPosY = customTiledPosition->y;
 }

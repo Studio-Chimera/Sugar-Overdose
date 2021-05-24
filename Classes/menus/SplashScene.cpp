@@ -23,7 +23,7 @@ bool SplashScene::init()
     }
 
     SonarCocosHelper::UI::AddCentredBackground(SPLASH_SCENE, this);
-    scheduleOnce(schedule_selector(SplashScene::SwitchToMainMenu), DISPLAY_TIME_SPLASH_SCENE);
+    scheduleOnce(schedule_selector(SplashScene::SwitchToMainMenu), TIME_DISPLAY_SPLASH_SCENE);
 
     return true;
 }
