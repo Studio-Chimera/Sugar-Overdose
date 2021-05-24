@@ -1,10 +1,5 @@
 #include "Bomb.h"
 
-//bool Bomb::init()
-//{
-//    return true;
-//}
-
 Bomb::Bomb(){
     //Bomb* b_Sprite = new Bomb();
 
@@ -31,27 +26,4 @@ Sprite* Bomb::getSprite()
 SpriteFrameCache* Bomb::getSpritecacher()
 {
     return _spriteCacher;
-}
-
-
-Bomb* Bomb::create()
-{
-    
-  
-    
-    //if (b_Sprite->initWithSpriteFrameName("/sprites/bomb/bomb1.png"))
-    //{
-    //    b_Sprite->init();
-
-    //    b_Sprite->autorelease();
-
-    //    return b_Sprite;
-    //};
-    //CC_SAFE_DELETE(b_Sprite);
-    return nullptr;
-}
-
-void Bomb::setBPosition(Vec2 position)
-{
-    //setPosition(10, 10);
 }
