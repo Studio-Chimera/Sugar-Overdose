@@ -47,6 +47,8 @@ EventListenerKeyboard* ControllerHelper::createKeyboardArrowController(Player* p
             player->moveUp();
         } else if (EventKeyboard::KeyCode::KEY_DOWN_ARROW == keyCode) {
             player->moveDown();
+        } else if (EventKeyboard::KeyCode::KEY_ENTER == keyCode) {
+            player->plantBomb();
         }
     };
 
@@ -67,6 +69,8 @@ EventListenerKeyboard* ControllerHelper::createKeyboard_ZQSD_Controller(Player* 
             player->moveUp();
         } else if (EventKeyboard::KeyCode::KEY_S == keyCode) {
             player->moveDown();
+        } else if (EventKeyboard::KeyCode::KEY_SPACE == keyCode) {
+            player->plantBomb();
         }
     };
 

@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <iomanip>
+#include "Bomb.h"
 #include <utils/Definitions.h>
 
 // ###################################################
@@ -161,7 +162,9 @@ void Player::moveDown() {
 }
 
 void Player::plantBomb() {
-	//Todo
+	auto bomb = new Bomb();
+	bomb->getSprite()->setPosition(getPosition());  
+	Level::getInstance()->addChild(bomb->getSprite());
 }
 
 bool Player::blockPlayerIfWalls(const int direction) {

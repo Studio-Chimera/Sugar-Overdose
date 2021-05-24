@@ -131,10 +131,6 @@ bool Level::init()
     this->addChild(player1->getSprite());
     this->addChild(player2->getSprite());
 
-    auto bomb = new Bomb();
-    bomb->getSprite()->setPosition(250, 350);
-    this->addChild(bomb->getSprite());
-
     return true;
 }
 
