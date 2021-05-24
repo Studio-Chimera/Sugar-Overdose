@@ -59,7 +59,7 @@ public:
     void moveUp();
     void moveDown();
     void plantBomb();
-    void explosion(Bomb* bomb);
+    void explosion(Bomb* bomb, float currentCustomTiledXPositon, float currentCustomTiledYPositon);
     bool blockPlayerIfWalls(const int direction);
     bool blockPlayer(const int direction);
 

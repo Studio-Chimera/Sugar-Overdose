@@ -178,32 +178,35 @@ void Player::plantBomb() {
 
 	Level::getInstance()->addChild(bomb->getSprite());
 
+	float currentCustomTiledXPositon = getCustomTiledPosition()->x;
+	float currentCustomTiledYPositon = getCustomTiledPosition()->y;
+
 	_sprite->runAction(Sequence::create(
 		DelayTime::create(TIME_EXPLOSION),
-		CallFunc::create(CC_CALLBACK_0(Player::explosion, this, bomb)), nullptr));
+		CallFunc::create(CC_CALLBACK_0(Player::explosion, this, bomb, currentCustomTiledXPositon, currentCustomTiledYPositon)), nullptr));
 }
 
-void Player::explosion(Bomb* bomb) {
+void Player::explosion(Bomb* bomb, float currentCustomTiledXPositon, float currentCustomTiledYPositon) {
 	bomb->getSprite()->removeFromParent();
 	auto mapLevel = Level::getInstance()->map;
 
-	mapLevel->at(getCustomTiledPosition()->x).at(getCustomTiledPosition()->y) = "Empty";
+	mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon) = "Empty";
 
-	string caseRight = mapLevel->at(getCustomTiledPosition()->x + 1).at(getCustomTiledPosition()->y);
+	string caseRight = mapLevel->at(currentCustomTiledXPositon + 1).at(currentCustomTiledYPositon);
 	if (caseRight != "Border") { 
-		mapLevel->at(getCustomTiledPosition()->x + 1).at(getCustomTiledPosition()->y) = "Empty";
+		mapLevel->at(currentCustomTiledXPositon + 1).at(currentCustomTiledYPositon) = "Empty";
 	}
-	string caseLeft = mapLevel->at(getCustomTiledPosition()->x - 1).at(getCustomTiledPosition()->y);
+	string caseLeft = mapLevel->at(currentCustomTiledXPositon - 1).at(currentCustomTiledYPositon);
 	if (caseLeft != "Border") {
-		mapLevel->at(getCustomTiledPosition()->x - 1).at(getCustomTiledPosition()->y) = "Empty";
+		mapLevel->at(currentCustomTiledXPositon - 1).at(currentCustomTiledYPositon) = "Empty";
 	}
-	string caseBottom = mapLevel->at(getCustomTiledPosition()->x).at(getCustomTiledPosition()->y + 1);
+	string caseBottom = mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon + 1);
 	if (caseBottom != "Border") {
-		mapLevel->at(getCustomTiledPosition()->x).at(getCustomTiledPosition()->y + 1) = "Empty";
+		mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon + 1) = "Empty";
 	}
-	string caseTop = mapLevel->at(getCustomTiledPosition()->x).at(getCustomTiledPosition()->y - 1);
+	string caseTop = mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon - 1);
 	if (caseTop != "Border") {
-		mapLevel->at(getCustomTiledPosition()->x).at(getCustomTiledPosition()->y - 1) = "Empty";
+		mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon - 1) = "Empty";
 	}
 }
 
