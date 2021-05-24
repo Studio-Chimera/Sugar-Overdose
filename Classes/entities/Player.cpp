@@ -177,6 +177,26 @@ void Player::plantBomb() {
 
 void Player::explosion(Bomb* bomb) {
 	bomb->getSprite()->removeFromParent();
+	auto mapLevel = Level::getInstance()->map;
+
+	mapLevel->at(getCustomTiledPosition()->x).at(getCustomTiledPosition()->y) = "Empty";
+
+	string caseRight = mapLevel->at(getCustomTiledPosition()->x + 1).at(getCustomTiledPosition()->y);
+	if (caseRight != "Border") { 
+		mapLevel->at(getCustomTiledPosition()->x + 1).at(getCustomTiledPosition()->y) = "Empty";
+	}
+	string caseLeft = mapLevel->at(getCustomTiledPosition()->x - 1).at(getCustomTiledPosition()->y);
+	if (caseLeft != "Border") {
+		mapLevel->at(getCustomTiledPosition()->x - 1).at(getCustomTiledPosition()->y) = "Empty";
+	}
+	string caseBottom = mapLevel->at(getCustomTiledPosition()->x).at(getCustomTiledPosition()->y + 1);
+	if (caseBottom != "Border") {
+		mapLevel->at(getCustomTiledPosition()->x).at(getCustomTiledPosition()->y + 1) = "Empty";
+	}
+	string caseTop = mapLevel->at(getCustomTiledPosition()->x).at(getCustomTiledPosition()->y - 1);
+	if (caseTop != "Border") {
+		mapLevel->at(getCustomTiledPosition()->x).at(getCustomTiledPosition()->y - 1) = "Empty";
+	}
 }
 
 bool Player::blockPlayerIfWalls(const int direction) {

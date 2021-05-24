@@ -22,7 +22,8 @@ public:
 
     virtual bool init();
     static Scene* scene();
-    
+    vector<vector<string>>* map;
+
     void playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBodyB);
     bool checkIfCollision(Vec2 nextPosition, int direction);
     void cleanOldPosition(Vec2 nextTiledPosition, int direction);
@@ -49,7 +50,6 @@ private:
     
     Vector<Rect*>* obstaclesWalls;
     Vector<Rect*>* obstaclesBorders;
-    vector<vector<string>>* map;
 
     TMXTiledMap* tileMap;
     TMXLayer* tilesBackground;
