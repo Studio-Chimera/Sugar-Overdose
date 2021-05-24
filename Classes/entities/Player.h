@@ -6,6 +6,7 @@
 #include <extensions\physics-nodes\CCPhysicsSprite.h>
 #include <variant>
 #include "entities/Level.h"
+#include "Bomb.h"
 
 using namespace cocos2d;
 
@@ -26,6 +27,7 @@ public:
 
     int getPosX();
     int getPosY();
+    Vec2* getCustomTiledPosition();
     Vec2 getNextPosition(int direction);
     Vec2 getPosition();
     Sprite* getSprite();
@@ -40,6 +42,7 @@ public:
     void setPosX(int newPos);
     void setPosY(int newPos);
     void setPosition(Vec2 position);
+    void setCustomTiledPosition(Vec2* customTiledPosition);
     void setSideMoveAnimation(Vector<SpriteFrame*>);
     void setTopMoveAnimation(Vector<SpriteFrame*>);
     void setBottomMoveAnimation(Vector<SpriteFrame*>);
@@ -54,16 +57,18 @@ public:
     void moveUp();
     void moveDown();
     void plantBomb();
+    void explosion(Bomb* bomb);
     bool blockPlayerIfWalls(const int direction);
     bool blockPlayer(const int direction);
     
-    int orthPosX;
-    int orthPosY;
+
 
 private:
     
     float _posX;
     float _posY;
+    int customTiledPosX;
+    int customTiledPosY;
 
     SpriteFrameCache* _spriteCacher;
     Sprite* _sprite;

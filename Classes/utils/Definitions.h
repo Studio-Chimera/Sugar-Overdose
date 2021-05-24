@@ -34,18 +34,15 @@ this file defines all constantes and reusables functions
 #define BUTTON_BACK_TO_MAIN_MENU "buttons/button_back_to_main_menu.png"
 #define BUTTON_BACK_TO_MAIN_MENU_PRESSED "buttons/"
 
-/*********** WAY WITH BUTTONS TEXTS HARD-CODED ***********/
-//#define CAPTURE "buttons/Capture.png"
-
 // IDs
 
 // VALUES NUMBER
-#define DISPLAY_TIME_SPLASH_SCENE 1.5
+#define TIME_DISPLAY_SPLASH_SCENE 1.5
 #define STEP_PLAYER 167
-//#define STEP_PLAYER 83.5
+#define TIME_EXPLOSION 1.0f 
 #define TIME_WALK_ANIMATION 0.1
-constexpr auto DEFAULT_VOLUME = 0;
 
+constexpr auto DEFAULT_VOLUME = 0;
 
 // STATES
 

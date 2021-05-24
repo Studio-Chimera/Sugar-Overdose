@@ -116,8 +116,9 @@ bool Level::init()
     const auto playerHelper = new PlayerHelper();
     auto player1 = playerHelper->createPlayer(new Vec2(spawn1.at("x").asFloat(), spawn1.at("y").asFloat()), TYPE_PLAYER_ONE, this);
     auto player2 = playerHelper->createPlayer(new Vec2(spawn2.at("x").asFloat(), spawn2.at("y").asFloat()), TYPE_PLAYER_TWO, this);
-    map->at(player1->orthPosX).at(player1->orthPosY) = "Player";
-    map->at(player2->orthPosX).at(player2->orthPosY) = "Player";
+    
+    map->at(player1->getCustomTiledPosition()->x).at(player1->getCustomTiledPosition()->y) = "Player";
+    map->at(player2->getCustomTiledPosition()->x).at(player2->getCustomTiledPosition()->y) = "Player";
 
     
     // get & set players controls 
