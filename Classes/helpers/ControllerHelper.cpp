@@ -14,20 +14,20 @@ ControllerHelper::~ControllerHelper()
 // Methods
 // ###################################################
 
-void ControllerHelper::addControls(Player* player, int type)
+void ControllerHelper::addControls(Player* player, int playerNumber)
 {
-    switch (type){
-        case 1:
+    switch (playerNumber){
+        case PLAYER_NUMBER_ONE:
             player->setController(createKeyboard_ZQSD_Controller(player));
             break;
-        case 2:
+        case PLAYER_NUMBER_TWO:
             player->setController(createKeyboardArrowController(player));
             break;
-        case 3:
+        case PLAYER_NUMBER_THREE:
             break;
-        case 4:
+        case PLAYER_NUMBER_FOUR:
             break;
-        case 5:
+        case PLAYER_IA:
             //player->setIAController();
             break;
     }

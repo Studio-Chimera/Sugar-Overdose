@@ -33,7 +33,7 @@ public:
     // Methods
     // ###################################################
 
-    Player* createPlayer(Vec2* position, int number, Level* level);
+    Player* createPlayer(Vec2* position, int newPlayerNumber, Level* level);
     void setPlayerSprites(Player* player);
     void createSideMoveAnimation(int playerNumber, Player* player);
     void createTopMoveAnimation(int playerNumber, Player* player);

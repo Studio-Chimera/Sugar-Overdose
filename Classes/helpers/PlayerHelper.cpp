@@ -37,16 +37,18 @@ std::list<Player*> PlayerHelper::getPlayers()
 	call this one to have your new player instance
 	type arg is a const "TYPE_PLAYER_X"
 */
-Player* PlayerHelper::createPlayer(Vec2* position, int type, Level* level)
+Player* PlayerHelper::createPlayer(Vec2* position, int playerNumber, Level* level)
 {
 	//create player instance
     auto player = new Player;
 	player->setPosition(*position);
-	switch (type) {
-	case TYPE_PLAYER_ONE:
+	player->setPlayerNumber(playerNumber);
+
+	switch (playerNumber) {
+	case PLAYER_NUMBER_ONE:
 		player->setCustomTiledPosition(new Vec2(1.0f, 4.0f));
 		break;
-	case TYPE_PLAYER_TWO:
+	case PLAYER_NUMBER_TWO:
 		player->setCustomTiledPosition(new Vec2(1.0f, 1.0f));
 		break;
 	}
@@ -56,7 +58,7 @@ Player* PlayerHelper::createPlayer(Vec2* position, int type, Level* level)
 
 	// add players special 
     auto controllerHelper = new ControllerHelper;
-	controllerHelper->addControls(player, type); //to use controls on scene add: this->_eventDispatcher->addEventListenerWithSceneGraphPriority(player->getController(), player->getSprite());
+	controllerHelper->addControls(player, playerNumber); //to use controls on scene add: this->_eventDispatcher->addEventListenerWithSceneGraphPriority(player->getController(), player->getSprite());
 
 	// save instance
 	_playersInstances.push_back(player);

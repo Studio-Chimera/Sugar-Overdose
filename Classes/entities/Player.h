@@ -25,10 +25,11 @@ public:
     // Getters
     // ###################################################
 
+    int getPlayerNumber();
     int getPosX();
     int getPosY();
     Vec2* getCustomTiledPosition();
-    Vec2 getNextPosition(int direction);
+    Vec2 getNextPositionOnCustomeTiledMap(int direction);
     Vec2 getPosition();
     Sprite* getSprite();
     SpriteFrameCache* getSpritecacher();
@@ -39,6 +40,7 @@ public:
     // Setters
     // ###################################################
 
+    void setPlayerNumber(int playerNumber);
     void setPosX(int newPos);
     void setPosY(int newPos);
     void setPosition(Vec2 position);
@@ -60,8 +62,6 @@ public:
     void explosion(Bomb* bomb);
     bool blockPlayerIfWalls(const int direction);
     bool blockPlayer(const int direction);
-    
-
 
 private:
     
@@ -69,6 +69,7 @@ private:
     float _posY;
     int customTiledPosX;
     int customTiledPosY;
+    int playerNumber;
 
     SpriteFrameCache* _spriteCacher;
     Sprite* _sprite;

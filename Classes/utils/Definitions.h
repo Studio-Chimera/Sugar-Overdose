@@ -48,11 +48,11 @@ constexpr auto DEFAULT_VOLUME = 0;
 
 
 // TYPES
-#define TYPE_PLAYER_ONE 1
-#define TYPE_PLAYER_TWO 2
-#define TYPE_PLAYER_THREE 3
-#define TYPE_PLAYER_FOUR 4
-#define TYPE_IA 5
+#define PLAYER_NUMBER_ONE 1
+#define PLAYER_NUMBER_TWO 2
+#define PLAYER_NUMBER_THREE 3
+#define PLAYER_NUMBER_FOUR 4
+#define PLAYER_IA 5
 
 // SOUNDS
 #define MAIN_SOUND "sounds/Giedre-PisserDebout.mp3"

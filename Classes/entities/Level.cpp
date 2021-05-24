@@ -114,8 +114,8 @@ bool Level::init()
 
     // spawn players
     const auto playerHelper = new PlayerHelper();
-    auto player1 = playerHelper->createPlayer(new Vec2(spawn1.at("x").asFloat(), spawn1.at("y").asFloat()), TYPE_PLAYER_ONE, this);
-    auto player2 = playerHelper->createPlayer(new Vec2(spawn2.at("x").asFloat(), spawn2.at("y").asFloat()), TYPE_PLAYER_TWO, this);
+    auto player1 = playerHelper->createPlayer(new Vec2(spawn1.at("x").asFloat(), spawn1.at("y").asFloat()), PLAYER_NUMBER_ONE, this);
+    auto player2 = playerHelper->createPlayer(new Vec2(spawn2.at("x").asFloat(), spawn2.at("y").asFloat()), PLAYER_NUMBER_TWO, this);
     
     map->at(player1->getCustomTiledPosition()->x).at(player1->getCustomTiledPosition()->y) = "Player";
     map->at(player2->getCustomTiledPosition()->x).at(player2->getCustomTiledPosition()->y) = "Player";
@@ -140,15 +140,19 @@ bool Level::init()
 */
 bool Level::checkIfCollision(Vec2 nextTiledPosition, int direction)
 {
-
     string tile = map->at(nextTiledPosition.x).at(nextTiledPosition.y);
     if (tile != "Empty") {
         return true;
     }
     
+    return false;
+}
+
+void Level::setNewPositionPlayerOnCustomTiledMap(Vec2 nextTiledPosition, int direction, int playerNumber){
+
     map->at(nextTiledPosition.x).at(nextTiledPosition.y) = "Player";
     cleanOldPosition(nextTiledPosition, direction);
-    return false;
+    return ;
 }
 
 /*

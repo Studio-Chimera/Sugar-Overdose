@@ -16,9 +16,9 @@ class Level : public Layer
 
 public:
 
-    /*
-    methods
-    */
+    // ###################################################
+    // Methods
+    // ###################################################
 
     virtual bool init();
     static Scene* scene();
@@ -26,6 +26,7 @@ public:
 
     void playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBodyB);
     bool checkIfCollision(Vec2 nextPosition, int direction);
+    
     void cleanOldPosition(Vec2 nextTiledPosition, int direction);
 
     Level(Level& other) = delete;
@@ -33,12 +34,18 @@ public:
 
     CREATE_FUNC(Level); // implement the "static create()" method manually
 
-    /*
-        getters
-    */
-    static Level* getInstance();
+    // ###################################################
+    // Getters
+    // ###################################################
     
+    static Level* getInstance();
     Vector<TMXLayer*> getLayersLevel();
+
+    // ###################################################
+    // Setters
+    // ###################################################
+
+    void setNewPositionPlayerOnCustomTiledMap(Vec2 nextTiledPosition, int direction, int playerNumber);
 
 protected:
     Level(){}

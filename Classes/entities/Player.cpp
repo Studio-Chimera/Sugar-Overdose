@@ -37,6 +37,14 @@ SpriteFrameCache* Player::getSpritecacher()
 	return _spriteCacher;
 }
 
+int Player::getPlayerNumber() {
+	return playerNumber;
+}
+
+void Player::setPlayerNumber(int newPlayerNumber) {
+	playerNumber = newPlayerNumber;
+}
+
 int Player::getPosX()
 {
 	return _posX;
@@ -201,14 +209,17 @@ void Player::explosion(Bomb* bomb) {
 
 bool Player::blockPlayerIfWalls(const int direction) {
 
-	Vec2 nextPosition = getNextPosition(direction);
+	Vec2 nextPosition = getNextPositionOnCustomeTiledMap(direction);
 	bool collision = Level::getInstance()->checkIfCollision(nextPosition, direction);
 
 	if (collision) {
 
 		return blockPlayer(direction);
 	}
-	return false;
+	else {
+		Level::getInstance()->setNewPositionPlayerOnCustomTiledMap(nextPosition, direction, playerNumber);
+		return false;
+	}
 }
 
 /*
@@ -247,7 +258,7 @@ bool Player::blockPlayer(const int direction) {
 /*
 	called when player is moving to calculate where he will be next step
 */
-Vec2 Player::getNextPosition(int direction) {
+Vec2 Player::getNextPositionOnCustomeTiledMap(int direction) {
 	Vec2 nextPosition = getPosition();
 	Vec2 nextTiledPosition;
 	switch (direction)
