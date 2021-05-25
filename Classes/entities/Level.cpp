@@ -89,7 +89,7 @@ bool Level::init()
             if (wallGid != 0 || borderGid != 0) {
                 
                 if (wallGid != 0) {
-                    currentColMap.push_back("Wall");
+                    currentColMap.push_back("Wall_" + wallGid);
                 }
 
                 else if (borderGid != 0) {
@@ -113,15 +113,19 @@ bool Level::init()
     auto spawn2 = spawnPoints->objectNamed("spawn 2");
 
     // spawn players
-    const auto playerHelper = new PlayerHelper();
+    const auto playerHelper = PlayerHelper::getInstance();
     auto player1 = playerHelper->createPlayer(new Vec2(spawn1.at("x").asFloat(), spawn1.at("y").asFloat()), PLAYER_NUMBER_ONE, this);
     auto player2 = playerHelper->createPlayer(new Vec2(spawn2.at("x").asFloat(), spawn2.at("y").asFloat()), PLAYER_NUMBER_TWO, this);
     
-    map->at(player1->getCustomTiledPosition()->x).at(player1->getCustomTiledPosition()->y) = "Player";
-    map->at(player2->getCustomTiledPosition()->x).at(player2->getCustomTiledPosition()->y) = "Player";
-
+    // set players case
+    stringstream player1_case;
+    stringstream player2_case;
+    player1_case << "Player_" << player1->getPlayerNumber();
+    player2_case << "Player_" << player2->getPlayerNumber();
+    map->at(player1->getCustomTiledPosition()->x).at(player1->getCustomTiledPosition()->y) = player1_case.str();
+    map->at(player2->getCustomTiledPosition()->x).at(player2->getCustomTiledPosition()->y) = player2_case.str();
     
-    // get & set players controls 
+    // get & set players controls
     EventListenerKeyboard *player1Controller = std::get<EventListenerKeyboard*>(player1->getController());
     EventListenerKeyboard *player2Controller = std::get<EventListenerKeyboard*>(player2->getController());
 
@@ -150,7 +154,9 @@ bool Level::checkIfCollision(Vec2 nextTiledPosition, int direction)
 
 void Level::setNewPositionPlayerOnCustomTiledMap(Vec2 nextTiledPosition, int direction, int playerNumber){
 
-    map->at(nextTiledPosition.x).at(nextTiledPosition.y) = "Player";
+    stringstream newCase;
+    newCase << "Player_" << playerNumber;
+    map->at(nextTiledPosition.x).at(nextTiledPosition.y) = newCase.str();
     cleanOldPosition(nextTiledPosition, direction);
     return ;
 }

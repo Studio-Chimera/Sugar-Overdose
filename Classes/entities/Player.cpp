@@ -2,6 +2,7 @@
 #include <iomanip>
 #include "Bomb.h"
 #include <utils/Definitions.h>
+#include "helpers/PlayerHelper.h"
 
 // ###################################################
 // Declarations
@@ -20,7 +21,10 @@ Player::Player()
 	_bottomMoveAnimation = new Animation;
 }
 
-Player::~Player(){}
+Player::~Player(){
+	
+	getSprite()->removeFromParent();
+}
 
 
 // ###################################################
@@ -187,26 +191,40 @@ void Player::plantBomb() {
 }
 
 void Player::explosion(Bomb* bomb, float currentCustomTiledXPositon, float currentCustomTiledYPositon) {
-	bomb->getSprite()->removeFromParent();
+	
+	bomb->~Bomb();
+
 	auto mapLevel = Level::getInstance()->map;
 
-	mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon) = "Empty";
+	string currentTile = mapLevel->at(currentCustomTiledXPositon + 1).at(currentCustomTiledYPositon);
+	string tileRight = mapLevel->at(currentCustomTiledXPositon + 1).at(currentCustomTiledYPositon);
+	string tileLeft = mapLevel->at(currentCustomTiledXPositon - 1).at(currentCustomTiledYPositon);
+	string tileBottom = mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon + 1);
+	string tileTop = mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon - 1);
 
-	string caseRight = mapLevel->at(currentCustomTiledXPositon + 1).at(currentCustomTiledYPositon);
-	if (caseRight != "Border") { 
-		mapLevel->at(currentCustomTiledXPositon + 1).at(currentCustomTiledYPositon) = "Empty";
+	removeOnMap(currentTile, currentCustomTiledXPositon, currentCustomTiledYPositon);
+	removeOnMap(tileRight, currentCustomTiledXPositon + 1, currentCustomTiledYPositon);
+	removeOnMap(tileLeft, currentCustomTiledXPositon - 1, currentCustomTiledYPositon);
+	removeOnMap(tileBottom, currentCustomTiledXPositon, currentCustomTiledYPositon + 1);
+	removeOnMap(tileTop, currentCustomTiledXPositon, currentCustomTiledYPositon - 1);
+}
+
+void Player::removeOnMap(string tile, float currentCustomTiledXPositon, float currentCustomTiledYPositon) {
+	
+	auto mapLevel = Level::getInstance()->map;
+
+	if (tile == "Player_1") {
+		mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon) = "Empty";
+		PlayerHelper::getInstance()->getPlayers().front()->~Player();
 	}
-	string caseLeft = mapLevel->at(currentCustomTiledXPositon - 1).at(currentCustomTiledYPositon);
-	if (caseLeft != "Border") {
-		mapLevel->at(currentCustomTiledXPositon - 1).at(currentCustomTiledYPositon) = "Empty";
+	
+	else if (tile == "Player_2") {
+		mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon) = "Empty";
+		PlayerHelper::getInstance()->getPlayers().back()->~Player();
 	}
-	string caseBottom = mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon + 1);
-	if (caseBottom != "Border") {
-		mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon + 1) = "Empty";
-	}
-	string caseTop = mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon - 1);
-	if (caseTop != "Border") {
-		mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon - 1) = "Empty";
+
+	if (tile != "Border") {
+		mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon) = "Empty";
 	}
 }
 

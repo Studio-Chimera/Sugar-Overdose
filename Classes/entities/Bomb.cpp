@@ -16,7 +16,9 @@ Bomb::Bomb(){
     _sprite->initWithSpriteFrameName(myfile);
 }
 
-Bomb::~Bomb(){}
+Bomb::~Bomb(){
+    getSprite()->removeFromParent();
+}
 
 Sprite* Bomb::getSprite()
 {

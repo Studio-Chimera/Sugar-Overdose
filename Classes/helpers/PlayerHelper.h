@@ -15,31 +15,38 @@ public:
     // Declarations
     // ###################################################
 
-    PlayerHelper();
-    ~PlayerHelper();
-
     // ###################################################
     // Getters
     // ###################################################
 
+    static PlayerHelper* getInstance();
     std::list<Player*> getPlayers();
 
     // ###################################################
     // Setters
     // ###################################################
 
-
     // ###################################################
     // Methods
     // ###################################################
-
+    
+    PlayerHelper();
+    ~PlayerHelper();
     Player* createPlayer(Vec2* position, int newPlayerNumber, Level* level);
     void setPlayerSprites(Player* player);
     void createSideMoveAnimation(int playerNumber, Player* player);
     void createTopMoveAnimation(int playerNumber, Player* player);
     void createBottomMoveAnimation(int playerNumber, Player* player);
 
+    PlayerHelper(PlayerHelper& other) = delete;
+    void operator=(const PlayerHelper&) = delete;
+
 private:
     std::list<Player*> _playersInstances;
+
+protected:
+
+
+    static PlayerHelper* playerHelperInstance;
 };
 #endif

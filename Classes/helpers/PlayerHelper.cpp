@@ -6,13 +6,23 @@ USING_NS_CC;
 // Declarations
 // ###################################################
 
+PlayerHelper* PlayerHelper::playerHelperInstance = nullptr;
+
 PlayerHelper::PlayerHelper()
 {
     _playersInstances = {};
 }
 
-PlayerHelper::~PlayerHelper()
+PlayerHelper::~PlayerHelper(){}
+
+
+PlayerHelper* PlayerHelper::getInstance()
 {
+	if (playerHelperInstance == nullptr)
+	{
+		playerHelperInstance = new PlayerHelper();
+	}
+	return playerHelperInstance;
 }
 
 // ###################################################
@@ -53,7 +63,6 @@ Player* PlayerHelper::createPlayer(Vec2* position, int playerNumber, Level* leve
 		break;
 	}
 
-	//player->setLevel(level);
 	setPlayerSprites(player);
 
 	// add players special 
