@@ -40,6 +40,10 @@ public:
     
     static Level* getInstance();
     Vector<TMXLayer*> getLayersLevel();
+    TMXLayer* tilesWalls;
+    TMXTiledMap* tileMap;
+    TMXLayer* tilesBackground;
+    TMXLayer* tilesBorders;
 
     // ###################################################
     // Setters
@@ -58,10 +62,6 @@ private:
     Vector<Rect*>* obstaclesWalls;
     Vector<Rect*>* obstaclesBorders;
 
-    TMXTiledMap* tileMap;
-    TMXLayer* tilesBackground;
-    TMXLayer* tilesWalls;
-    TMXLayer* tilesBorders;
 };
 
 #endif // __LEVEL_SCENE_H__

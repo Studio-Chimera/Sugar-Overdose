@@ -84,12 +84,11 @@ bool Level::init()
         for (int y = 0; y < mapHeight; y++) {
             wallGid = tilesWalls->getTileGIDAt(Vec2(i, y));
             borderGid = tilesBorders->getTileGIDAt(Vec2(i, y)); // CAN BE OPTIMISED
-            
 
             if (wallGid != 0 || borderGid != 0) {
                 
                 if (wallGid != 0) {
-                    currentColMap.push_back("Wall_" + wallGid);
+                    currentColMap.push_back("Wall");
                 }
 
                 else if (borderGid != 0) {

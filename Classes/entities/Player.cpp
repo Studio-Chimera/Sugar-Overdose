@@ -223,9 +223,10 @@ void Player::removeOnMap(string tile, float currentCustomTiledXPositon, float cu
 		PlayerHelper::getInstance()->getPlayers().back()->~Player();
 	}
 
-	if (tile != "Border") {
+	else if (tile == "Wall") {
+		Level::getInstance()->tilesWalls->removeTileAt(Vec2(currentCustomTiledXPositon, currentCustomTiledYPositon));
 		mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon) = "Empty";
-	}
+	} 
 }
 
 bool Player::blockPlayerIfWalls(const int direction) {
