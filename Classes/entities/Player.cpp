@@ -177,9 +177,9 @@ void Player::moveDown() {
 
 void Player::plantBomb() {
 	auto bomb = new Bomb();
+	Vec2 pos = getPosition();
 	bomb->getSprite()->setPosition(getPosition());
 	bomb->setCustomTiledPosition(getCustomTiledPosition());
-
 	Level::getInstance()->addChild(bomb->getSprite());
 
 	float currentCustomTiledXPositon = getCustomTiledPosition()->x;
@@ -192,11 +192,11 @@ void Player::plantBomb() {
 
 void Player::explosion(Bomb* bomb, float currentCustomTiledXPositon, float currentCustomTiledYPositon) {
 	
-	bomb->~Bomb();
+	bomb->spawnParticules();
 
 	auto mapLevel = Level::getInstance()->map;
 
-	string currentTile = mapLevel->at(currentCustomTiledXPositon + 1).at(currentCustomTiledYPositon);
+	string currentTile = mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon);
 	string tileRight = mapLevel->at(currentCustomTiledXPositon + 1).at(currentCustomTiledYPositon);
 	string tileLeft = mapLevel->at(currentCustomTiledXPositon - 1).at(currentCustomTiledYPositon);
 	string tileBottom = mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon + 1);

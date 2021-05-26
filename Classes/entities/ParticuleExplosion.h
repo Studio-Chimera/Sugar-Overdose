@@ -1,10 +1,11 @@
 #pragma once
 #include <string>
 #include "cocos2d.h"
-#include "ParticuleExplosion.h"
-using namespace cocos2d;
 
-class Bomb : public Sprite
+using namespace cocos2d;
+using namespace std;
+
+class ParticuleExplosion : public Sprite
 {
 public:
 
@@ -12,11 +13,9 @@ public:
     // Methods
     // ###################################################
 
-    Bomb();
-    ~Bomb();
-    void spawnParticules();
-    std::vector<ParticuleExplosion*> particulesExplosionList;
-
+    ParticuleExplosion();
+    ~ParticuleExplosion();
+        
     // ###################################################
     // Setters
     // ###################################################
@@ -32,11 +31,10 @@ public:
     Vec2* getCustomTiledPosition();
 
 private:
-    
+
     int customTiledPosX;
     int customTiledPosY;
     Sprite* _sprite;
     SpriteFrameCache* _spriteCacher;
 
-    void removeParticules();
 };

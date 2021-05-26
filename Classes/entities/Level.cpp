@@ -4,8 +4,6 @@
 #include "utils/Store.h"
 #include "helpers/PlayerHelper.h"
 #include "entities/Player.h"
-#include <proj.win32/PhysicsShapeCache.h>
-#include <external/bullet/include/bullet/LinearMath/btAlignedAllocator.h>
 #include "Bomb.h"
 
 using namespace cocos2d;
