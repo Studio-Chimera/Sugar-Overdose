@@ -173,9 +173,11 @@ void Player::moveDown() {
 	_posY -= STEP_PLAYER;
 }
 
-
-
 void Player::plantBomb() {
+
+	auto players = PlayerHelper::getInstance()->getPlayers();
+	float test = 0.0f;
+
 	auto bomb = new Bomb();
 	Vec2 pos = getPosition();
 	bomb->getSprite()->setPosition(getPosition());
@@ -231,15 +233,15 @@ void Player::removeOnMap(string tile, float currentCustomTiledXPositon, float cu
 
 bool Player::blockPlayerIfWalls(const int direction) {
 
-	Vec2 nextPosition = getNextPositionOnCustomeTiledMap(direction);
+	Vec2* nextPosition = getNextPositionOnCustomeTiledMap(direction);
 	bool collision = Level::getInstance()->checkIfCollision(nextPosition, direction);
 
 	if (collision) {
-
 		return blockPlayer(direction);
 	}
 	else {
 		Level::getInstance()->setNewPositionPlayerOnCustomTiledMap(nextPosition, direction, playerNumber);
+		setCustomTiledPosition(nextPosition);
 		return false;
 	}
 }
@@ -280,33 +282,32 @@ bool Player::blockPlayer(const int direction) {
 /*
 	called when player is moving to calculate where he will be next step
 */
-Vec2 Player::getNextPositionOnCustomeTiledMap(int direction) {
-	Vec2 nextPosition = getPosition();
-	Vec2 nextTiledPosition;
+Vec2* Player::getNextPositionOnCustomeTiledMap(int direction) {
+	Vec2* nextTiledPosition = new Vec2;
 	switch (direction)
 	{
 	case DIRECTION_LEFT:
-		this->customTiledPosX -= 1;
-		nextTiledPosition.x = this->customTiledPosX;
-		nextTiledPosition.y = this->customTiledPosY;
+		//this->customTiledPosX -= 1;
+		nextTiledPosition->x = this->customTiledPosX - 1;
+		nextTiledPosition->y = this->customTiledPosY;
 		return nextTiledPosition;
 	
 	case DIRECTION_RIGHT:
-		this->customTiledPosX += 1;
-		nextTiledPosition.x = this->customTiledPosX;
-		nextTiledPosition.y = this->customTiledPosY;
+		//this->customTiledPosX += 1;
+		nextTiledPosition->x = this->customTiledPosX + 1;
+		nextTiledPosition->y = this->customTiledPosY;
 		return nextTiledPosition;
 	
 	case DIRECTION_TOP:
-		this->customTiledPosY -= 1;
-		nextTiledPosition.y = this->customTiledPosY;
-		nextTiledPosition.x = this->customTiledPosX;
+		//this->customTiledPosY -= 1;
+		nextTiledPosition->x = this->customTiledPosX;
+		nextTiledPosition->y = this->customTiledPosY - 1;
 		return nextTiledPosition;
 	
 	case DIRECTION_BOTTOM:
-		this->customTiledPosY += 1;
-		nextTiledPosition.y = this->customTiledPosY;
-		nextTiledPosition.x = this->customTiledPosX;
+		//this->customTiledPosY += 1;
+		nextTiledPosition->x = this->customTiledPosX;
+		nextTiledPosition->y = this->customTiledPosY + 1;
 		return nextTiledPosition;
 	
 	default:

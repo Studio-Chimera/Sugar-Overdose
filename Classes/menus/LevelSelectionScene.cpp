@@ -51,8 +51,12 @@ bool LevelSelectionScene::init() {
 	/*********** WAY WITH BUTTONS TEXTS HARD-CODED ***********/
 
 	// Place buttons
-	Button* buttonPlay = Button::create(BUTTON_PLAY, BUTTON_PLAY);
-	buttonPlay->setPosition(Vec2(screenZize.width / 4 + origin.x, screenZize.height * 0.38));
+	Button* buttonLevel1 = Button::create(BUTTON_LEVEL1, BUTTON_LEVEL1);
+	buttonLevel1->setPosition(Vec2(screenZize.width / 4 + origin.x, screenZize.height * 0.28));
+	Button* buttonLevel2 = Button::create(BUTTON_LEVEL2, BUTTON_LEVEL2);
+	buttonLevel2->setPosition(Vec2(screenZize.width / 4 + origin.x, screenZize.height * 0.38));
+	Button* buttonLevel3 = Button::create(BUTTON_LEVEL3, BUTTON_LEVEL3);
+	buttonLevel3->setPosition(Vec2(screenZize.width / 4 + origin.x, screenZize.height * 0.48));
 
 	Button* buttonBack = Button::create(BUTTON_BACK_TO_MAIN_MENU, BUTTON_BACK_TO_MAIN_MENU);
 	buttonBack->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.38 + origin.y));
@@ -63,23 +67,36 @@ bool LevelSelectionScene::init() {
 	//	// add name 
 	//}
 
-	this->addChild(buttonPlay);
-	this->addChild(buttonBack);
-
-	buttonPlay->addTouchEventListener(CC_CALLBACK_2(LevelSelectionScene::onClickPlayButton, this));
+	buttonLevel1->addTouchEventListener(CC_CALLBACK_2(LevelSelectionScene::onClickPlayButton, this, MAP_BLUE));
+	buttonLevel2->addTouchEventListener(CC_CALLBACK_2(LevelSelectionScene::onClickPlayButton, this, MAP_MANY_WALL));
+	buttonLevel3->addTouchEventListener(CC_CALLBACK_2(LevelSelectionScene::onClickPlayButton, this, MAP_TRIANGLE));
 	buttonBack->addTouchEventListener(CC_CALLBACK_2(LevelSelectionScene::onClickBackButton, this));
 
 	levelManager = new LevelManager();
 	listLevels = levelManager->getLevels();
 
+	this->addChild(buttonLevel1);
+	this->addChild(buttonLevel2);
+	this->addChild(buttonLevel3);
+	this->addChild(buttonBack);
+
 	return true;
 }
 
-void LevelSelectionScene::onClickPlayButton(Ref *sender, Widget::TouchEventType type){
+void LevelSelectionScene::onClickPlayButton(Ref *sender, Widget::TouchEventType type, string level){
 	switch (type) {
 		
 	case Widget::TouchEventType::ENDED:
-		levelManager->openLevel("blueMap");
+		if (level == MAP_BLUE){
+			levelManager->openLevel(MAP_BLUE);
+		}
+		else if (level == MAP_MANY_WALL) {
+			levelManager->openLevel(MAP_MANY_WALL);
+		}
+		else if (level == MAP_TRIANGLE) {
+			levelManager->openLevel(MAP_TRIANGLE);
+		}
+		
 		break;
 
 	default:

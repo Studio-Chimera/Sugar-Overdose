@@ -105,14 +105,20 @@ bool Level::init()
     }
         
     // get spawnpoint objects from objects
-    TMXObjectGroup* spawnPoints = tileMap->objectGroupNamed("spawns");
-    auto spawn1 = spawnPoints->objectNamed("spawn 1");
-    auto spawn2 = spawnPoints->objectNamed("spawn 2");
+    //x & y 250, 50 p2
+    //y 751,50 p1
+    TMXObjectGroup* spawnPoints = tileMap->objectGroupNamed("SPAWNS");
+    auto spawn1 = spawnPoints->objectNamed("Spawn 1");
+    auto spawn2 = spawnPoints->objectNamed("Spawn 2");
+    float posY1 = spawn1.at("y").asFloat();
+    float newPosY1 = (mapHeight * tileHeight) - posY1;
+    float posY2 = spawn2.at("y").asFloat();
+    float newPosY2 = (mapHeight * tileHeight) - posY2;
 
     // spawn players
     const auto playerHelper = PlayerHelper::getInstance();
-    auto player1 = playerHelper->createPlayer(new Vec2(spawn1.at("x").asFloat(), spawn1.at("y").asFloat()), PLAYER_NUMBER_ONE, this);
-    auto player2 = playerHelper->createPlayer(new Vec2(spawn2.at("x").asFloat(), spawn2.at("y").asFloat()), PLAYER_NUMBER_TWO, this);
+    auto player1 = playerHelper->createPlayer(new Vec2(spawn1.at("x").asFloat(), newPosY1), PLAYER_NUMBER_ONE, this);
+    auto player2 = playerHelper->createPlayer(new Vec2(spawn2.at("x").asFloat(), newPosY2), PLAYER_NUMBER_TWO, this);
     
     // set players case
     stringstream player1_case;
@@ -139,9 +145,9 @@ bool Level::init()
 /*
     uses new player positions on all objects to detect collisions
 */
-bool Level::checkIfCollision(Vec2 nextTiledPosition, int direction)
+bool Level::checkIfCollision(Vec2* nextTiledPosition, int direction)
 {
-    string tile = map->at(nextTiledPosition.x).at(nextTiledPosition.y);
+    string tile = map->at(nextTiledPosition->x).at(nextTiledPosition->y);
     if (tile != "Empty") {
         return true;
     }
@@ -149,42 +155,42 @@ bool Level::checkIfCollision(Vec2 nextTiledPosition, int direction)
     return false;
 }
 
-void Level::setNewPositionPlayerOnCustomTiledMap(Vec2 nextTiledPosition, int direction, int playerNumber){
+void Level::setNewPositionPlayerOnCustomTiledMap(Vec2* nextTiledPosition, int direction, int playerNumber){
 
     stringstream newCase;
     newCase << "Player_" << playerNumber;
-    map->at(nextTiledPosition.x).at(nextTiledPosition.y) = newCase.str();
+    map->at(nextTiledPosition->x).at(nextTiledPosition->y) = newCase.str();
     cleanOldPosition(nextTiledPosition, direction);
-    return ;
+    return;
 }
 
 /*
     called when player move to free old case and 
     permit to other players to come in this case
 */
-void Level::cleanOldPosition(Vec2 nextTiledPosition, int direction) {
+void Level::cleanOldPosition(Vec2* nextTiledPosition, int direction) {
     
     float oldTiledPosition;
     switch (direction)
     {
     case DIRECTION_LEFT:
-        oldTiledPosition = nextTiledPosition.x + 1;
-        map->at(oldTiledPosition).at(nextTiledPosition.y) = "Empty";
+        oldTiledPosition = nextTiledPosition->x + 1;
+        map->at(oldTiledPosition).at(nextTiledPosition->y) = "Empty";
         return;
 
     case DIRECTION_RIGHT:
-        oldTiledPosition = nextTiledPosition.x - 1;
-        map->at(oldTiledPosition).at(nextTiledPosition.y) = "Empty";
+        oldTiledPosition = nextTiledPosition->x - 1;
+        map->at(oldTiledPosition).at(nextTiledPosition->y) = "Empty";
         return;
 
     case DIRECTION_TOP:
-        oldTiledPosition = nextTiledPosition.y + 1;
-        map->at(nextTiledPosition.x).at(oldTiledPosition) = "Empty";
+        oldTiledPosition = nextTiledPosition->y + 1;
+        map->at(nextTiledPosition->x).at(oldTiledPosition) = "Empty";
         return;
 
     case DIRECTION_BOTTOM:
-        oldTiledPosition = nextTiledPosition.y - 1;
-        map->at(nextTiledPosition.x).at(oldTiledPosition) = "Empty";
+        oldTiledPosition = nextTiledPosition->y - 1;
+        map->at(nextTiledPosition->x).at(oldTiledPosition) = "Empty";
         return;
 
     default:

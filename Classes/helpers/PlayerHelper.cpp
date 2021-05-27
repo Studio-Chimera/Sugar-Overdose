@@ -1,5 +1,6 @@
 #include "PlayerHelper.h"
 #include <entities/Level.h>
+#include <cmath>
 
 USING_NS_CC;
 // ###################################################
@@ -54,15 +55,8 @@ Player* PlayerHelper::createPlayer(Vec2* position, int playerNumber, Level* leve
 	player->setPosition(*position);
 	player->setPlayerNumber(playerNumber);
 
-	switch (playerNumber) {
-	case PLAYER_NUMBER_ONE:
-		player->setCustomTiledPosition(new Vec2(1.0f, 4.0f));
-		break;
-	case PLAYER_NUMBER_TWO:
-		player->setCustomTiledPosition(new Vec2(1.0f, 1.0f));
-		break;
-	}
-
+	player->setCustomTiledPosition(new Vec2(trunc(player->getPosition().x / STEP_PLAYER), trunc(player->getPosition().y / STEP_PLAYER)));
+	
 	setPlayerSprites(player);
 
 	// add players special 

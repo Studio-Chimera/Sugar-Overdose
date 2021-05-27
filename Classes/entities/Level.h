@@ -25,9 +25,9 @@ public:
     vector<vector<string>>* map;
 
     void playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBodyB);
-    bool checkIfCollision(Vec2 nextPosition, int direction);
+    bool checkIfCollision(Vec2* nextPosition, int direction);
     
-    void cleanOldPosition(Vec2 nextTiledPosition, int direction);
+    void cleanOldPosition(Vec2* nextTiledPosition, int direction);
 
     Level(Level& other) = delete;
     void operator=(const Level&) = delete;
@@ -49,7 +49,7 @@ public:
     // Setters
     // ###################################################
 
-    void setNewPositionPlayerOnCustomTiledMap(Vec2 nextTiledPosition, int direction, int playerNumber);
+    void setNewPositionPlayerOnCustomTiledMap(Vec2* nextTiledPosition, int direction, int playerNumber);
 
 protected:
     Level(){}

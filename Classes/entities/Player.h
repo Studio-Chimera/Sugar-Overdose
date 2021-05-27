@@ -31,12 +31,11 @@ public:
     int getPosX();
     int getPosY();
     Vec2* getCustomTiledPosition();
-    Vec2 getNextPositionOnCustomeTiledMap(int direction);
+    Vec2* getNextPositionOnCustomeTiledMap(int direction);
     Vec2 getPosition();
     Sprite* getSprite();
     SpriteFrameCache* getSpritecacher();
     std::variant<EventListenerCustom*, EventListenerKeyboard*> getController();
-
 
     // ###################################################
     // Setters

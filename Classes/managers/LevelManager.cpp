@@ -1,5 +1,6 @@
 #include "LevelManager.h"
 #include "entities/Level.h"
+#include "helpers/PlayerHelper.h"
 #include "utils/Store.h"
 
 USING_NS_CC;
@@ -47,4 +48,5 @@ void LevelManager::openLevel(std::string level)
 	//Level* currentLevel = Level::getInstance();
 	auto scene = Level::getInstance()->scene(); /* Instantiate the Level singleton AND the Scene */
 	director->replaceScene(scene);
+
 }

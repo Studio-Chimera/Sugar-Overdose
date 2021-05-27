@@ -24,7 +24,7 @@ public:
 private:
 
 	// FUNC
-	void onClickPlayButton(Ref* sender, Widget::TouchEventType touchEventType);
+	void onClickPlayButton(Ref* sender, Widget::TouchEventType touchEventType, string level);
 	void onClickBackButton(Ref* sender, Widget::TouchEventType touchEventType);
 
 	// ATTR
