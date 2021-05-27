@@ -75,11 +75,11 @@ SpriteFrameCache* Bomb::getSpritecacher()
 }
 
 
-Vec2* Bomb::getCustomTiledPosition() {
-    return new Vec2(customTiledPosX, customTiledPosY);
+Vec2 Bomb::getCustomTiledPosition() {
+    return Vec2(customTiledPosX, customTiledPosY);
 }
 
-void Bomb::setCustomTiledPosition(Vec2* customTiledPosition) {
-    customTiledPosX = customTiledPosition->x;
-    customTiledPosY = customTiledPosition->y;
+void Bomb::setCustomTiledPosition(Vec2 customTiledPosition) {
+    customTiledPosX = customTiledPosition.x;
+    customTiledPosY = customTiledPosition.y;
 }

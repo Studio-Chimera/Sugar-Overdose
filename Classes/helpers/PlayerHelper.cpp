@@ -48,15 +48,15 @@ std::list<Player*> PlayerHelper::getPlayers()
 	call this one to have your new player instance
 	type arg is a const "TYPE_PLAYER_X"
 */
-Player* PlayerHelper::createPlayer(Vec2* position, int playerNumber, Level* level)
+Player* PlayerHelper::createPlayer(float mapHeight, Vec2* position, int playerNumber, Level* level)
 {
 	//create player instance
     auto player = new Player;
 	player->setPosition(*position);
 	player->setPlayerNumber(playerNumber);
 
-	player->setCustomTiledPosition(new Vec2(trunc(player->getPosition().x / STEP_PLAYER), trunc(player->getPosition().y / STEP_PLAYER)));
-	
+	player->setCustomTiledPosition(Vec2(trunc(player->getPosition().x / STEP_PLAYER), mapHeight - 1 - trunc(player->getPosition().y / STEP_PLAYER)));
+
 	setPlayerSprites(player);
 
 	// add players special 

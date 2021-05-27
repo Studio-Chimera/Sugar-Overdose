@@ -25,7 +25,7 @@ Sprite* ParticuleExplosion::getSprite()
     return _sprite;
 }
 
-void ParticuleExplosion::setCustomTiledPosition(Vec2* customTiledPosition) {
-    customTiledPosX = customTiledPosition->x;
-    customTiledPosY = customTiledPosition->y;
+void ParticuleExplosion::setCustomTiledPosition(Vec2 customTiledPosition) {
+    customTiledPosX = customTiledPosition.x;
+    customTiledPosY = customTiledPosition.y;
 }

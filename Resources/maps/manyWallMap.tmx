@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="12" height="6" tilewidth="167" tileheight="167" infinite="0" nextlayerid="5" nextobjectid="5">
+<map version="1.5" tiledversion="1.6.0" orientation="orthogonal" renderorder="right-down" width="12" height="6" tilewidth="167" tileheight="167" infinite="0" nextlayerid="5" nextobjectid="6">
  <editorsettings>
   <chunksize width="167" height="167"/>
  </editorsettings>
@@ -36,11 +36,11 @@
 0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="spawns">
-  <object id="1" name="spawn 2" x="918.5" y="250.5">
+ <objectgroup id="4" name="SPAWNS">
+  <object id="1" name="Spawn 2" x="918.5" y="250.5">
    <point/>
   </object>
-  <object id="2" name="spawn 1" x="584" y="751.5">
+  <object id="2" name="Spawn 1" x="584" y="751.5">
    <point/>
   </object>
  </objectgroup>

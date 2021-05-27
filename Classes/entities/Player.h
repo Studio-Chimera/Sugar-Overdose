@@ -30,8 +30,8 @@ public:
     int getPlayerNumber();
     int getPosX();
     int getPosY();
-    Vec2* getCustomTiledPosition();
-    Vec2* getNextPositionOnCustomeTiledMap(int direction);
+    Vec2 getCustomTiledPosition();
+    Vec2 getNextPositionOnCustomeTiledMap(int direction);
     Vec2 getPosition();
     Sprite* getSprite();
     SpriteFrameCache* getSpritecacher();
@@ -45,7 +45,7 @@ public:
     void setPosX(int newPos);
     void setPosY(int newPos);
     void setPosition(Vec2 position);
-    void setCustomTiledPosition(Vec2* customTiledPosition);
+    void setCustomTiledPosition(Vec2 customTiledPosition);
     void setSideMoveAnimation(Vector<SpriteFrame*>);
     void setTopMoveAnimation(Vector<SpriteFrame*>);
     void setBottomMoveAnimation(Vector<SpriteFrame*>);

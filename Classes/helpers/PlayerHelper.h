@@ -32,7 +32,7 @@ public:
     
     PlayerHelper();
     ~PlayerHelper();
-    Player* createPlayer(Vec2* position, int newPlayerNumber, Level* level);
+    Player* createPlayer(float mapHeight, Vec2* position, int newPlayerNumber, Level* level);
     void setPlayerSprites(Player* player);
     void createSideMoveAnimation(int playerNumber, Player* player);
     void createTopMoveAnimation(int playerNumber, Player* player);

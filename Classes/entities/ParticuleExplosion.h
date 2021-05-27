@@ -20,7 +20,7 @@ public:
     // Setters
     // ###################################################
 
-    void setCustomTiledPosition(Vec2* customTiledPosition);
+    void setCustomTiledPosition(Vec2 customTiledPosition);
 
     // ###################################################
     // Getters
