@@ -46,7 +46,7 @@ void Bomb::spawnParticules() {
 
     // clean map from particules
     _sprite->runAction(Sequence::create(
-        DelayTime::create(TIME_EXPLOSION),
+        DelayTime::create(TIME_PARTICULE),
         CallFunc::create(CC_CALLBACK_0(Bomb::removeParticules, this)), nullptr));
 }
 
