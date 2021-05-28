@@ -11,11 +11,11 @@
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{120,201}</string>
+                <string>{163,167}</string>
                 <key>spriteSourceSize</key>
-                <string>{120,201}</string>
+                <string>{163,167}</string>
                 <key>textureRect</key>
-                <string>{{0,0},{120,201}}</string>
+                <string>{{0,334},{163,167}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -26,26 +26,11 @@
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{120,207}</string>
+                <string>{133,167}</string>
                 <key>spriteSourceSize</key>
-                <string>{120,207}</string>
+                <string>{133,167}</string>
                 <key>textureRect</key>
-                <string>{{120,0},{120,207}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
-            <key>player1_hurt.png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{150,174}</string>
-                <key>spriteSourceSize</key>
-                <string>{150,174}</string>
-                <key>textureRect</key>
-                <string>{{240,0},{150,174}}</string>
+                <string>{{124,0},{133,167}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -56,41 +41,11 @@
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{120,201}</string>
+                <string>{124,167}</string>
                 <key>spriteSourceSize</key>
-                <string>{120,201}</string>
+                <string>{124,167}</string>
                 <key>textureRect</key>
-                <string>{{390,0},{120,201}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
-            <key>player1_sideWalk02.png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{120,207}</string>
-                <key>spriteSourceSize</key>
-                <string>{120,207}</string>
-                <key>textureRect</key>
-                <string>{{510,0},{120,207}}</string>
-                <key>textureRotated</key>
-                <false/>
-            </dict>
-            <key>player1_sit.png</key>
-            <dict>
-                <key>aliases</key>
-                <array/>
-                <key>spriteOffset</key>
-                <string>{0,0}</string>
-                <key>spriteSize</key>
-                <string>{150,181}</string>
-                <key>spriteSourceSize</key>
-                <string>{150,181}</string>
-                <key>textureRect</key>
-                <string>{{630,0},{150,181}}</string>
+                <string>{{0,0},{124,167}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -101,11 +56,11 @@
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{120,201}</string>
+                <string>{161,167}</string>
                 <key>spriteSourceSize</key>
-                <string>{120,201}</string>
+                <string>{161,167}</string>
                 <key>textureRect</key>
-                <string>{{780,0},{120,201}}</string>
+                <string>{{147,167},{161,167}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -116,11 +71,11 @@
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{120,201}</string>
+                <string>{164,167}</string>
                 <key>spriteSourceSize</key>
-                <string>{120,201}</string>
+                <string>{164,167}</string>
                 <key>textureRect</key>
-                <string>{{900,0},{120,201}}</string>
+                <string>{{163,334},{164,167}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -131,11 +86,26 @@
                 <key>spriteOffset</key>
                 <string>{0,0}</string>
                 <key>spriteSize</key>
-                <string>{120,207}</string>
+                <string>{147,167}</string>
                 <key>spriteSourceSize</key>
-                <string>{120,207}</string>
+                <string>{147,167}</string>
                 <key>textureRect</key>
-                <string>{{1020,0},{120,207}}</string>
+                <string>{{0,167},{147,167}}</string>
+                <key>textureRotated</key>
+                <false/>
+            </dict>
+            <key>player1_topWalk03.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{136,167}</string>
+                <key>spriteSourceSize</key>
+                <string>{136,167}</string>
+                <key>textureRect</key>
+                <string>{{257,0},{136,167}}</string>
                 <key>textureRotated</key>
                 <false/>
             </dict>
@@ -151,9 +121,9 @@
             <key>realTextureFileName</key>
             <string>player1.png</string>
             <key>size</key>
-            <string>{1140,207}</string>
+            <string>{393,501}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:9005adebc77a2a9629b1b2fae4990cd5:d1f4ef417f73fad953ae942518260b7b:e747f5312c3d452c9fc2c2ace0f0a9fb$</string>
+            <string>$TexturePacker:SmartUpdate:4e860a9989298afa37bfab277b626b09:fb14384e03ee5cbd1e34f39a3c2871b1:e747f5312c3d452c9fc2c2ace0f0a9fb$</string>
             <key>textureFileName</key>
             <string>player1.png</string>
         </dict>
