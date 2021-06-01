@@ -4,6 +4,7 @@
 #include "utils/Store.h"
 #include "helpers/PlayerHelper.h"
 #include "entities/Player.h"
+#include "entities/PowerUP_Range.h"
 #include "Bomb.h"
 
 using namespace cocos2d;
@@ -59,13 +60,8 @@ bool Level::init()
     tileMap = new TMXTiledMap();
     tileMap->initWithTMXFile(store->g_mapName);
 
-    // prepare background
     tilesBackground = tileMap->getLayer("background");
-    
-    // prepare walls (obstacles)
     tilesWalls = tileMap->getLayer("walls");
-
-    // prepare borders
     tilesBorders = tileMap->layerNamed("borders");
 
     const float mapWidth = tileMap->getMapSize().width;
@@ -103,15 +99,24 @@ bool Level::init()
             currentColMap.clear();
         }
     }
-        
-    // get spawnpoint objects from objects
-    //x & y 250, 50 p2
-    //y 751,50 p1
-    TMXObjectGroup* spawnPoints = tileMap->objectGroupNamed("SPAWNS");
-    auto spawn1 = spawnPoints->objectNamed("Spawn 1");
-    auto spawn2 = spawnPoints->objectNamed("Spawn 2");
 
+    // prepare powerUP
+    TMXObjectGroup* spawnPowerUp = tileMap->objectGroupNamed("PowerUp");
+    auto spawnPowerUpRangeX1 = spawnPowerUp->objectNamed("PowerUp_RangeX1");
+    auto spawnPowerUpRangeX2 = spawnPowerUp->objectNamed("PowerUp_RangeX2");
+    auto spawnPowerUpRangeY1 = spawnPowerUp->objectNamed("PowerUp_RangeY1");
+    auto spawnPowerUpRangeY2 = spawnPowerUp->objectNamed("PowerUp_RangeY2");
+    
+    PowerUP_Range* powerUp_RangeX1 = new PowerUP_Range(Vec2(spawnPowerUpRangeX1.at("x").asFloat(), spawnPowerUpRangeX1.at("y").asFloat()), Vec2(4, 3), AXIS_X, 1);
+    PowerUP_Range* powerUp_RangeX2 = new PowerUP_Range(Vec2(spawnPowerUpRangeX2.at("x").asFloat(), spawnPowerUpRangeX2.at("y").asFloat()), Vec2(6, 2), AXIS_X, 1);
+    PowerUP_Range* powerUp_RangeY1 = new PowerUP_Range(Vec2(spawnPowerUpRangeY1.at("x").asFloat(), spawnPowerUpRangeY1.at("y").asFloat()), Vec2(8, 1), AXIS_Y, 1);
+    PowerUP_Range* powerUp_RangeY2 = new PowerUP_Range(Vec2(spawnPowerUpRangeY2.at("x").asFloat(), spawnPowerUpRangeY2.at("y").asFloat()), Vec2(4, 4), AXIS_Y, 1);
+        
     // spawn players
+    TMXObjectGroup* spawnPlayer = tileMap->objectGroupNamed("Spawns");
+    auto spawn1 = spawnPlayer->objectNamed("Spawn 1");
+    auto spawn2 = spawnPlayer->objectNamed("Spawn 2");
+
     const auto playerHelper = PlayerHelper::getInstance();
     auto player1 = playerHelper->createPlayer(mapHeight, new Vec2(spawn1.at("x").asFloat(), spawn1.at("y").asFloat()), PLAYER_NUMBER_ONE, this);
     auto player2 = playerHelper->createPlayer(mapHeight, new Vec2(spawn2.at("x").asFloat(), spawn2.at("y").asFloat()), PLAYER_NUMBER_TWO, this);
@@ -133,9 +138,14 @@ bool Level::init()
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(player1Controller, player1->getSprite());
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(player2Controller, player2->getSprite());
 
-    this->addChild(tileMap);
-    this->addChild(player1->getSprite());
-    this->addChild(player2->getSprite());
+    // display map, players & powerUp
+    if (tileMap) { this->addChild(tileMap); }
+    if (player1) { this->addChild(player1->getSprite()); }
+    if (player2) { this->addChild(player2->getSprite()); }
+    if (powerUp_RangeX1) { this->addChild(powerUp_RangeX1->getSprite()); }
+    if (powerUp_RangeX2) { this->addChild(powerUp_RangeX2->getSprite()); }
+    if (powerUp_RangeY1) { this->addChild(powerUp_RangeY1->getSprite()); }
+    if (powerUp_RangeY2) { this->addChild(powerUp_RangeY2->getSprite()); }
 
     return true;
 }

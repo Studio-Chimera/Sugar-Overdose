@@ -74,6 +74,8 @@ enum class CustomScenes { MainMenu, LevelSelectionMenu, OptionsMenu, CreditsMenu
 #define DIRECTION_RIGHT 2
 #define DIRECTION_TOP 3
 #define DIRECTION_BOTTOM 4
+#define AXIS_X 1
+#define AXIS_Y 2
 
 
 /*	Open a new menu
