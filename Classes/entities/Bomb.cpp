@@ -19,29 +19,29 @@ Bomb::Bomb(){
 /*
     make appear differents particules for visual only
 */
-void Bomb::spawnParticules() {
+void Bomb::spawnParticules(int rangeX, int rangeY) {
 
-    // particules positions
-    vector<Vec2> allPositions;
-    allPositions.push_back(getSprite()->getPosition());
-    allPositions.push_back(Vec2(getSprite()->getPosition().x + 167, getSprite()->getPosition().y)); // Sprite on right
-    allPositions.push_back(Vec2(getSprite()->getPosition().x - 167, getSprite()->getPosition().y)); // Sprite on left
-    allPositions.push_back(Vec2(getSprite()->getPosition().x, getSprite()->getPosition().y - 167)); // Sprite on top
-    allPositions.push_back(Vec2(getSprite()->getPosition().x, getSprite()->getPosition().y + 167)); // Sprite on bottom
 
-    // particules creations
-    for (int i = 0; i <= 4; i++) {
-        particulesExplosionList.push_back(new ParticuleExplosion);
+    int positionVariable = -STEP_PLAYER;
+
+    // particules spawn on X axis
+    for (int i = 1; i <= rangeX; i++) {        
+        ParticuleExplosion* particuleExplosion = new ParticuleExplosion();
+        particuleExplosion->getSprite()->setPosition(Vec2(getSprite()->getPosition().x + positionVariable, getSprite()->getPosition().y));
+        positionVariable += STEP_PLAYER;
+        Level::getInstance()->addChild(particuleExplosion->getSprite());
+        particulesExplosionList.push_back(particuleExplosion);
     }
 
-    // particules spawns
-    for (auto it : particulesExplosionList) {
-        for (auto itPosition : allPositions) {
-            it->getSprite()->setPosition(itPosition);
-            Level::getInstance()->addChild(it->getSprite());
-            allPositions.erase(allPositions.begin());
-            break;
-        }
+    // particules spawn on Y axis
+    positionVariable = -STEP_PLAYER;
+    for (int i = 1; i <= rangeY; i++) {
+
+        ParticuleExplosion* particuleExplosion = new ParticuleExplosion();
+        particuleExplosion->getSprite()->setPosition(Vec2(getSprite()->getPosition().x, getSprite()->getPosition().y + positionVariable));
+        positionVariable += STEP_PLAYER;
+        Level::getInstance()->addChild(particuleExplosion->getSprite());
+        particulesExplosionList.push_back(particuleExplosion);
     }
 
     // clean map from particules

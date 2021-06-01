@@ -194,7 +194,7 @@ void Player::plantBomb() {
 
 void Player::explosion(Bomb* bomb, float currentCustomTiledXPositon, float currentCustomTiledYPositon) {
 	
-	bomb->spawnParticules();
+	bomb->spawnParticules(getRangeExplosionX(), getRangeExplosionY());
 
 	auto mapLevel = Level::getInstance()->map;
 
@@ -255,22 +255,18 @@ bool Player::blockPlayer(const int direction) {
 	{
 	case DIRECTION_LEFT:
 		this->setPosition(Vec2(pos.x + STEP_PLAYER, pos.y));
-		//this->customTiledPosX += 1;
 		return true;
 
 	case DIRECTION_RIGHT:
 		this->setPosition(Vec2(pos.x - STEP_PLAYER, pos.y));
-		//this->customTiledPosX -= 1;
 		return true;
 
 	case DIRECTION_TOP:
 		this->setPosition(Vec2(pos.x, pos.y - STEP_PLAYER));
-		//this->customTiledPosY += 1;
 		return true;
 
 	case DIRECTION_BOTTOM:
 		this->setPosition(Vec2(pos.x, pos.y + STEP_PLAYER));
-		//this->customTiledPosY -= 1;
 		return true;
 	
 	default:
@@ -287,25 +283,21 @@ Vec2 Player::getNextPositionOnCustomeTiledMap(int direction) {
 	switch (direction)
 	{
 	case DIRECTION_LEFT:
-		//this->customTiledPosX -= 1;
 		nextTiledPosition.x = this->customTiledPosX - 1;
 		nextTiledPosition.y = this->customTiledPosY;
 		return nextTiledPosition;
 	
 	case DIRECTION_RIGHT:
-		//this->customTiledPosX += 1;
 		nextTiledPosition.x = this->customTiledPosX + 1;
 		nextTiledPosition.y = this->customTiledPosY;
 		return nextTiledPosition;
 	
 	case DIRECTION_TOP:
-		//this.customTiledPosY -= 1;
 		nextTiledPosition.x = this->customTiledPosX;
 		nextTiledPosition.y = this->customTiledPosY - 1;
 		return nextTiledPosition;
 	
 	case DIRECTION_BOTTOM:
-		//this->customTiledPosY += 1;
 		nextTiledPosition.x = this->customTiledPosX;
 		nextTiledPosition.y = this->customTiledPosY + 1;
 		return nextTiledPosition;
@@ -323,4 +315,20 @@ Vec2 Player::getCustomTiledPosition() {
 void Player::setCustomTiledPosition(Vec2 customTiledPosition) {
 	this->customTiledPosX = customTiledPosition.x;
 	this->customTiledPosY = customTiledPosition.y;
+}
+
+void Player::setRangeExplosionX(int rangeExplosionX) {
+	_rangeExplosionX = rangeExplosionX;
+}
+
+void Player::setRangeExplosionY(int rangeExplosionY) {
+	_rangeExplosionY = rangeExplosionY;
+}
+
+int Player::getRangeExplosionX() {
+	return _rangeExplosionX;
+}
+
+int Player::getRangeExplosionY() {
+	return _rangeExplosionY;
 }

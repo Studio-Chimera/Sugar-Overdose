@@ -30,6 +30,8 @@ public:
     int getPlayerNumber();
     int getPosX();
     int getPosY();
+    int getRangeExplosionY();
+    int getRangeExplosionX();
     Vec2 getCustomTiledPosition();
     Vec2 getNextPositionOnCustomeTiledMap(int direction);
     Vec2 getPosition();
@@ -44,6 +46,8 @@ public:
     void setPlayerNumber(int playerNumber);
     void setPosX(int newPos);
     void setPosY(int newPos);
+    void setRangeExplosionY(int rangeExplosion);
+    void setRangeExplosionX(int rangeExplosion);
     void setPosition(Vec2 position);
     void setCustomTiledPosition(Vec2 customTiledPosition);
     void setSideMoveAnimation(Vector<SpriteFrame*>);
@@ -71,8 +75,10 @@ private:
     float _posY;
     int customTiledPosX;
     int customTiledPosY;
+    int _rangeExplosionX = 3;
+    int _rangeExplosionY = 3;
     int playerNumber;
-
+    
     SpriteFrameCache* _spriteCacher;
     Sprite* _sprite;
     Animation* _sideMoveAnimation;

@@ -14,7 +14,7 @@ public:
 
     Bomb();
     ~Bomb();
-    void spawnParticules();
+    void spawnParticules(int rangeX, int rangeY);
     std::vector<ParticuleExplosion*> particulesExplosionList;
 
     // ###################################################
