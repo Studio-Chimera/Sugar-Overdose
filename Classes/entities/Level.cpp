@@ -3,8 +3,7 @@
 #include <vector>
 #include "utils/Store.h"
 #include "helpers/PlayerHelper.h"
-#include "entities/Player.h"
-#include "entities/PowerUP_Range.h"
+#include "PowerUP_Range.h"
 #include "Bomb.h"
 
 using namespace cocos2d;
@@ -18,14 +17,6 @@ Level* Level::getInstance()
         levelInstance = new Level();
     }
     return levelInstance;
-}
-
-Vector<TMXLayer*> Level::getLayersLevel() 
-{
-    Vector<TMXLayer*> layersLevel;
-    layersLevel.pushBack(tilesWalls);
-    layersLevel.pushBack(tilesBackground);
-    return layersLevel;
 }
 
 Scene* Level::scene()
@@ -64,54 +55,47 @@ bool Level::init()
     tilesWalls = tileMap->getLayer("walls");
     tilesBorders = tileMap->layerNamed("borders");
 
-    const float mapWidth = tileMap->getMapSize().width;
-    const float mapHeight = tileMap->getMapSize().height;
-    const float tileWidth = tileMap->getTileSize().width;
-    const float tileHeight = tileMap->getTileSize().height;
-    int wallGid = 0;
-    int borderGid = 0;
+    mapWidth = tileMap->getMapSize().width;
+    mapHeight = tileMap->getMapSize().height;
 
-    map = new vector<vector<string>>;
-    vector<string> currentColMap;
-
-    for (int i = 0; i < mapWidth; i++) {
-        for (int y = 0; y < mapHeight; y++) {
-            wallGid = tilesWalls->getTileGIDAt(Vec2(i, y));
-            borderGid = tilesBorders->getTileGIDAt(Vec2(i, y)); // CAN BE OPTIMISED
-
-            if (wallGid != 0 || borderGid != 0) {
-                
-                if (wallGid != 0) {
-                    currentColMap.push_back("Wall");
-                }
-
-                else if (borderGid != 0) {
-                    currentColMap.push_back("Border");
-                }
-            }
-            else {
-                currentColMap.push_back("Empty");
-            }
-        }
-        
-        if (!currentColMap.empty()) {
-            map->push_back(currentColMap);
-            currentColMap.clear();
-        }
-    }
+    fillCustomTiledMap();
 
     // prepare powerUP
     TMXObjectGroup* spawnPowerUp = tileMap->objectGroupNamed("PowerUp");
+    
+    //int id = 1;
+    //string id_s = to_string(id);
+    //for (auto spawnPowerUp : spawnPowerUp->objectNamed("PowerUp_RangeX" + id_s)) {
+    //    if (spawnPowerUp.first.empty() == false) {
+    //        spawnsVector->pushBack(spawnPowerUp);
+    //        id += 1;
+    //        id_s = to_string(id);
+    //    }
+    //}
+
     auto spawnPowerUpRangeX1 = spawnPowerUp->objectNamed("PowerUp_RangeX1");
     auto spawnPowerUpRangeX2 = spawnPowerUp->objectNamed("PowerUp_RangeX2");
     auto spawnPowerUpRangeY1 = spawnPowerUp->objectNamed("PowerUp_RangeY1");
     auto spawnPowerUpRangeY2 = spawnPowerUp->objectNamed("PowerUp_RangeY2");
     
+    //for ()
+    //powerRangeVector
     PowerUP_Range* powerUp_RangeX1 = new PowerUP_Range(Vec2(spawnPowerUpRangeX1.at("x").asFloat(), spawnPowerUpRangeX1.at("y").asFloat()), Vec2(4, 3), AXIS_X, 1);
     PowerUP_Range* powerUp_RangeX2 = new PowerUP_Range(Vec2(spawnPowerUpRangeX2.at("x").asFloat(), spawnPowerUpRangeX2.at("y").asFloat()), Vec2(6, 2), AXIS_X, 1);
     PowerUP_Range* powerUp_RangeY1 = new PowerUP_Range(Vec2(spawnPowerUpRangeY1.at("x").asFloat(), spawnPowerUpRangeY1.at("y").asFloat()), Vec2(8, 1), AXIS_Y, 1);
     PowerUP_Range* powerUp_RangeY2 = new PowerUP_Range(Vec2(spawnPowerUpRangeY2.at("x").asFloat(), spawnPowerUpRangeY2.at("y").asFloat()), Vec2(4, 4), AXIS_Y, 1);
-        
+       
+    // set items case
+    stringstream powerUp_RangeX_case;
+    stringstream powerUp_RangeY_case;
+    powerUp_RangeX_case << "powerUp_RangeX";
+    powerUp_RangeY_case << "powerUp_RangeY";
+  
+    customTiledMap->at(powerUp_RangeX1->getCustomTiledPosition().x).at(powerUp_RangeX1->getCustomTiledPosition().y) = powerUp_RangeX_case.str();
+    customTiledMap->at(powerUp_RangeX2->getCustomTiledPosition().x).at(powerUp_RangeX2->getCustomTiledPosition().y) = powerUp_RangeX_case.str();
+    customTiledMap->at(powerUp_RangeY1->getCustomTiledPosition().x).at(powerUp_RangeY1->getCustomTiledPosition().y) = powerUp_RangeY_case.str();
+    customTiledMap->at(powerUp_RangeY2->getCustomTiledPosition().x).at(powerUp_RangeY2->getCustomTiledPosition().y) = powerUp_RangeY_case.str();
+
     // spawn players
     TMXObjectGroup* spawnPlayer = tileMap->objectGroupNamed("Spawns");
     auto spawn1 = spawnPlayer->objectNamed("Spawn 1");
@@ -128,8 +112,8 @@ bool Level::init()
     player2_case << "Player_" << player2->getPlayerNumber();
     float currY1 = player1->getCustomTiledPosition().y;
     float currY2 = player2->getCustomTiledPosition().y;
-    map->at(player1->getCustomTiledPosition().x).at(player1->getCustomTiledPosition().y) = player1_case.str();
-    map->at(player2->getCustomTiledPosition().x).at(player2->getCustomTiledPosition().y) = player2_case.str();
+    customTiledMap->at(player1->getCustomTiledPosition().x).at(player1->getCustomTiledPosition().y) = player1_case.str();
+    customTiledMap->at(player2->getCustomTiledPosition().x).at(player2->getCustomTiledPosition().y) = player2_case.str();
     
     // get & set players controls
     EventListenerKeyboard *player1Controller = std::get<EventListenerKeyboard*>(player1->getController());
@@ -151,23 +135,64 @@ bool Level::init()
 }
 
 /*
-    uses new player positions on all objects to detect collisions
+    Create the whole custom tiled map
 */
-bool Level::checkIfCollision(Vec2 nextTiledPosition, int direction)
-{
-    string tile = map->at(nextTiledPosition.x).at(nextTiledPosition.y);
-    if (tile != "Empty") {
-        return true;
-    }
+void Level::fillCustomTiledMap() {
     
-    return false;
+    int wallGid = 0;
+    int borderGid = 0;
+
+    customTiledMap = new vector<vector<string>>; // 2D dynamics array
+    vector<string> currentColMap;
+
+    for (int i = 0; i < mapWidth; i++) {
+        for (int y = 0; y < mapHeight; y++) { // fill columns first
+
+            if (tilesWalls->getTileGIDAt(Vec2(i, y)) != 0) {
+                currentColMap.push_back("Wall");
+            }
+            else if (tilesBorders->getTileGIDAt(Vec2(i, y)) != 0) {
+                currentColMap.push_back("Border");
+            }
+            else {
+                currentColMap.push_back("Empty");
+            }
+        }
+        
+        if (!currentColMap.empty()) {
+            customTiledMap->push_back(currentColMap);
+            currentColMap.clear();
+        }
+    }
 }
 
+/*
+    uses new player positions on all objects to detect collisions
+*/
+bool Level::checkIfCollisions(Vec2 nextTiledPosition, int direction, Player* player)
+{
+    string tile = customTiledMap->at(nextTiledPosition.x).at(nextTiledPosition.y);
+    if (tile != "Empty" && tile.substr(0, 7) != "powerUp") {
+        return true; // collison
+    }
+    else if (tile.substr(0, 7) == "powerUp") {
+        if (tile.substr(9, 6) == "powerUp_RangeX") {
+            //player->setRangeExplosionX() == 
+        }
+        
+    }
+    
+    return false; // no collison
+}
+
+/*
+    place player on custom tiled map
+*/
 void Level::setNewPositionPlayerOnCustomTiledMap(Vec2 nextTiledPosition, int direction, int playerNumber){
 
     stringstream newCase;
     newCase << "Player_" << playerNumber;
-    map->at(nextTiledPosition.x).at(nextTiledPosition.y) = newCase.str();
+    customTiledMap->at(nextTiledPosition.x).at(nextTiledPosition.y) = newCase.str();
     cleanOldPosition(nextTiledPosition, direction);
     return;
 }
@@ -183,22 +208,22 @@ void Level::cleanOldPosition(Vec2 nextTiledPosition, int direction) {
     {
     case DIRECTION_LEFT:
         oldTiledPosition = nextTiledPosition.x + 1;
-        map->at(oldTiledPosition).at(nextTiledPosition.y) = "Empty";
+        customTiledMap->at(oldTiledPosition).at(nextTiledPosition.y) = "Empty";
         return;
 
     case DIRECTION_RIGHT:
         oldTiledPosition = nextTiledPosition.x - 1;
-        map->at(oldTiledPosition).at(nextTiledPosition.y) = "Empty";
+        customTiledMap->at(oldTiledPosition).at(nextTiledPosition.y) = "Empty";
         return;
 
     case DIRECTION_TOP:
         oldTiledPosition = nextTiledPosition.y + 1;
-        map->at(nextTiledPosition.x).at(oldTiledPosition) = "Empty";
+        customTiledMap->at(nextTiledPosition.x).at(oldTiledPosition) = "Empty";
         return;
 
     case DIRECTION_BOTTOM:
         oldTiledPosition = nextTiledPosition.y - 1;
-        map->at(nextTiledPosition.x).at(oldTiledPosition) = "Empty";
+        customTiledMap->at(nextTiledPosition.x).at(oldTiledPosition) = "Empty";
         return;
 
     default:

@@ -2,11 +2,12 @@
 #include "utils/Definitions.h"
 
 PowerUP_Range::PowerUP_Range(Vec2 position, Vec2 customTiledPosition, int axis, int value) {
-	this->setCustomTiledPosition(customTiledPosition);
+	
 	this->setValue(value);
 	this->setAxis(axis);
 	this->setPosX(position.x);
 	this->setPosY(position.y);
+	this->setCustomTiledPosition(customTiledPosition);
 
 	_spriteCacher = SpriteFrameCache::getInstance();
 
@@ -26,6 +27,14 @@ PowerUP_Range::PowerUP_Range(Vec2 position, Vec2 customTiledPosition, int axis, 
 	auto myfile = standPng.str();
 	_sprite->initWithSpriteFrameName(myfile);
 	getSprite()->setPosition(getPosition());
+}
+
+	// ###################################################
+	// Getters & Setters
+	// ###################################################
+
+Vec2 PowerUP_Range::getCustomTiledPosition() {
+	return Vec2(_customTiledPosX, _customTiledPosY);
 }
 
 void PowerUP_Range::setCustomTiledPosition(Vec2 customTiledPosition) {

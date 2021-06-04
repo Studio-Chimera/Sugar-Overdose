@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Level.h"
 #include <iomanip>
 #include "Bomb.h"
 #include <utils/Definitions.h>
@@ -176,66 +177,15 @@ void Player::moveDown() {
 void Player::plantBomb() {
 
 	auto players = PlayerHelper::getInstance()->getPlayers();
-	float test = 0.0f;
 
-	auto bomb = new Bomb();
-	Vec2 pos = getPosition();
-	bomb->getSprite()->setPosition(getPosition());
-	bomb->setCustomTiledPosition(getCustomTiledPosition());
-	Level::getInstance()->addChild(bomb->getSprite());
-
-	float currentCustomTiledXPositon = getCustomTiledPosition().x;
-	float currentCustomTiledYPositon = getCustomTiledPosition().y;
-
-	_sprite->runAction(Sequence::create(
-		DelayTime::create(TIME_EXPLOSION),
-		CallFunc::create(CC_CALLBACK_0(Player::explosion, this, bomb, currentCustomTiledXPositon, currentCustomTiledYPositon)), nullptr));
-}
-
-void Player::explosion(Bomb* bomb, float currentCustomTiledXPositon, float currentCustomTiledYPositon) {
-	
-	bomb->spawnParticules(getRangeExplosionX(), getRangeExplosionY());
-
-	auto mapLevel = Level::getInstance()->map;
-
-	string currentTile = mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon);
-	string tileRight = mapLevel->at(currentCustomTiledXPositon + 1).at(currentCustomTiledYPositon);
-	string tileLeft = mapLevel->at(currentCustomTiledXPositon - 1).at(currentCustomTiledYPositon);
-	string tileBottom = mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon + 1);
-	string tileTop = mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon - 1);
-
-	removeOnMap(currentTile, currentCustomTiledXPositon, currentCustomTiledYPositon);
-	removeOnMap(tileRight, currentCustomTiledXPositon + 1, currentCustomTiledYPositon);
-	removeOnMap(tileLeft, currentCustomTiledXPositon - 1, currentCustomTiledYPositon);
-	removeOnMap(tileBottom, currentCustomTiledXPositon, currentCustomTiledYPositon + 1);
-	removeOnMap(tileTop, currentCustomTiledXPositon, currentCustomTiledYPositon - 1);
-}
-
-void Player::removeOnMap(string tile, float currentCustomTiledXPositon, float currentCustomTiledYPositon) {
-	
-	auto mapLevel = Level::getInstance()->map;
-
-	if (tile == "Player_1") {
-		mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon) = "Empty";
-		PlayerHelper::getInstance()->getPlayers().front()->~Player();
-	}
-	
-	else if (tile == "Player_2") {
-		mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon) = "Empty";
-		PlayerHelper::getInstance()->getPlayers().back()->~Player();
-	}
-
-	else if (tile == "Wall") {
-		Level::getInstance()->tilesWalls->removeTileAt(Vec2(currentCustomTiledXPositon, currentCustomTiledYPositon));
-		mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon) = "Empty";
-	} 
+	auto bomb = new Bomb(getPosition(), getCustomTiledPosition(), getRangeExplosionX(), getRangeExplosionY());
 }
 
 bool Player::blockPlayerIfWalls(const int direction) {
 
 	Vec2 nextPosition = getNextPositionOnCustomeTiledMap(direction);
-	bool collision = Level::getInstance()->checkIfCollision(nextPosition, direction);
-
+	bool collision = Level::getInstance()->checkIfCollisions(nextPosition, direction, this);
+	//bool collision = true;
 	if (collision) {
 		return blockPlayer(direction);
 	}

@@ -12,9 +12,13 @@ public:
     // Methods
     // ###################################################
 
-    Bomb();
+    Bomb(Vec2 position, Vec2 customTiledPosition, int rangeExplosionX, int rangeExplosionY);
+
     ~Bomb();
     void spawnParticules(int rangeX, int rangeY);
+    void explosion(float currentCustomTiledXPositon, float currentCustomTiledYPositon, int rangeExplosionX, int rangeExplosionY);
+    void removeOnMap(string tile, float currentCustomTiledXPositon, float currentCustomTiledYPositon);
+
     std::vector<ParticuleExplosion*> particulesExplosionList;
 
     // ###################################################

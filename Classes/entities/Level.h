@@ -5,6 +5,7 @@
 #include "cocos2d.h"
 #include "Player.h"
 #include "utils/Definitions.h"
+//#include "PowerUp.h"
 
 using namespace cocos2d;
 
@@ -22,11 +23,9 @@ public:
 
     virtual bool init();
     static Scene* scene();
-    vector<vector<string>>* map;
+    vector<vector<string>>* customTiledMap;
 
-    void playersCollision(PhysicsBody* physicsBodyA, PhysicsBody* physicsBodyB);
-    bool checkIfCollision(Vec2 nextPosition, int direction);
-    
+    bool checkIfCollisions(Vec2 nextPosition, int direction, Player* player);
     void cleanOldPosition(Vec2 nextTiledPosition, int direction);
 
     Level(Level& other) = delete;
@@ -39,7 +38,6 @@ public:
     // ###################################################
     
     static Level* getInstance();
-    Vector<TMXLayer*> getLayersLevel();
     TMXLayer* tilesWalls;
     TMXTiledMap* tileMap;
     TMXLayer* tilesBackground;
@@ -59,9 +57,15 @@ protected:
 
 private:
     
+    float mapWidth;
+    float mapHeight;
     Vector<Rect*>* obstaclesWalls;
     Vector<Rect*>* obstaclesBorders;
+    //Vector<PowerUp*> powerRangeVector;
+    Vector<pair<string, Value>>* spawnsVector;
 
+    void fillCustomTiledMap();
+    
 };
 
 #endif // __LEVEL_SCENE_H__

@@ -50,7 +50,6 @@ constexpr auto DEFAULT_VOLUME = 0;
 
 // STATES
 
-
 // TYPES
 #define PLAYER_NUMBER_ONE 1
 #define PLAYER_NUMBER_TWO 2
@@ -76,7 +75,6 @@ enum class CustomScenes { MainMenu, LevelSelectionMenu, OptionsMenu, CreditsMenu
 #define DIRECTION_BOTTOM 4
 #define AXIS_X 1
 #define AXIS_Y 2
-
 
 /*	Open a new menu
 * dt: time to replace scene

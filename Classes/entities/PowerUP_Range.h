@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "cocos2d.h"
+#include "PowerUp.h"
 
 using namespace cocos2d;
 

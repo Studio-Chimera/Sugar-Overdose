@@ -1,12 +1,11 @@
 #pragma once
-#ifndef __PLAYER_H__
-#define __PLAYER_H__
+//#ifndef __PLAYER_H__
+//#define __PLAYER_H__
 
 #include "cocos2d.h"
 #include <extensions\physics-nodes\CCPhysicsSprite.h>
 #include <string>
 #include <variant>
-#include "entities/Level.h"
 #include "Bomb.h"
 
 using namespace cocos2d;
@@ -64,8 +63,6 @@ public:
     void moveUp();
     void moveDown();
     void plantBomb();
-    void removeOnMap(string tile, float currentCustomTiledXPositon, float currentCustomTiledYPositon);
-    void explosion(Bomb* bomb, float currentCustomTiledXPositon, float currentCustomTiledYPositon);
     bool blockPlayerIfWalls(const int direction);
     bool blockPlayer(const int direction);
 
@@ -88,4 +85,4 @@ private:
 
 };
 
-#endif // __PLAYER_H__
+//#endif // __PLAYER_H__

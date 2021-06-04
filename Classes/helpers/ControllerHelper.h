@@ -2,7 +2,8 @@
 #define DEF_ControllerHelper
 
 #include "cocos2d.h"
-#include <entities\Player.h>
+#include "entities\Player.h"
+#include "utils\Definitions.h"
 
 class ControllerHelper
 {
