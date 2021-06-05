@@ -80,10 +80,10 @@ bool Level::init()
     
     //for ()
     //powerRangeVector
-    PowerUP_Range* powerUp_RangeX1 = new PowerUP_Range(Vec2(spawnPowerUpRangeX1.at("x").asFloat(), spawnPowerUpRangeX1.at("y").asFloat()), Vec2(4, 3), AXIS_X, 1);
-    PowerUP_Range* powerUp_RangeX2 = new PowerUP_Range(Vec2(spawnPowerUpRangeX2.at("x").asFloat(), spawnPowerUpRangeX2.at("y").asFloat()), Vec2(6, 2), AXIS_X, 1);
-    PowerUP_Range* powerUp_RangeY1 = new PowerUP_Range(Vec2(spawnPowerUpRangeY1.at("x").asFloat(), spawnPowerUpRangeY1.at("y").asFloat()), Vec2(8, 1), AXIS_Y, 1);
-    PowerUP_Range* powerUp_RangeY2 = new PowerUP_Range(Vec2(spawnPowerUpRangeY2.at("x").asFloat(), spawnPowerUpRangeY2.at("y").asFloat()), Vec2(4, 4), AXIS_Y, 1);
+    PowerUP_Range* powerUp_RangeX1 = new PowerUP_Range(Vec2(spawnPowerUpRangeX1.at("x").asFloat(), spawnPowerUpRangeX1.at("y").asFloat()), Vec2(4, 3), AXIS_X, 4);
+    PowerUP_Range* powerUp_RangeX2 = new PowerUP_Range(Vec2(spawnPowerUpRangeX2.at("x").asFloat(), spawnPowerUpRangeX2.at("y").asFloat()), Vec2(6, 2), AXIS_X, 4);
+    PowerUP_Range* powerUp_RangeY1 = new PowerUP_Range(Vec2(spawnPowerUpRangeY1.at("x").asFloat(), spawnPowerUpRangeY1.at("y").asFloat()), Vec2(10, 1), AXIS_Y, 4);
+    PowerUP_Range* powerUp_RangeY2 = new PowerUP_Range(Vec2(spawnPowerUpRangeY2.at("x").asFloat(), spawnPowerUpRangeY2.at("y").asFloat()), Vec2(10, 4), AXIS_Y, 4);
        
     // set items case
     stringstream powerUp_RangeX_case;
@@ -138,9 +138,6 @@ bool Level::init()
     Create the whole custom tiled map
 */
 void Level::fillCustomTiledMap() {
-    
-    int wallGid = 0;
-    int borderGid = 0;
 
     customTiledMap = new vector<vector<string>>; // 2D dynamics array
     vector<string> currentColMap;
@@ -172,14 +169,21 @@ void Level::fillCustomTiledMap() {
 bool Level::checkIfCollisions(Vec2 nextTiledPosition, int direction, Player* player)
 {
     string tile = customTiledMap->at(nextTiledPosition.x).at(nextTiledPosition.y);
+    
+    // collision
     if (tile != "Empty" && tile.substr(0, 7) != "powerUp") {
-        return true; // collison
+        return true;
     }
+
+    // gather power-up
     else if (tile.substr(0, 7) == "powerUp") {
-        if (tile.substr(9, 6) == "powerUp_RangeX") {
-            //player->setRangeExplosionX() == 
+        if (tile == "powerUp_RangeX") {
+            player->incrementRangeExplosionX(1);
         }
-        
+        else if (tile == "powerUp_RangeY") {
+            player->incrementRangeExplosionY(1);
+        }            
+        customTiledMap->at(nextTiledPosition.x).at(nextTiledPosition.y) = "Empty";
     }
     
     return false; // no collison

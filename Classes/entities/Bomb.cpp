@@ -4,6 +4,7 @@
 
 Bomb::Bomb(Vec2 position, Vec2 customTiledPosition, int rangeExplosionX, int rangeExplosionY){
 
+    // Setup sprite
     _spriteCacher = SpriteFrameCache::getInstance();
 
     std::stringstream plistFile;
@@ -16,8 +17,8 @@ Bomb::Bomb(Vec2 position, Vec2 customTiledPosition, int rangeExplosionX, int ran
     auto myfile = standPng.str();
     _sprite->initWithSpriteFrameName(myfile);
 
+    // Place sprite
     Level::getInstance()->addChild(getSprite());
-
     getSprite()->setPosition(position);
     setCustomTiledPosition(customTiledPosition);
 
@@ -29,23 +30,52 @@ Bomb::Bomb(Vec2 position, Vec2 customTiledPosition, int rangeExplosionX, int ran
 
 Bomb::~Bomb(){}
 
-void Bomb::explosion(float currentCustomTiledXPositon, float currentCustomTiledYPositon, int rangeExplosionX, int rangeExplosionY) {
+void Bomb::explosion(float customTiledXMap, float customTiledYMap, int rangeExplosionX, int rangeExplosionY) {
 
     spawnParticules(rangeExplosionX, rangeExplosionY);
 
     auto mapLevel = Level::getInstance()->customTiledMap;
+    const int widthMap = Level::getInstance()->tileMap->getMapSize().width;
+    const int heightMap = Level::getInstance()->tileMap->getMapSize().height;
 
-    string currentTile = mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon);
-    string tileRight = mapLevel->at(currentCustomTiledXPositon + 1).at(currentCustomTiledYPositon);
-    string tileLeft = mapLevel->at(currentCustomTiledXPositon - 1).at(currentCustomTiledYPositon);
-    string tileBottom = mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon + 1);
-    string tileTop = mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon - 1);
+    removeOnMap(mapLevel->at(customTiledXMap).at(customTiledYMap), customTiledXMap, customTiledYMap);
 
-    removeOnMap(currentTile, currentCustomTiledXPositon, currentCustomTiledYPositon);
-    removeOnMap(tileRight, currentCustomTiledXPositon + 1, currentCustomTiledYPositon);
-    removeOnMap(tileLeft, currentCustomTiledXPositon - 1, currentCustomTiledYPositon);
-    removeOnMap(tileBottom, currentCustomTiledXPositon, currentCustomTiledYPositon + 1);
-    removeOnMap(tileTop, currentCustomTiledXPositon, currentCustomTiledYPositon - 1);
+    // fill the X axis with custom tiled map
+    int x = -1;
+    for (int i = 1; i <= rangeExplosionX; i++) {
+        if (customTiledXMap + x > 0) { // explosion is at left of the bomb
+            removeOnMap(mapLevel->at(customTiledXMap + x).at(customTiledYMap), customTiledXMap + x, customTiledYMap);
+        }
+        
+        x = -x;
+        if (customTiledXMap + x < widthMap) { // explosion is at right of the bomb
+            removeOnMap(mapLevel->at(customTiledXMap + x).at(customTiledYMap), customTiledXMap + x, customTiledYMap);
+        }
+        
+        if (x > 0) {
+            x = -x;
+            x--;
+        }
+    }
+
+    // fill the T axis with custom tiled map
+    int y = -1;
+    for (int i = 1; i <= rangeExplosionY; i++) {
+        
+        if (customTiledYMap + y > 0) { // explosion is at top of the bomb
+            removeOnMap(mapLevel->at(customTiledXMap).at(customTiledYMap + y), customTiledXMap, customTiledYMap + y);
+        }
+        
+        y = -y;
+        if (customTiledYMap + y < heightMap) { // explosion is at bottom of the bomb
+            removeOnMap(mapLevel->at(customTiledXMap).at(customTiledYMap + y), customTiledXMap, customTiledYMap + y);
+        }
+        
+        if (y > 0) {
+            y = -y;
+            y--;
+        }
+    }
 }
 
 /*
@@ -57,7 +87,7 @@ void Bomb::spawnParticules(int rangeX, int rangeY) {
     int positionVariable = -STEP_PLAYER;
 
     // particules spawn on X axis
-    for (int i = 1; i <= rangeX; i++) {
+    for (int i = 0; i < rangeX; i++) {
         ParticuleExplosion* particuleExplosion = new ParticuleExplosion();
         particuleExplosion->getSprite()->setPosition(Vec2(getSprite()->getPosition().x + positionVariable, getSprite()->getPosition().y));
         positionVariable += STEP_PLAYER;
@@ -67,7 +97,7 @@ void Bomb::spawnParticules(int rangeX, int rangeY) {
 
     // particules spawn on Y axis
     positionVariable = -STEP_PLAYER;
-    for (int i = 1; i <= rangeY; i++) {
+    for (int i = 0; i < rangeY; i++) {
 
         ParticuleExplosion* particuleExplosion = new ParticuleExplosion();
         particuleExplosion->getSprite()->setPosition(Vec2(getSprite()->getPosition().x, getSprite()->getPosition().y + positionVariable));
@@ -97,23 +127,23 @@ void Bomb::removeParticules() {
 /*
     Update custom tiled map to set "Empty" where elements are destroyed
 */
-void Bomb::removeOnMap(string tile, float currentCustomTiledXPositon, float currentCustomTiledYPositon) {
+void Bomb::removeOnMap(string tile, float customTiledXMap, float customTiledYMap) {
 
     auto mapLevel = Level::getInstance()->customTiledMap;
 
     if (tile == "Player_1") {
-        mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon) = "Empty";
+        mapLevel->at(customTiledXMap).at(customTiledYMap) = "Empty";
         PlayerHelper::getInstance()->getPlayers().front()->~Player();
     }
 
     else if (tile == "Player_2") {
-        mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon) = "Empty";
+        mapLevel->at(customTiledXMap).at(customTiledYMap) = "Empty";
         PlayerHelper::getInstance()->getPlayers().back()->~Player();
     }
 
     else if (tile == "Wall") {
-        Level::getInstance()->tilesWalls->removeTileAt(Vec2(currentCustomTiledXPositon, currentCustomTiledYPositon));
-        mapLevel->at(currentCustomTiledXPositon).at(currentCustomTiledYPositon) = "Empty";
+        Level::getInstance()->tilesWalls->removeTileAt(Vec2(customTiledXMap, customTiledYMap));
+        mapLevel->at(customTiledXMap).at(customTiledYMap) = "Empty";
     }
 }
 

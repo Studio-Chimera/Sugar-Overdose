@@ -185,7 +185,6 @@ bool Player::blockPlayerIfWalls(const int direction) {
 
 	Vec2 nextPosition = getNextPositionOnCustomeTiledMap(direction);
 	bool collision = Level::getInstance()->checkIfCollisions(nextPosition, direction, this);
-	//bool collision = true;
 	if (collision) {
 		return blockPlayer(direction);
 	}
@@ -267,12 +266,12 @@ void Player::setCustomTiledPosition(Vec2 customTiledPosition) {
 	this->customTiledPosY = customTiledPosition.y;
 }
 
-void Player::setRangeExplosionX(int rangeExplosionX) {
-	_rangeExplosionX = rangeExplosionX;
+void Player::incrementRangeExplosionX(int rangeExplosionX) {
+	_rangeExplosionX += rangeExplosionX;
 }
 
-void Player::setRangeExplosionY(int rangeExplosionY) {
-	_rangeExplosionY = rangeExplosionY;
+void Player::incrementRangeExplosionY(int rangeExplosionY) {
+	_rangeExplosionY += rangeExplosionY;
 }
 
 int Player::getRangeExplosionX() {
