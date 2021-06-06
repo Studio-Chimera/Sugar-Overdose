@@ -1,6 +1,4 @@
 #pragma once
-//#ifndef __PLAYER_H__
-//#define __PLAYER_H__
 
 #include "cocos2d.h"
 #include <extensions\physics-nodes\CCPhysicsSprite.h>
@@ -84,5 +82,3 @@ private:
     std::variant<EventListenerCustom*, EventListenerKeyboard*> _controller;
 
 };
-
-//#endif // __PLAYER_H__

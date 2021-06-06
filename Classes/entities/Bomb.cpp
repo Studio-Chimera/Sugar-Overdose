@@ -83,27 +83,53 @@ void Bomb::explosion(float customTiledXMap, float customTiledYMap, int rangeExpl
 */
 void Bomb::spawnParticules(int rangeX, int rangeY) {
 
-
-    int positionVariable = -STEP_PLAYER;
+    int x = -STEP_PLAYER;
 
     // particules spawn on X axis
     for (int i = 0; i < rangeX; i++) {
-        ParticuleExplosion* particuleExplosion = new ParticuleExplosion();
-        particuleExplosion->getSprite()->setPosition(Vec2(getSprite()->getPosition().x + positionVariable, getSprite()->getPosition().y));
-        positionVariable += STEP_PLAYER;
-        Level::getInstance()->addChild(particuleExplosion->getSprite());
-        particulesExplosionList.push_back(particuleExplosion);
+        // explosion is at left of the bomb
+        ParticuleExplosion* particuleExplosion1 = new ParticuleExplosion();
+        particuleExplosion1->getSprite()->setPosition(Vec2(getSprite()->getPosition().x + x, getSprite()->getPosition().y));
+        Level::getInstance()->addChild(particuleExplosion1->getSprite());
+        particulesExplosionList.push_back(particuleExplosion1);
+
+        x = -x;
+
+        // explosion is at right of the bomb
+        ParticuleExplosion* particuleExplosion2 = new ParticuleExplosion();
+        particuleExplosion2->getSprite()->setPosition(Vec2(getSprite()->getPosition().x + x, getSprite()->getPosition().y));
+        Level::getInstance()->addChild(particuleExplosion2->getSprite());
+        particulesExplosionList.push_back(particuleExplosion2);
+
+        if (x > 0) {
+            x = -x;
+            x -= STEP_PLAYER;
+        }
     }
 
     // particules spawn on Y axis
-    positionVariable = -STEP_PLAYER;
+    x = -STEP_PLAYER;
     for (int i = 0; i < rangeY; i++) {
-
+        
+        // explosion is at left of the bomb
         ParticuleExplosion* particuleExplosion = new ParticuleExplosion();
-        particuleExplosion->getSprite()->setPosition(Vec2(getSprite()->getPosition().x, getSprite()->getPosition().y + positionVariable));
-        positionVariable += STEP_PLAYER;
+        particuleExplosion->getSprite()->setPosition(Vec2(getSprite()->getPosition().x, getSprite()->getPosition().y + x));
         Level::getInstance()->addChild(particuleExplosion->getSprite());
         particulesExplosionList.push_back(particuleExplosion);
+        
+        x = -x;
+
+        // explosion is at right of the bomb
+        ParticuleExplosion* particuleExplosion2 = new ParticuleExplosion();
+        particuleExplosion2->getSprite()->setPosition(Vec2(getSprite()->getPosition().x, getSprite()->getPosition().y + x));
+
+        Level::getInstance()->addChild(particuleExplosion2->getSprite());
+        particulesExplosionList.push_back(particuleExplosion2);
+
+        if (x > 0) {
+            x = -x;
+            x -= STEP_PLAYER;
+        }
     }
 
     // clean map from particules
