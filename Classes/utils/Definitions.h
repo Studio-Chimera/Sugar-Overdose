@@ -46,7 +46,7 @@ this file defines all constantes and reusables functions
 #define TIME_PARTICULE 0.3f
 #define TIME_WALK_ANIMATION 0.1
 
-constexpr auto DEFAULT_VOLUME = 0;
+//constexpr auto DEFAULT_VOLUME = 0;
 
 // STATES
 
@@ -56,9 +56,10 @@ constexpr auto DEFAULT_VOLUME = 0;
 #define PLAYER_NUMBER_THREE 3
 #define PLAYER_NUMBER_FOUR 4
 #define PLAYER_IA 5
+#define DEFAULT_VOLUME 0.1
 
 // SOUNDS
-#define MAIN_SOUND "sounds/Giedre-PisserDebout.mp3"
+#define MAIN_SOUND "sounds/XTaKeRuX - Resurrection.mp3"
 
 // SCENES
 enum class CustomScenes { MainMenu, LevelSelectionMenu, OptionsMenu, CreditsMenu };
