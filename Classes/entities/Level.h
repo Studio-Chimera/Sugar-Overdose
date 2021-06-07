@@ -5,7 +5,7 @@
 #include "cocos2d.h"
 #include "Player.h"
 #include "utils/Definitions.h"
-//#include "PowerUp.h"
+#include "PowerUP_Range.h"
 
 using namespace cocos2d;
 
@@ -61,8 +61,8 @@ private:
     float mapHeight;
     Vector<Rect*>* obstaclesWalls;
     Vector<Rect*>* obstaclesBorders;
-    //Vector<PowerUp*> powerRangeVector;
-    Vector<pair<string, Value>>* spawnsVector;
+    vector<PowerUP_Range*> powerRangeVector;
+    vector<Vec2> customTiledPositionOfItems;
 
     void fillCustomTiledMap();
     

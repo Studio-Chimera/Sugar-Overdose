@@ -19,7 +19,7 @@ public:
     void explosion(float currentCustomTiledXPositon, float currentCustomTiledYPositon, int rangeExplosionX, int rangeExplosionY);
     void removeOnMap(string tile, float currentCustomTiledXPositon, float currentCustomTiledYPositon);
 
-    std::vector<ParticuleExplosion*> particulesExplosionList;
+    vector<ParticuleExplosion*> particulesExplosionList;
 
     // ###################################################
     // Setters

@@ -63,38 +63,52 @@ bool Level::init()
     // prepare powerUP
     TMXObjectGroup* spawnPowerUp = tileMap->objectGroupNamed("PowerUp");
     
-    //int id = 1;
-    //string id_s = to_string(id);
-    //for (auto spawnPowerUp : spawnPowerUp->objectNamed("PowerUp_RangeX" + id_s)) {
-    //    if (spawnPowerUp.first.empty() == false) {
-    //        spawnsVector->pushBack(spawnPowerUp);
-    //        id += 1;
-    //        id_s = to_string(id);
-    //    }
-    //}
+    customTiledPositionOfItems.push_back(Vec2(4, 3));
+    customTiledPositionOfItems.push_back(Vec2(10, 1));
+    customTiledPositionOfItems.push_back(Vec2(6, 2));
+    customTiledPositionOfItems.push_back(Vec2(10, 4));
 
-    auto spawnPowerUpRangeX1 = spawnPowerUp->objectNamed("PowerUp_RangeX1");
-    auto spawnPowerUpRangeX2 = spawnPowerUp->objectNamed("PowerUp_RangeX2");
-    auto spawnPowerUpRangeY1 = spawnPowerUp->objectNamed("PowerUp_RangeY1");
-    auto spawnPowerUpRangeY2 = spawnPowerUp->objectNamed("PowerUp_RangeY2");
-    
-    //for ()
-    //powerRangeVector
-    PowerUP_Range* powerUp_RangeX1 = new PowerUP_Range(Vec2(spawnPowerUpRangeX1.at("x").asFloat(), spawnPowerUpRangeX1.at("y").asFloat()), Vec2(4, 3), AXIS_X, 4);
-    PowerUP_Range* powerUp_RangeX2 = new PowerUP_Range(Vec2(spawnPowerUpRangeX2.at("x").asFloat(), spawnPowerUpRangeX2.at("y").asFloat()), Vec2(6, 2), AXIS_X, 4);
-    PowerUP_Range* powerUp_RangeY1 = new PowerUP_Range(Vec2(spawnPowerUpRangeY1.at("x").asFloat(), spawnPowerUpRangeY1.at("y").asFloat()), Vec2(10, 1), AXIS_Y, 4);
-    PowerUP_Range* powerUp_RangeY2 = new PowerUP_Range(Vec2(spawnPowerUpRangeY2.at("x").asFloat(), spawnPowerUpRangeY2.at("y").asFloat()), Vec2(10, 4), AXIS_Y, 4);
-       
+    int id = 1;
+    string id_s = to_string(id);
+    stringstream powerUp_RangeX;
+    stringstream powerUp_RangeY;
+    powerUp_RangeX << "PowerUp_RangeX";
+    powerUp_RangeY << "PowerUp_RangeY";
+    ValueMap spawnPowerUpRange;
+
+    powerRangeVector = vector<PowerUP_Range*>();
+    for (int i = 1; i < spawnPowerUp->getObjects().size() - 1; i++) {
+        powerUp_RangeX << i;
+        spawnPowerUpRange = spawnPowerUp->objectNamed(powerUp_RangeX.str());
+        powerRangeVector.push_back(new PowerUP_Range(Vec2(spawnPowerUpRange.at("x").asFloat(), spawnPowerUpRange.at("y").asFloat()), customTiledPositionOfItems.front(), AXIS_X, 1));
+        customTiledPositionOfItems.erase(customTiledPositionOfItems.begin());
+        powerUp_RangeX.str("");
+        powerUp_RangeX.clear();
+        powerUp_RangeX << "PowerUp_RangeX";
+
+        powerUp_RangeY << i;
+        spawnPowerUpRange = spawnPowerUp->objectNamed(powerUp_RangeY.str());
+        powerRangeVector.push_back(new PowerUP_Range(Vec2(spawnPowerUpRange.at("x").asFloat(), spawnPowerUpRange.at("y").asFloat()), customTiledPositionOfItems.front(), AXIS_Y, 1));
+        customTiledPositionOfItems.erase(customTiledPositionOfItems.begin());
+        powerUp_RangeY.str("");
+        powerUp_RangeY.clear();
+        powerUp_RangeY << "PowerUp_RangeY";
+    }
+
     // set items case
     stringstream powerUp_RangeX_case;
     stringstream powerUp_RangeY_case;
     powerUp_RangeX_case << "powerUp_RangeX";
     powerUp_RangeY_case << "powerUp_RangeY";
-  
-    customTiledMap->at(powerUp_RangeX1->getCustomTiledPosition().x).at(powerUp_RangeX1->getCustomTiledPosition().y) = powerUp_RangeX_case.str();
-    customTiledMap->at(powerUp_RangeX2->getCustomTiledPosition().x).at(powerUp_RangeX2->getCustomTiledPosition().y) = powerUp_RangeX_case.str();
-    customTiledMap->at(powerUp_RangeY1->getCustomTiledPosition().x).at(powerUp_RangeY1->getCustomTiledPosition().y) = powerUp_RangeY_case.str();
-    customTiledMap->at(powerUp_RangeY2->getCustomTiledPosition().x).at(powerUp_RangeY2->getCustomTiledPosition().y) = powerUp_RangeY_case.str();
+
+    for (auto powerUp : powerRangeVector) {
+        if (powerUp->getAxis() == AXIS_X) {
+            customTiledMap->at(powerUp->getCustomTiledPosition().x).at(powerUp->getCustomTiledPosition().y) = powerUp_RangeX_case.str();
+        }
+        else if (powerUp->getAxis() == AXIS_Y) {
+            customTiledMap->at(powerUp->getCustomTiledPosition().x).at(powerUp->getCustomTiledPosition().y) = powerUp_RangeY_case.str();
+        }
+    }
 
     // spawn players
     TMXObjectGroup* spawnPlayer = tileMap->objectGroupNamed("Spawns");
@@ -126,10 +140,10 @@ bool Level::init()
     if (tileMap) { this->addChild(tileMap); }
     if (player1) { this->addChild(player1->getSprite()); }
     if (player2) { this->addChild(player2->getSprite()); }
-    if (powerUp_RangeX1) { this->addChild(powerUp_RangeX1->getSprite()); }
-    if (powerUp_RangeX2) { this->addChild(powerUp_RangeX2->getSprite()); }
-    if (powerUp_RangeY1) { this->addChild(powerUp_RangeY1->getSprite()); }
-    if (powerUp_RangeY2) { this->addChild(powerUp_RangeY2->getSprite()); }
+
+    for (auto powerUp : powerRangeVector) {
+        this->addChild(powerUp->getSprite());
+    }
 
     return true;
 }
@@ -169,7 +183,7 @@ void Level::fillCustomTiledMap() {
 bool Level::checkIfCollisions(Vec2 nextTiledPosition, int direction, Player* player)
 {
     string tile = customTiledMap->at(nextTiledPosition.x).at(nextTiledPosition.y);
-    
+
     // collision
     if (tile != "Empty" && tile.substr(0, 7) != "powerUp") {
         return true;
@@ -182,7 +196,12 @@ bool Level::checkIfCollisions(Vec2 nextTiledPosition, int direction, Player* pla
         }
         else if (tile == "powerUp_RangeY") {
             player->incrementRangeExplosionY(1);
-        }            
+        }
+        for (auto powerUp : powerRangeVector) {
+            if (powerUp->getCustomTiledPosition().x == nextTiledPosition.x && powerUp->getCustomTiledPosition().y == nextTiledPosition.y){
+                powerUp->getSprite()->removeFromParent();
+            }
+        }
         customTiledMap->at(nextTiledPosition.x).at(nextTiledPosition.y) = "Empty";
     }
     
