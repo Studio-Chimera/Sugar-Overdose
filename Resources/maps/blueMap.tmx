@@ -16,14 +16,6 @@
 0,0,0,0,0,0,0,0,0,0,1,1
 </data>
  </layer>
- <objectgroup id="6" name="Spawns">
-  <object id="5" name="Spawn 1" x="255" y="751.5">
-   <point/>
-  </object>
-  <object id="8" name="Spawn 2" x="250.5" y="250.5">
-   <point/>
-  </object>
- </objectgroup>
  <objectgroup id="8" name="PowerUp">
   <object id="15" name="PowerUp_RangeX2" x="1085.5" y="417.5">
    <point/>
@@ -35,6 +27,18 @@
    <point/>
   </object>
   <object id="18" name="PowerUp_RangeY1" x="1753.5" y="250.5">
+   <properties>
+    <property name="X_Custom" type="int" value="4"/>
+    <property name="Y_Custom" type="int" value="3"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="6" name="Spawns">
+  <object id="5" name="Spawn 1" x="255" y="751.5">
+   <point/>
+  </object>
+  <object id="8" name="Spawn 2" x="250.5" y="250.5">
    <point/>
   </object>
  </objectgroup>

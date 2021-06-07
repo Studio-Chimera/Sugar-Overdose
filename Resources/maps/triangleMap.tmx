@@ -29,18 +29,18 @@
  <layer id="3" name="walls" width="12" height="6">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,11,0,0,0,0,0,0,11,0,0,
-0,0,11,0,0,0,0,0,0,11,0,0,
-0,0,11,0,0,0,0,0,0,11,0,0,
+0,0,11,0,0,11,11,0,0,11,0,0,
+0,0,11,0,11,0,0,11,0,11,0,0,
+0,0,11,11,0,0,0,0,11,11,0,0,
 0,0,11,0,0,0,0,0,0,11,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
  <objectgroup id="4" name="SPAWNS">
-  <object id="1" name="Spawn 2" x="751.5" y="584.5">
+  <object id="1" name="Spawn 2" x="250.5" y="250.5">
    <point/>
   </object>
-  <object id="2" name="Spawn 1" x="1252.5" y="417.5">
+  <object id="2" name="Spawn 1" x="1753.5" y="250.5">
    <point/>
   </object>
  </objectgroup>
