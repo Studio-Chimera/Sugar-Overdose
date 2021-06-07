@@ -128,7 +128,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     
     // run
     director->runWithScene(scene);
-    
+    director->setDisplayStats(false);
+
     return true;
 }
 

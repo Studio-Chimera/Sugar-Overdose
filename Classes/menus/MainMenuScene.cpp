@@ -29,8 +29,8 @@ bool MainMenuScene::init() {
 	Size const screenZize = Director::getInstance()->getVisibleSize();
 	Vec2 const origin = Director::getInstance()->getVisibleOrigin();
 	
-	Sprite* const title = Sprite::create(TITLE);
-	title->setPosition(Vec2(screenZize.width / 2 + origin.x, screenZize.height * 0.65 + origin.y));
+	Sprite* const background = Sprite::create(BACKGROUND);
+	background->setPosition(Vec2(origin.x + screenZize.width / 2, origin.y + screenZize.height / 2));
 		
 	// Place buttons
 	Button* const buttonLevelSelection = Button::create(BUTTON_LEVEL_SELECTION, BUTTON_LEVEL_SELECTION);
@@ -46,7 +46,7 @@ bool MainMenuScene::init() {
 	buttonLeave->setPosition(Vec2(screenZize.width / 1.52 + origin.x, screenZize.height * 0.25 + origin.y));
 
 
-	this->addChild(title);
+	this->addChild(background);
 	this->addChild(buttonLevelSelection);
 	this->addChild(buttonOptions);
 	this->addChild(buttonCredits);

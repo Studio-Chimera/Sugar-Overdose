@@ -13,6 +13,7 @@ this file defines all constantes and reusables functions
 #define SPLASH_SCENE "backgrounds&windows/icon_studio_chimera.png"
 #define MAIN_MENU ""
 #define TITLE "backgrounds&windows/Sugar_Overdose_Title.png"
+#define BACKGROUND "backgrounds&windows/background.jpg"
 #define CREDITS "backgrounds&windows/credits.png"
 
 // SPRITES - BUTTONS
