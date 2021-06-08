@@ -47,8 +47,6 @@ this file defines all constantes and reusables functions
 #define TIME_PARTICULE 0.3f
 #define TIME_WALK_ANIMATION 0.1
 
-//constexpr auto DEFAULT_VOLUME = 0;
-
 // STATES
 
 // TYPES

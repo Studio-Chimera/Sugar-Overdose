@@ -30,11 +30,11 @@ bool CreditsScene::init() {
 	background->setPosition(Vec2(origin.x + screenZize.width / 2, origin.y + screenZize.height / 2));
 
 	Sprite* const credits = Sprite::create(CREDITS);
-	credits->setPosition(Vec2(screenZize.width / 2 + origin.x, screenZize.height * 0.3 + origin.y));
+	credits->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.64 + origin.y));
 	
 	// Place buttons
 	Button* buttonBack = Button::create(BUTTON_BACK_TO_MAIN_MENU, BUTTON_BACK_TO_MAIN_MENU);
-	buttonBack->setPosition(Vec2(screenZize.width / 2 + origin.x, screenZize.height * 0.1 + origin.y));
+	buttonBack->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.25 + origin.y));
 
 	
 	this->addChild(background);

@@ -51,14 +51,14 @@ bool LevelSelectionScene::init() {
 
 	// Place buttons
 	Button* buttonLevel1 = Button::create(BUTTON_LEVEL1, BUTTON_LEVEL1);
-	buttonLevel1->setPosition(Vec2(screenZize.width / 4 + origin.x, screenZize.height * 0.28));
+	buttonLevel1->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.64));
 	Button* buttonLevel2 = Button::create(BUTTON_LEVEL2, BUTTON_LEVEL2);
-	buttonLevel2->setPosition(Vec2(screenZize.width / 4 + origin.x, screenZize.height * 0.38));
+	buttonLevel2->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.51));
 	Button* buttonLevel3 = Button::create(BUTTON_LEVEL3, BUTTON_LEVEL3);
-	buttonLevel3->setPosition(Vec2(screenZize.width / 4 + origin.x, screenZize.height * 0.48));
+	buttonLevel3->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.38));
 
 	Button* buttonBack = Button::create(BUTTON_BACK_TO_MAIN_MENU, BUTTON_BACK_TO_MAIN_MENU);
-	buttonBack->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.38 + origin.y));
+	buttonBack->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.25 + origin.y));
 	
 	//Todo: Add level selection
 	//for each (level in levelManager->getLevels()) {

@@ -33,12 +33,12 @@ bool OptionsScene::init() {
 
 	// Place buttons
 	Button* buttonBack = Button::create(BUTTON_BACK_TO_MAIN_MENU, BUTTON_BACK_TO_MAIN_MENU);
-	buttonBack->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.38 + origin.y));
+	buttonBack->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.25 + origin.y));
 	
 	ui::Slider* slider = ui::Slider::create();
 	slider->loadBarTexture("buttons/slider.png");
 	slider->loadSlidBallTextureNormal("buttons/thumb.png");
-	slider->setPosition(Vec2(screenZize.width / 3, screenZize.height * 0.38));
+	slider->setPosition(Vec2(screenZize.width / 1.5, screenZize.height * 0.38));
 	slider->addEventListener(CC_CALLBACK_2(OptionsScene::sliderEvent, this));	
 	slider->setPercent(DEFAULT_VOLUME * 100);
 

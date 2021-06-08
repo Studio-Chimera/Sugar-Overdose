@@ -34,17 +34,16 @@ bool MainMenuScene::init() {
 		
 	// Place buttons
 	Button* const buttonLevelSelection = Button::create(BUTTON_LEVEL_SELECTION, BUTTON_LEVEL_SELECTION);
-	buttonLevelSelection->setPosition(Vec2(screenZize.width / 4 + origin.x, screenZize.height * 0.38));
+	buttonLevelSelection->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.64));
 
 	Button* const buttonOptions = Button::create(BUTTON_OPTIONS, BUTTON_OPTIONS);
-	buttonOptions->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.38 + origin.y));
+	buttonOptions->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.51 + origin.y));
 
 	Button* const buttonCredits = Button::create(BUTTON_CREDITS, BUTTON_CREDITS);
-	buttonCredits->setPosition(Vec2(screenZize.width / 4.1 + origin.x, screenZize.height * 0.25 + origin.y));
+	buttonCredits->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.38 + origin.y));
 
 	Button* const buttonLeave = Button::create(BUTTON_LEAVE, BUTTON_LEAVE);
-	buttonLeave->setPosition(Vec2(screenZize.width / 1.52 + origin.x, screenZize.height * 0.25 + origin.y));
-
+	buttonLeave->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.25 + origin.y));
 
 	this->addChild(background);
 	this->addChild(buttonLevelSelection);
