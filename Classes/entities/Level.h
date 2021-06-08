@@ -22,11 +22,16 @@ public:
     // ###################################################
 
     virtual bool init();
-    static Scene* scene();
+    static Scene* scene(string level);
+    void countdown();
+    void displayCountDown(int time, Sprite* counter);
+    
     vector<vector<string>>* customTiledMap;
+    Sprite* counter;
 
     bool checkIfCollisions(Vec2 nextPosition, int direction, Player* player);
     void cleanOldPosition(Vec2 nextTiledPosition, int direction);
+    void start(EventListenerKeyboard* player1Controller, EventListenerKeyboard* player2Controller);
 
     Level(Level& other) = delete;
     void operator=(const Level&) = delete;
@@ -37,6 +42,7 @@ public:
     // Getters
     // ###################################################
     
+    string getLevelName();
     static Level* getInstance();
     TMXLayer* tilesWalls;
     TMXTiledMap* tileMap;
@@ -47,6 +53,7 @@ public:
     // Setters
     // ###################################################
 
+    static void setLevelName(string level);
     void setNewPositionPlayerOnCustomTiledMap(Vec2 nextTiledPosition, int direction, int playerNumber);
 
 protected:
@@ -57,6 +64,7 @@ protected:
 
 private:
     
+    static string _levelName;
     float mapWidth;
     float mapHeight;
     Vector<Rect*>* obstaclesWalls;

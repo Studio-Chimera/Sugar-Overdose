@@ -123,8 +123,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto scene = SplashScene::createScene();
 
     //Start music
-    cocos2d::experimental::AudioEngine::play2d(MAIN_SOUND, true);
-    cocos2d::experimental::AudioEngine::setVolume(0, DEFAULT_VOLUME);
+    //cocos2d::experimental::AudioEngine::play2d(SOUND_LEVEL1, true);
+    //cocos2d::experimental::AudioEngine::setVolume(0, DEFAULT_VOLUME);
+    //cocos2d::experimental::AudioEngine:: (0, DEFAULT_VOLUME);
     
     // run
     director->runWithScene(scene);

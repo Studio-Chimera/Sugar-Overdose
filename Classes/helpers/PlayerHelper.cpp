@@ -74,7 +74,7 @@ void PlayerHelper::setPlayerSprites(Player* player)
 	// search all the sprites
     auto playerNumber = _playersInstances.size();
 	std::stringstream plistFile;
-	plistFile << "sprites/player/player"<< playerNumber+1 << "/player" << playerNumber + 1 << ".plist";
+	plistFile << "sprites/player/player" << playerNumber+1 << "/player" << playerNumber + 1 << ".plist";
 	player->getSpritecacher()->addSpriteFramesWithFile(plistFile.str());
 	
 	// set all sprites

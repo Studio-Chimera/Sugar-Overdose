@@ -2,6 +2,9 @@
 #include <SonarFrameworks.h>
 #include "MainMenuScene.h"
 #include "utils/Definitions.h"
+#include <AudioEngine.h>
+#include <AudioEngine.h>
+
 USING_NS_CC;
 
 Scene* LevelSelectionScene::createScene() {
@@ -83,17 +86,26 @@ bool LevelSelectionScene::init() {
 }
 
 void LevelSelectionScene::onClickPlayButton(Ref *sender, Widget::TouchEventType type, string level){
+	
+	runAction(DelayTime::create(TIME_START_GAME));
+
 	switch (type) {
 		
 	case Widget::TouchEventType::ENDED:
 		if (level == MAP_BLUE){
 			levelManager->openLevel(MAP_BLUE);
+			cocos2d::experimental::AudioEngine::play2d(SOUND_OPEN_LEVEL, false);
+			cocos2d::experimental::AudioEngine::play2d(SOUND_LEVEL1, false);
 		}
 		else if (level == MAP_MANY_WALL) {
 			levelManager->openLevel(MAP_MANY_WALL);
+			cocos2d::experimental::AudioEngine::play2d(SOUND_OPEN_LEVEL, false);
+			cocos2d::experimental::AudioEngine::play2d(SOUND_LEVEL2, false);
 		}
 		else if (level == MAP_TRIANGLE) {
 			levelManager->openLevel(MAP_TRIANGLE);
+			cocos2d::experimental::AudioEngine::play2d(SOUND_OPEN_LEVEL, false);
+			//cocos2d::experimental::AudioEngine::play2d(SOUND_OPEN_LEVEL, false);
 		}
 		
 		break;

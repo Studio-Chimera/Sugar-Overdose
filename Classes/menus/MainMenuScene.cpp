@@ -60,6 +60,7 @@ bool MainMenuScene::init() {
 }
 
 void MainMenuScene::onClickSelectionLevelButton(Ref *sender, Widget::TouchEventType type){
+
 	switch (type) {
 		
 	case Widget::TouchEventType::ENDED:

@@ -38,11 +38,16 @@ this file defines all constantes and reusables functions
 #define BUTTON_BACK_TO_MAIN_MENU "buttons/button_back_to_main_menu.png"
 #define BUTTON_BACK_TO_MAIN_MENU_PRESSED "buttons/"
 
+#define SPRITE_COUNT "countdown_"
+#define FOLDER_COUNT "sprites/countdown/"
+
+
 // IDs
 
 // VALUES NUMBER
 #define TIME_DISPLAY_SPLASH_SCENE 1.5
 #define STEP_PLAYER 167
+#define TIME_START_GAME 4.0f
 #define TIME_EXPLOSION 0.75f
 #define TIME_PARTICULE 0.3f
 #define TIME_WALK_ANIMATION 0.1
@@ -58,7 +63,9 @@ this file defines all constantes and reusables functions
 #define DEFAULT_VOLUME 0.1
 
 // SOUNDS
-#define MAIN_SOUND "sounds/XTaKeRuX - Resurrection.mp3"
+#define SOUND_LEVEL1 "sounds/XTaKeRuX - Resurrection.mp3"
+#define SOUND_LEVEL2 "sounds/Strobotone - Eclipse Alpha.mp3"
+#define SOUND_OPEN_LEVEL "sounds/kettle-drum-single-hit.mp3"
 
 // SCENES
 enum class CustomScenes { MainMenu, LevelSelectionMenu, OptionsMenu, CreditsMenu };

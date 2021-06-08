@@ -45,8 +45,6 @@ void LevelManager::openLevel(std::string level)
 	auto store = Store::GetInstance();
 	store->g_mapName = map.str();
 	
-	//Level* currentLevel = Level::getInstance();
-	auto scene = Level::getInstance()->scene(); /* Instantiate the Level singleton AND the Scene */
+	auto scene = Level::getInstance()->scene(level); /* Instantiate the Level singleton AND the Scene */
 	director->replaceScene(scene);
-
 }

@@ -8,6 +8,7 @@
 
 using namespace cocos2d;
 
+string Level::_levelName = "";
 Level* Level::levelInstance = nullptr;
 
 Level* Level::getInstance()
@@ -19,24 +20,23 @@ Level* Level::getInstance()
     return levelInstance;
 }
 
-Scene* Level::scene()
+Scene* Level::scene(string level)
 {
     // 'scene' is an autorelease object
     Scene* scene = Scene::create();
 
     // 'layer' is an autorelease object
-    levelInstance = Level::getInstance()->create();
+    setLevelName(level);
+    levelInstance = Level::getInstance()->create(); // call init() method
     scene->addChild(levelInstance);
-
+    
     return scene;
 }
 
-// on "init" you need to initialize your instance
+// called by create() method
 bool Level::init()
 {
-    // ###################################################
-    // Instanciate tilemap
-    // ###################################################
+
     if (!Layer::init())
     {
         return false;
@@ -64,10 +64,28 @@ bool Level::init()
     TMXObjectGroup* spawnPowerUp = tileMap->objectGroupNamed("PowerUp");
     
     // REPLACE THIS BY LOOP WITH TILED OBJECTS PROPERTIES
-    customTiledPositionOfItems.push_back(Vec2(4, 3));
-    customTiledPositionOfItems.push_back(Vec2(10, 1));
-    customTiledPositionOfItems.push_back(Vec2(6, 2));
-    customTiledPositionOfItems.push_back(Vec2(10, 4));
+    // Order is important
+    if (getLevelName() == MAP_BLUE) {
+        customTiledPositionOfItems.push_back(Vec2(4, 3)); // X1
+        customTiledPositionOfItems.push_back(Vec2(10, 1)); // Y1
+        customTiledPositionOfItems.push_back(Vec2(6, 2)); // X2
+        customTiledPositionOfItems.push_back(Vec2(10, 4)); // Y2
+    }
+    else if (getLevelName() == MAP_MANY_WALL) {
+        customTiledPositionOfItems.push_back(Vec2(3, 1));
+        customTiledPositionOfItems.push_back(Vec2(1, 3));
+        customTiledPositionOfItems.push_back(Vec2(8, 4));
+        customTiledPositionOfItems.push_back(Vec2(10, 2));
+    }
+
+    else if (getLevelName() == MAP_TRIANGLE) {
+        customTiledPositionOfItems.push_back(Vec2(4, 3));
+        customTiledPositionOfItems.push_back(Vec2(10, 1));
+        customTiledPositionOfItems.push_back(Vec2(6, 2));
+        customTiledPositionOfItems.push_back(Vec2(10, 4));
+    }
+    
+    string test = getLevelName();
 
     int id = 1;
     string id_s = to_string(id);
@@ -123,16 +141,19 @@ bool Level::init()
     // set players case
     stringstream player1_case;
     stringstream player2_case;
+    
     player1_case << "Player_" << player1->getPlayerNumber();
     player2_case << "Player_" << player2->getPlayerNumber();
-    float currY1 = player1->getCustomTiledPosition().y;
-    float currY2 = player2->getCustomTiledPosition().y;
+
     customTiledMap->at(player1->getCustomTiledPosition().x).at(player1->getCustomTiledPosition().y) = player1_case.str();
     customTiledMap->at(player2->getCustomTiledPosition().x).at(player2->getCustomTiledPosition().y) = player2_case.str();
     
     // get & set players controls
     EventListenerKeyboard *player1Controller = std::get<EventListenerKeyboard*>(player1->getController());
     EventListenerKeyboard *player2Controller = std::get<EventListenerKeyboard*>(player2->getController());
+    
+    player2Controller->setEnabled(false);
+    player1Controller->setEnabled(false);
 
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(player1Controller, player1->getSprite());
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(player2Controller, player2->getSprite());
@@ -145,9 +166,63 @@ bool Level::init()
     for (auto powerUp : powerRangeVector) {
         this->addChild(powerUp->getSprite());
     }
+    //cocos2d::experimental::AudioEngine::setVolume(1, DEFAULT_VOLUME);
+    
+    countdown();
+
+    runAction(Sequence::create(
+        DelayTime::create(TIME_START_GAME), 
+        CallFunc::create(CC_CALLBACK_0(Level::start, this, player1Controller, player2Controller)), nullptr));
 
     return true;
 }
+
+/*
+Countdown before start
+*/
+void Level::countdown() {
+
+    SpriteFrameCache* _spriteCacher = SpriteFrameCache::getInstance();
+    Vector<SpriteFrame*> frames;
+    counter = Sprite::create();
+    
+    counter->setPosition(Vec2(1980 / 2, 1020 / 2));
+
+    std::stringstream plistFile;
+    plistFile << FOLDER_COUNT << "countdowns" << ".plist";
+    _spriteCacher->addSpriteFramesWithFile(plistFile.str());
+
+    Animation* animation = new Animation();
+    for (int i = 3; i >= 0; i--) {
+
+        stringstream count;
+        count << SPRITE_COUNT << i << ".png";
+        auto sprite = _spriteCacher->getSpriteFrameByName(count.str());
+        frames.pushBack(sprite);
+    }
+
+
+    const float delay = 1;
+    const unsigned int loop = 1;
+    animation->initWithSpriteFrames(frames, delay, loop);
+    
+    auto movement = MoveTo::create(1, Vec2(1980 / 2, 1020 / 2));
+    this->addChild(counter);
+    counter->runAction(Spawn::create(Animate::create(animation), movement, nullptr));
+
+}
+
+/*
+    Called before the game start, display the number
+*/
+void Level::start(EventListenerKeyboard* player1Controller, EventListenerKeyboard* player2Controller) {
+
+    counter->removeFromParent();
+
+    player1Controller->setEnabled(true);
+    player2Controller->setEnabled(true);
+}
+
 
 /*
     Create the whole custom tiled map
@@ -253,4 +328,12 @@ void Level::cleanOldPosition(Vec2 nextTiledPosition, int direction) {
     default:
         return;
     }
+}
+
+string Level::getLevelName() {
+    return _levelName;
+}
+
+void Level::setLevelName(string level) {
+    _levelName = level;
 }
