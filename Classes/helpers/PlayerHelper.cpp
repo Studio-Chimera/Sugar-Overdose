@@ -54,8 +54,7 @@ Player* PlayerHelper::createPlayer(float mapHeight, Vec2* position, int playerNu
     auto player = new Player;
 	player->setPosition(*position);
 	player->setPlayerNumber(playerNumber);
-
-	player->setCustomTiledPosition(Vec2(trunc(player->getPosition().x / STEP_PLAYER), mapHeight - 1 - trunc(player->getPosition().y / STEP_PLAYER)));
+	player->setCustomTiledPosition(Vec2(round(player->getPosition().x / STEP_PLAYER), mapHeight - 1 - round(player->getPosition().y / STEP_PLAYER)));
 
 	setPlayerSprites(player);
 

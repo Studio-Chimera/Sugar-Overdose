@@ -105,7 +105,7 @@ void LevelSelectionScene::onClickPlayButton(Ref *sender, Widget::TouchEventType 
 		else if (level == MAP_TRIANGLE) {
 			levelManager->openLevel(MAP_TRIANGLE);
 			cocos2d::experimental::AudioEngine::play2d(SOUND_OPEN_LEVEL, false);
-			//cocos2d::experimental::AudioEngine::play2d(SOUND_OPEN_LEVEL, false);
+			cocos2d::experimental::AudioEngine::play2d(SOUND_LEVEL3, false);
 		}
 		
 		break;

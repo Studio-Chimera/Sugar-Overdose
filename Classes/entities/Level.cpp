@@ -79,10 +79,10 @@ bool Level::init()
     }
 
     else if (getLevelName() == MAP_TRIANGLE) {
-        customTiledPositionOfItems.push_back(Vec2(4, 3));
-        customTiledPositionOfItems.push_back(Vec2(10, 1));
-        customTiledPositionOfItems.push_back(Vec2(6, 2));
-        customTiledPositionOfItems.push_back(Vec2(10, 4));
+        customTiledPositionOfItems.push_back(Vec2(7, 1));
+        customTiledPositionOfItems.push_back(Vec2(7, 4));
+        customTiledPositionOfItems.push_back(Vec2(4, 1));
+        customTiledPositionOfItems.push_back(Vec2(4, 4));
     }
     
     string test = getLevelName();

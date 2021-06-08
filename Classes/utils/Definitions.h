@@ -49,7 +49,7 @@ this file defines all constantes and reusables functions
 #define STEP_PLAYER 167
 #define TIME_START_GAME 4.0f
 #define TIME_EXPLOSION 0.75f
-#define TIME_PARTICULE 0.3f
+#define TIME_PARTICULE 0.5f
 #define TIME_WALK_ANIMATION 0.1
 
 // STATES
@@ -65,6 +65,8 @@ this file defines all constantes and reusables functions
 // SOUNDS
 #define SOUND_LEVEL1 "sounds/XTaKeRuX - Resurrection.mp3"
 #define SOUND_LEVEL2 "sounds/Strobotone - Eclipse Alpha.mp3"
+#define SOUND_LEVEL3 "sounds/Eaters - Motionwork.mp3"
+
 #define SOUND_OPEN_LEVEL "sounds/kettle-drum-single-hit.mp3"
 
 // SCENES
