@@ -60,7 +60,7 @@ this file defines all constantes and reusables functions
 #define PLAYER_NUMBER_THREE 3
 #define PLAYER_NUMBER_FOUR 4
 #define PLAYER_IA 5
-#define DEFAULT_VOLUME 0.1
+#define DEFAULT_VOLUME 0.01
 
 // SOUNDS
 #define SOUND_LEVEL1 "sounds/XTaKeRuX - Resurrection.mp3"
@@ -68,6 +68,8 @@ this file defines all constantes and reusables functions
 #define SOUND_LEVEL3 "sounds/Eaters - Motionwork.mp3"
 
 #define SOUND_OPEN_LEVEL "sounds/kettle-drum-single-hit.mp3"
+#define SOUND_PLANT_BOMB "sounds/plant.mp3"
+#define SOUND_EXPLOSION "sounds/explosion.mp3"
 
 // SCENES
 enum class CustomScenes { MainMenu, LevelSelectionMenu, OptionsMenu, CreditsMenu };

@@ -96,7 +96,7 @@ void PlayerHelper::createSideMoveAnimation(int playerNumber, Player* player)
 	for (int i = 1; i < kNumberOfFrames; i++)
 	{
 		std::stringstream ss;
-		ss << "player" << playerNumber+1 << "_sideWalk0" << i << ".png";
+		ss << "player" << playerNumber + 1 << "_sideWalk0" << i << ".png";
 		auto sprite = player->getSpritecacher()->getSpriteFrameByName(ss.str());
 		frames.pushBack(sprite);
 	}

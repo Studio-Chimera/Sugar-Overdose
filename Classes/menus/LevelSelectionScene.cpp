@@ -3,7 +3,6 @@
 #include "MainMenuScene.h"
 #include "utils/Definitions.h"
 #include <AudioEngine.h>
-#include <AudioEngine.h>
 
 USING_NS_CC;
 
@@ -94,18 +93,18 @@ void LevelSelectionScene::onClickPlayButton(Ref *sender, Widget::TouchEventType 
 	case Widget::TouchEventType::ENDED:
 		if (level == MAP_BLUE){
 			levelManager->openLevel(MAP_BLUE);
-			cocos2d::experimental::AudioEngine::play2d(SOUND_OPEN_LEVEL, false);
-			cocos2d::experimental::AudioEngine::play2d(SOUND_LEVEL1, false);
+			cocos2d::experimental::AudioEngine::play2d(SOUND_OPEN_LEVEL, false, 0.15);
+			cocos2d::experimental::AudioEngine::play2d(SOUND_LEVEL1, false, 0.25);
 		}
 		else if (level == MAP_MANY_WALL) {
 			levelManager->openLevel(MAP_MANY_WALL);
-			cocos2d::experimental::AudioEngine::play2d(SOUND_OPEN_LEVEL, false);
-			cocos2d::experimental::AudioEngine::play2d(SOUND_LEVEL2, false);
+			cocos2d::experimental::AudioEngine::play2d(SOUND_OPEN_LEVEL, false, 0.15);
+			cocos2d::experimental::AudioEngine::play2d(SOUND_LEVEL2, false, 0.25);
 		}
 		else if (level == MAP_TRIANGLE) {
 			levelManager->openLevel(MAP_TRIANGLE);
-			cocos2d::experimental::AudioEngine::play2d(SOUND_OPEN_LEVEL, false);
-			cocos2d::experimental::AudioEngine::play2d(SOUND_LEVEL3, false);
+			cocos2d::experimental::AudioEngine::play2d(SOUND_OPEN_LEVEL, false, 0.15);
+			cocos2d::experimental::AudioEngine::play2d(SOUND_LEVEL3, false, 0.25);
 		}
 		
 		break;

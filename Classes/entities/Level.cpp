@@ -186,7 +186,7 @@ void Level::countdown() {
     Vector<SpriteFrame*> frames;
     counter = Sprite::create();
     
-    counter->setPosition(Vec2(1980 / 2, 1020 / 2));
+    counter->setPosition(Vec2(1000, 500));
 
     std::stringstream plistFile;
     plistFile << FOLDER_COUNT << "countdowns" << ".plist";
@@ -206,7 +206,7 @@ void Level::countdown() {
     const unsigned int loop = 1;
     animation->initWithSpriteFrames(frames, delay, loop);
     
-    auto movement = MoveTo::create(1, Vec2(1980 / 2, 1020 / 2));
+    auto movement = MoveTo::create(1, Vec2(1000, 500));
     this->addChild(counter);
     counter->runAction(Spawn::create(Animate::create(animation), movement, nullptr));
 

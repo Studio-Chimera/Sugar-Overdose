@@ -1,6 +1,7 @@
 #include "Bomb.h"
 #include "Level.h"
 #include <helpers/PlayerHelper.h>
+#include <AudioEngine.h>
 
 Bomb::Bomb(Vec2 position, Vec2 customTiledPosition, int rangeExplosionX, int rangeExplosionY){
 
@@ -22,6 +23,8 @@ Bomb::Bomb(Vec2 position, Vec2 customTiledPosition, int rangeExplosionX, int ran
     getSprite()->setPosition(position);
     setCustomTiledPosition(customTiledPosition);
 
+    cocos2d::experimental::AudioEngine::play2d(SOUND_PLANT_BOMB, false, 0.5);
+
     // Trigger the explosion after TIME_EXPLOSION delay
     _sprite->runAction(Sequence::create(
         DelayTime::create(TIME_EXPLOSION),
@@ -31,6 +34,8 @@ Bomb::Bomb(Vec2 position, Vec2 customTiledPosition, int rangeExplosionX, int ran
 Bomb::~Bomb(){}
 
 void Bomb::explosion(float customTiledXMap, float customTiledYMap, int rangeExplosionX, int rangeExplosionY) {
+
+    cocos2d::experimental::AudioEngine::play2d(SOUND_EXPLOSION, false, 0.1);
 
     spawnParticules(rangeExplosionX, rangeExplosionY);
 
