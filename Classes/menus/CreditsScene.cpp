@@ -26,19 +26,19 @@ bool CreditsScene::init() {
 	Size const screenZize = Director::getInstance()->getVisibleSize();
 	Vec2 const origin = Director::getInstance()->getVisibleOrigin();
 
-	Sprite* const title = Sprite::create(TITLE);
-	title->setPosition(Vec2(screenZize.width / 2 + origin.x, screenZize.height * 0.65 + origin.y));
-	this->addChild(title);
+	Sprite* const background = Sprite::create(BACKGROUND);
+	background->setPosition(Vec2(origin.x + screenZize.width / 2, origin.y + screenZize.height / 2));
 
 	Sprite* const credits = Sprite::create(CREDITS);
 	credits->setPosition(Vec2(screenZize.width / 2 + origin.x, screenZize.height * 0.3 + origin.y));
-	this->addChild(credits);
-
+	
 	// Place buttons
 	Button* buttonBack = Button::create(BUTTON_BACK_TO_MAIN_MENU, BUTTON_BACK_TO_MAIN_MENU);
 	buttonBack->setPosition(Vec2(screenZize.width / 2 + origin.x, screenZize.height * 0.1 + origin.y));
 
-
+	
+	this->addChild(background);
+	this->addChild(credits);
 	this->addChild(buttonBack);
 
 	buttonBack->addTouchEventListener(CC_CALLBACK_2(CreditsScene::onClickBackButton, this));

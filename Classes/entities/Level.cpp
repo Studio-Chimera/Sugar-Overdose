@@ -63,6 +63,7 @@ bool Level::init()
     // prepare powerUP
     TMXObjectGroup* spawnPowerUp = tileMap->objectGroupNamed("PowerUp");
     
+    // REPLACE THIS BY LOOP WITH TILED OBJECTS PROPERTIES
     customTiledPositionOfItems.push_back(Vec2(4, 3));
     customTiledPositionOfItems.push_back(Vec2(10, 1));
     customTiledPositionOfItems.push_back(Vec2(6, 2));

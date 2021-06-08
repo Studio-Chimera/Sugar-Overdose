@@ -26,9 +26,8 @@ bool LevelSelectionScene::init() {
 	Size const screenZize = Director::getInstance()->getVisibleSize();
 	Vec2 const origin = Director::getInstance()->getVisibleOrigin();
 
-	Sprite* const title = Sprite::create(TITLE);
-	title->setPosition(Vec2(screenZize.width / 2 + origin.x, screenZize.height * 0.65 + origin.y));
-	this->addChild(title);
+	Sprite* const background = Sprite::create(BACKGROUND);
+	background->setPosition(Vec2(origin.x + screenZize.width / 2, origin.y + screenZize.height / 2));
 
 	//Todo: Refactor with dynamic text
 	/*********** WAY WITH BUTTON TEXT HARD-CODED ***********/
@@ -75,11 +74,11 @@ bool LevelSelectionScene::init() {
 	levelManager = new LevelManager();
 	listLevels = levelManager->getLevels();
 
+	this->addChild(background);
 	this->addChild(buttonLevel1);
 	this->addChild(buttonLevel2);
 	this->addChild(buttonLevel3);
 	this->addChild(buttonBack);
-
 	return true;
 }
 

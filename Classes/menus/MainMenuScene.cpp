@@ -105,8 +105,5 @@ void MainMenuScene::onClickLeaveButton(Ref* sender, Widget::TouchEventType type)
 		const auto director = Director::getInstance();
 		director->end();
 		break;
-
-	//default:
-	//	break;
 	}
 }
