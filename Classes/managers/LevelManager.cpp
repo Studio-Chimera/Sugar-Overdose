@@ -38,7 +38,7 @@ std::list<std::string> LevelManager::getLevels()
 
 void LevelManager::openLevel(std::string level)
 {
-	auto director = Director::getInstance();
+	
 
 	std::stringstream map;
 	map << "maps/" << level << ".tmx";
@@ -46,5 +46,6 @@ void LevelManager::openLevel(std::string level)
 	store->g_mapName = map.str();
 	
 	auto scene = Level::getInstance()->scene(level); /* Instantiate the Level singleton AND the Scene */
-	director->replaceScene(scene);
+	Director::getInstance()->pushScene(scene);
+	//Director::getInstance()->replaceScene(scene);
 }

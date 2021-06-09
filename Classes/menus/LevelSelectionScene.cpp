@@ -6,6 +6,11 @@
 
 USING_NS_CC;
 
+/********************
+
+EN FAIRE UN SINGLETON, COMME DANS LE MENU PRINCIPAL
+
+*********************/
 Scene* LevelSelectionScene::createScene() {
 
 	auto scene = Scene::create();
@@ -86,6 +91,7 @@ bool LevelSelectionScene::init() {
 
 void LevelSelectionScene::onClickPlayButton(Ref *sender, Widget::TouchEventType type, string level){
 	
+	cocos2d::experimental::AudioEngine::stop(0);
 	runAction(DelayTime::create(TIME_START_GAME));
 
 	switch (type) {

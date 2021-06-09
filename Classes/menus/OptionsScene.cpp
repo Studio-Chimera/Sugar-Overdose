@@ -5,14 +5,26 @@
 #include <utils/Store.h>
 #include <AudioEngine.h>
 
+USING_NS_CC;
+OptionsScene* OptionsScene::optionsMenuInstance = nullptr;
+Scene* OptionsScene::scene = nullptr;
+
+// Singleton 
+OptionsScene* OptionsScene::getInstance()
+{
+	if (optionsMenuInstance == nullptr)
+	{
+		scene = Scene::create();
+		optionsMenuInstance = new OptionsScene();
+		optionsMenuInstance = create();
+		scene->addChild(optionsMenuInstance);
+	}
+	return optionsMenuInstance;
+}
+
 Scene* OptionsScene::createScene() {
 
-	auto scene = Scene::create();
-	auto layer = OptionsScene::create();
-	
-
-	scene->addChild(layer);
-
+	optionsMenuInstance = OptionsScene::getInstance();
 	return scene;
 }
 

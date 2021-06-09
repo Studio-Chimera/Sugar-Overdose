@@ -11,6 +11,15 @@ using namespace cocos2d;
 string Level::_levelName = "";
 Level* Level::levelInstance = nullptr;
 
+
+
+/********************
+
+LE SINGLETON N'EST PAS COMPLET, FAIRE COMME DANS LE MENU PRINCIPAL
+
+*********************/
+
+// Singleton 
 Level* Level::getInstance()
 {
     if (levelInstance == nullptr)
@@ -186,8 +195,6 @@ void Level::countdown() {
     Vector<SpriteFrame*> frames;
     counter = Sprite::create();
     
-    counter->setPosition(Vec2(1000, 500));
-
     std::stringstream plistFile;
     plistFile << FOLDER_COUNT << "countdowns" << ".plist";
     _spriteCacher->addSpriteFramesWithFile(plistFile.str());
@@ -200,7 +207,6 @@ void Level::countdown() {
         auto sprite = _spriteCacher->getSpriteFrameByName(count.str());
         frames.pushBack(sprite);
     }
-
 
     const float delay = 1;
     const unsigned int loop = 1;

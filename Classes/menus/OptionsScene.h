@@ -10,19 +10,22 @@ class OptionsScene : public cocos2d::Layer{
 
 public:
 
-	// FUNC
 	static cocos2d::Scene* createScene();
 	virtual bool init();
 	CREATE_FUNC(OptionsScene)
 
-	// ATTR
+	static OptionsScene* getInstance();
+
+	OptionsScene(OptionsScene& other) = delete; // ??
+	void operator=(const OptionsScene&) = delete; // ??
 
 private:
 
-	// FUNC
+	OptionsScene() {};
+
 	void onClickBackButton(Ref* sender, Widget::TouchEventType touchEventType);
 	void sliderEvent(Ref* sender, ui::Slider::EventType eventType);
-	
-	// ATTR
 
+	static OptionsScene* optionsMenuInstance;
+	static Scene* scene;
 };

@@ -4,6 +4,11 @@
 #include <utils/Definitions.h>
 USING_NS_CC;
 
+/********************
+
+EN FAIRE UN SINGLETON, COMME DANS LE MENU PRINCIPAL
+
+*********************/
 Scene* CreditsScene::createScene() {
 
 	auto scene = Scene::create();

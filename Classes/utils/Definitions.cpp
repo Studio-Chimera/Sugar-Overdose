@@ -2,30 +2,24 @@
 
 void changeScene(float dt, CustomScenes customScenes)
 {
-	Scene* newScene;
 	switch (customScenes)
 	{
 	case(CustomScenes::MainMenu):
-		newScene = MainMenuScene::createScene();
+		Director::getInstance()->pushScene(MainMenuScene::createScene());
 		break;
-		/*return newScene;*/
 
 	case(CustomScenes::LevelSelectionMenu):
-		newScene = LevelSelectionScene::createScene();
+		Director::getInstance()->pushScene(LevelSelectionScene::createScene());
 		break;
 	case(CustomScenes::OptionsMenu):
-		newScene = OptionsScene::createScene();
+		Director::getInstance()->pushScene(OptionsScene::createScene());
 		break;
 
 	case(CustomScenes::CreditsMenu):
-		newScene = CreditsScene::createScene();
+		Director::getInstance()->pushScene(CreditsScene::createScene());
 		break;
 
 	default:
 		break; // Implement error msg
 	}
-
-	TransitionFade* transition = TransitionFade::create(dt, newScene);
-	Director::getInstance()->replaceScene(newScene);
-	
 }

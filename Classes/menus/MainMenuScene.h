@@ -6,25 +6,31 @@ USING_NS_CC;
 
 using namespace ui;
 
-class MainMenuScene : public cocos2d::Layer{
+class MainMenuScene : public cocos2d::Layer {
 
 public:
 
-	// FUNC
-	static cocos2d::Scene* createScene();
+	static Scene* createScene();
 	virtual bool init();
-	CREATE_FUNC(MainMenuScene)
+	CREATE_FUNC(MainMenuScene);
+	static MainMenuScene* getInstance();
+	
+	MainMenuScene(MainMenuScene& other) = delete; // ??
+	void operator=(const MainMenuScene&) = delete; // ??
 
-	// ATTR
+	static void changeCurrentMusic(int newMusicId);
 
 private:
 
-	// FUNC
+	
+	MainMenuScene() {};
 	void onClickSelectionLevelButton(Ref* sender, Widget::TouchEventType touchEventType);
 	void onClickOptionsButton(Ref* sender, Widget::TouchEventType touchEventType);
 	void onClickCreditsButton(Ref* sender, Widget::TouchEventType touchEventType);
 	void onClickLeaveButton(Ref* sender, Widget::TouchEventType touchEventType);
 
-	// ATTR
+	static int currentMusicId;
+	static MainMenuScene* mainMenuInstance;
+	static Scene* scene;
 
 };

@@ -6,14 +6,25 @@
 #include <AudioEngine.h>
 
 USING_NS_CC;
+MainMenuScene* MainMenuScene::mainMenuInstance = nullptr;
+int MainMenuScene::currentMusicId = -1;
+Scene* MainMenuScene::scene = nullptr;
+
+// Singleton 
+MainMenuScene* MainMenuScene::getInstance()
+{
+	if (mainMenuInstance == nullptr)
+	{
+		scene = Scene::create();
+		mainMenuInstance = new MainMenuScene();
+		mainMenuInstance = create();
+		scene->addChild(mainMenuInstance);
+	}
+	return mainMenuInstance;
+}
 
 Scene* MainMenuScene::createScene() {
-
-	auto scene = Scene::create();
-	auto layer = MainMenuScene::create();
-
-	scene->addChild(layer);
-
+	mainMenuInstance = MainMenuScene::getInstance();
 	return scene;
 }
 
@@ -25,13 +36,15 @@ bool MainMenuScene::init() {
 		return false;
 	} 
 
+	changeCurrentMusic(cocos2d::experimental::AudioEngine::play2d(SOUND_MENUS, true, 0.1));
+
 	// Get informations for display 
 	Size const screenZize = Director::getInstance()->getVisibleSize();
 	Vec2 const origin = Director::getInstance()->getVisibleOrigin();
 	
 	Sprite* const background = Sprite::create(BACKGROUND);
 	background->setPosition(Vec2(origin.x + screenZize.width / 2, origin.y + screenZize.height / 2));
-		
+
 	// Place buttons
 	Button* const buttonLevelSelection = Button::create(BUTTON_LEVEL_SELECTION, BUTTON_LEVEL_SELECTION);
 	buttonLevelSelection->setPosition(Vec2(screenZize.width / 1.5 + origin.x, screenZize.height * 0.64));
@@ -105,5 +118,12 @@ void MainMenuScene::onClickLeaveButton(Ref* sender, Widget::TouchEventType type)
 		const auto director = Director::getInstance();
 		director->end();
 		break;
+	}
+}
+
+
+void MainMenuScene::changeCurrentMusic(int newMusicId) {
+	if (currentMusicId == -1 && currentMusicId != newMusicId){
+		currentMusicId = newMusicId;
 	}
 }

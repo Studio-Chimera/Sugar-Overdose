@@ -57,13 +57,14 @@ public:
     void setNewPositionPlayerOnCustomTiledMap(Vec2 nextTiledPosition, int direction, int playerNumber);
 
 protected:
-    Level(){}
-    ~Level(){}
-    
-    static Level* levelInstance;
+
 
 private:
-    
+
+    Level() {}
+    ~Level() {}
+    void fillCustomTiledMap();
+
     static string _levelName;
     float mapWidth;
     float mapHeight;
@@ -71,8 +72,7 @@ private:
     Vector<Rect*>* obstaclesBorders;
     vector<PowerUP_Range*> powerRangeVector;
     vector<Vec2> customTiledPositionOfItems;
-
-    void fillCustomTiledMap();
+    static Level* levelInstance;
     
 };
 
