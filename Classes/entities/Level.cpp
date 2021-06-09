@@ -29,7 +29,7 @@ Level* Level::getInstance()
     return levelInstance;
 }
 
-Scene* Level::scene(string level)
+Scene* Level::createScene(string level)
 {
     // 'scene' is an autorelease object
     Scene* scene = Scene::create();

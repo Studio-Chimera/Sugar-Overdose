@@ -4,18 +4,25 @@
 #include <utils/Definitions.h>
 USING_NS_CC;
 
-/********************
+CreditsScene* CreditsScene::creditsSceneInstance = nullptr;
+Scene* CreditsScene::scene = nullptr;
 
-EN FAIRE UN SINGLETON, COMME DANS LE MENU PRINCIPAL
+// Singleton 
+CreditsScene* CreditsScene::getInstance()
+{
+	if (creditsSceneInstance == nullptr)
+	{
+		scene = Scene::create();
+		creditsSceneInstance = new CreditsScene();
+		creditsSceneInstance = create();
+		scene->addChild(creditsSceneInstance);
+	}
+	return creditsSceneInstance;
+}
 
-*********************/
 Scene* CreditsScene::createScene() {
 
-	auto scene = Scene::create();
-	auto layer = CreditsScene::create();
-
-	scene->addChild(layer);
-
+	creditsSceneInstance = CreditsScene::getInstance();
 	return scene;
 }
 

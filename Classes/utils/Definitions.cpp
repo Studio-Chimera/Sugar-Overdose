@@ -1,7 +1,7 @@
 #include "Definitions.h"
 
 void changeScene(float dt, CustomScenes customScenes)
-{
+{	
 	switch (customScenes)
 	{
 	case(CustomScenes::MainMenu):
@@ -11,6 +11,7 @@ void changeScene(float dt, CustomScenes customScenes)
 	case(CustomScenes::LevelSelectionMenu):
 		Director::getInstance()->pushScene(LevelSelectionScene::createScene());
 		break;
+
 	case(CustomScenes::OptionsMenu):
 		Director::getInstance()->pushScene(OptionsScene::createScene());
 		break;

@@ -22,7 +22,7 @@ public:
     // ###################################################
 
     virtual bool init();
-    static Scene* scene(string level);
+    static Scene* createScene(string level);
     void countdown();
     void displayCountDown(int time, Sprite* counter);
     

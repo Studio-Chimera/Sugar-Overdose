@@ -35,8 +35,7 @@ bool MainMenuScene::init() {
 	if (!Layer::init()) {	
 		return false;
 	} 
-
-	changeCurrentMusic(cocos2d::experimental::AudioEngine::play2d(SOUND_MENUS, true, 0.1));
+	changeCurrentMusic(cocos2d::experimental::AudioEngine::play2d(SOUND_MENUS, true, DEFAULT_VOLUME));
 
 	// Get informations for display 
 	Size const screenZize = Director::getInstance()->getVisibleSize();

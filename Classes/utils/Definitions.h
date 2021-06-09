@@ -4,6 +4,7 @@
 #include "menus/LevelSelectionScene.h"
 #include "menus/OptionsScene.h"
 #include "menus/CreditsScene.h"
+#include "entities/Level.h"
 
 /*
 this file defines all constantes and reusables functions

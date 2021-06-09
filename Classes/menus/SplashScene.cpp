@@ -32,5 +32,5 @@ void SplashScene::SwitchToMainMenu(float dt)
 {
         Scene* scene = MainMenuScene::createScene();
         TransitionFade* transition = TransitionFade::create(dt, scene);
-        Director::getInstance()->replaceScene(transition);
+        Director::getInstance()->pushScene(transition);
 }

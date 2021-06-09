@@ -7,22 +7,25 @@ USING_NS_CC;
 
 using namespace ui;
 
-class CreditsScene : public cocos2d::Layer{
+class CreditsScene : public Layer{
 
 public:
 
-	// FUNC
-	static cocos2d::Scene* createScene();
+	static CreditsScene* getInstance();
+	static Scene* createScene();
 	virtual bool init();
 	CREATE_FUNC(CreditsScene)
 
-	// ATTR
+	CreditsScene(CreditsScene& other) = delete; // ??
+	void operator=(const CreditsScene&) = delete; // ??
 
+	
 private:
 
-	// FUNC
+	CreditsScene() {};
 	void onClickBackButton(Ref* sender, Widget::TouchEventType touchEventType);
-
-	// ATTR
+	
+	static CreditsScene* creditsSceneInstance;
+	static Scene* scene;
 
 };

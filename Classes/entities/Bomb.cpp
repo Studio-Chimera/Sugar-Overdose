@@ -2,6 +2,7 @@
 #include "Level.h"
 #include <helpers/PlayerHelper.h>
 #include <AudioEngine.h>
+#include "menus/OptionsScene.h"
 
 Bomb::Bomb(Vec2 position, Vec2 customTiledPosition, int rangeExplosionX, int rangeExplosionY){
 
@@ -23,7 +24,7 @@ Bomb::Bomb(Vec2 position, Vec2 customTiledPosition, int rangeExplosionX, int ran
     getSprite()->setPosition(position);
     setCustomTiledPosition(customTiledPosition);
 
-    cocos2d::experimental::AudioEngine::play2d(SOUND_PLANT_BOMB, false, 0.5);
+    cocos2d::experimental::AudioEngine::play2d(SOUND_PLANT_BOMB, false, OptionsScene::getInstance()->getVolume());
 
     // Trigger the explosion after TIME_EXPLOSION delay
     _sprite->runAction(Sequence::create(
@@ -35,7 +36,7 @@ Bomb::~Bomb(){}
 
 void Bomb::explosion(float customTiledXMap, float customTiledYMap, int rangeExplosionX, int rangeExplosionY) {
 
-    cocos2d::experimental::AudioEngine::play2d(SOUND_EXPLOSION, false, 0.1);
+    cocos2d::experimental::AudioEngine::play2d(SOUND_EXPLOSION, false, OptionsScene::getInstance()->getVolume());
 
     spawnParticules(rangeExplosionX, rangeExplosionY);
 
